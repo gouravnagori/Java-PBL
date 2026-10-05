@@ -1,6 +1,7 @@
 /* 
  * Enterprise Glassmorphic Dark UI Design System
  * Authored by Harshvardhan Bhatt (Reports & Analytics Module Lead)
+ * Updated Week 14: Polish transitions, toast banners, responsive visualizer
  */
 
 @import url('https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
@@ -136,12 +137,13 @@ body {
     display: flex;
     flex-direction: column;
     gap: 12px;
-    transition: transform 0.2s ease, border-color 0.2s ease;
+    transition: transform 0.25s cubic-bezier(0.4, 0, 0.2, 1), border-color 0.25s ease, box-shadow 0.25s ease;
 }
 
 .kpi-card:hover {
     transform: translateY(-4px);
     border-color: var(--border-highlight);
+    box-shadow: 0 12px 24px -6px rgba(99, 102, 241, 0.2);
 }
 
 .kpi-label {
@@ -198,11 +200,12 @@ body {
     font-weight: 600;
     cursor: pointer;
     box-shadow: 0 4px 14px var(--accent-glow);
-    transition: opacity 0.2s ease;
+    transition: opacity 0.2s ease, transform 0.15s ease;
 }
 
 .btn-primary:hover {
-    opacity: 0.9;
+    opacity: 0.95;
+    transform: scale(1.02);
 }
 
 .btn-secondary {
@@ -213,6 +216,11 @@ body {
     border-radius: var(--radius-sm);
     font-weight: 500;
     cursor: pointer;
+    transition: background 0.2s ease;
+}
+
+.btn-secondary:hover {
+    background: rgba(255, 255, 255, 0.14);
 }
 
 /* Status Badges */
@@ -251,6 +259,26 @@ body {
 
 .custom-table tr:hover td {
     background: rgba(255, 255, 255, 0.02);
+}
+
+/* Toast Banners */
+.toast-banner {
+    position: fixed;
+    bottom: 24px;
+    right: 24px;
+    background: #1e293b;
+    border: 1px solid var(--accent-primary);
+    padding: 14px 20px;
+    border-radius: var(--radius-md);
+    color: #fff;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.5);
+    z-index: 2000;
+    animation: slideUp 0.3s ease-out;
+}
+
+@keyframes slideUp {
+    from { transform: translateY(100%); opacity: 0; }
+    to { transform: translateY(0); opacity: 1; }
 }
 
 /* Footer */

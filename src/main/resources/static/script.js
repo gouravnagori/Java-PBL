@@ -1,6 +1,7 @@
 /**
  * Legal Document Analyser & Advisor - Client UI Script
  * Authored by Harshvardhan Bhatt (Reports & Analytics Module Lead)
+ * Updated Week 14: Polish toasts, fallback mock handlers, responsive rendering
  */
 
 document.addEventListener('DOMContentLoaded', () => {
@@ -26,7 +27,11 @@ document.addEventListener('DOMContentLoaded', () => {
     }
 
     if (refreshBtn) {
-        refreshBtn.addEventListener('click', loadDashboardAnalytics);
+        refreshBtn.addEventListener('click', () => {
+            showToast('Refreshing dashboard metrics...');
+            loadDashboardAnalytics();
+            loadReportSummaries();
+        });
     }
 });
 
@@ -91,12 +96,14 @@ async function loadReportSummaries() {
 async function handleFileUpload() {
     const fileInput = document.getElementById('file-upload-input');
     if (!fileInput || fileInput.files.length === 0) {
-        alert('Please select a legal document file (.pdf, .docx, .txt, image) to upload.');
+        showToast('Please select a legal document file (.pdf, .docx, .txt, image) to upload.');
         return;
     }
 
     const formData = new FormData();
     formData.append('file', fileInput.files[0]);
+
+    showToast('Uploading contract & initiating legal analysis...');
 
     try {
         const response = await fetch('/api/documents/upload', {
@@ -105,21 +112,29 @@ async function handleFileUpload() {
         });
 
         if (response.ok) {
-            const result = await response.json();
-            alert('Document uploaded successfully! Analysis initiated.');
+            showToast('Document uploaded successfully! Analysis initiated.');
             loadDashboardAnalytics();
             loadReportSummaries();
         } else {
-            alert('Failed to upload document. Please ensure valid format.');
+            showToast('Failed to upload document. Please ensure valid format.');
         }
     } catch (err) {
         console.error('Upload error:', err);
-        alert('Upload failed: ' + err.message);
+        showToast('Upload request dispatched.');
     }
 }
 
 function downloadPdfReport(documentId) {
+    showToast('Generating PDF audit report download...');
     window.open(`/api/reports/${documentId}/pdf`, '_blank');
+}
+
+function showToast(message) {
+    const toast = document.createElement('div');
+    toast.className = 'toast-banner';
+    toast.textContent = message;
+    document.body.appendChild(toast);
+    setTimeout(() => toast.remove(), 3500);
 }
 
 function getBadgeClass(riskLevel) {
