@@ -48,15 +48,46 @@ This project strictly adheres to 5th-Semester Advanced Java curriculum standards
 
 ---
 
+## 📑 Academic Milestone: Week 1 — Team Formation, Guide Selection & Abstract
+
+> **Academic Portal Status:**  
+> `Team formation + Guide selection + Abstract (this portal)` ➔ **Status: ✅ Completed (Week 1 Submission)**
+
+* **Official Abstract Document:** [`docs/Legal Document Analyser & Advisor - ABSTRACT.pdf`](./docs/Legal%20Document%20Analyser%20&%20Advisor%20-%20ABSTRACT.pdf)
+* **Academic Guide Selection:** Academic Faculty Mentor assigned.
+* **Confirmed Team Composition:**
+  1. **Gourav Nagori** *(Team Lead)* — Document Management & Ingestion Module
+  2. **Dilip Kumawat** — Legal Analysis & Risk Detection Module
+  3. **Ayush Rathore** — User, Authentication & Case Management Module
+  4. **Abhishi Samar** — AI Legal Advisor & Contextual Q&A Module
+  5. **Harshvardhan Bhatt** — Reports, Analytics & Integration Module
+
+### 📄 Official Project Abstract
+> *Legal documents such as rental agreements, employment contracts, loan papers and notices are written in complex language that most people find hard to understand. This often leads to signed agreements with hidden risks and unfair terms. Hiring a lawyer for every document is costly and slow, especially for students, tenants, freelancers and small business owners.*
+>
+> *This project presents the **Legal Document Analyser and Adviser**, a web-based application developed in Java using the Spring Boot framework. Users can upload legal documents in PDF, DOCX, TXT or scanned image format. The system extracts text using Apache PDFBox, Apache POI and Tess4J (OCR), and processes it with Natural Language Processing (NLP) techniques and a Large Language Model (LLM).*
+>
+> *It then classifies the document type and generates a plain-language summary. It identifies key clauses and entities such as parties, dates, payment terms, termination conditions and governing law. It also flags unfair, ambiguous or missing clauses with Low, Medium or High severity and explains difficult legal terms in simple words.*
+>
+> *A question-and-answer adviser built on Retrieval-Augmented Generation (RAG) lets users ask follow-up questions and receive answers grounded in their own document, so the system does not invent clauses. It also suggests next steps and negotiation points, and users can download the full analysis as a PDF report.*
+>
+> *The application uses Spring Security with JWT for authentication and role-based access, Spring Data JPA with Hibernate for persistence, and PostgreSQL or MySQL for storage. It includes a user history module and an administrator dashboard.*
+>
+> *The system is for informational assistance only and does not replace a qualified lawyer. By making legal documents understandable and highlighting risks early, it helps ordinary users make informed decisions.*
+>
+> **Keywords:** `Legal Document Analysis` • `Java` • `Spring Boot` • `NLP` • `Large Language Model` • `RAG` • `OCR` • `Risk Detection`
+
+---
+
 ## 🏛️ System Architecture
 
 ```mermaid
 flowchart TD
     subgraph Client["Client Tier (Web Browser)"]
-        UI["Harsh: Dashboard, Reports & Analytics UI"]
-        ChatUI["Abhishi: AI Legal Advisor Chat UI"]
-        UploadUI["Gourav: Document Upload & Metadata UI"]
-        AuthUI["Ayush: Authentication & Case Manager UI"]
+        UI["Harshvardhan Bhatt: Dashboard, Reports & Analytics UI"]
+        ChatUI["Abhishi Samar: AI Legal Advisor Chat UI"]
+        UploadUI["Gourav Nagori: Document Upload & Metadata UI"]
+        AuthUI["Ayush Rathore: Authentication & Case Manager UI"]
     end
 
     subgraph SecurityTier["Security & Gateway Tier"]
@@ -65,11 +96,11 @@ flowchart TD
     end
 
     subgraph CoreBackend["Spring Boot Enterprise Service Tier"]
-        UserSvc["Ayush: User & Case Management Service"]
-        DocSvc["Gourav: Document Processing & Extraction Service"]
-        AnalysisSvc["Dilip: Clause Detection & Risk Scoring Engine"]
-        AISvc["Abhishi: Contextual AI Advisor Service"]
-        ReportSvc["Harsh: Analytics & PDF Export Service"]
+        UserSvc["Ayush Rathore: User & Case Management Service"]
+        DocSvc["Gourav Nagori: Document Processing & Extraction Service"]
+        AnalysisSvc["Dilip Kumawat: Clause Detection & Risk Scoring Engine"]
+        AISvc["Abhishi Samar: Contextual AI Advisor Service"]
+        ReportSvc["Harshvardhan Bhatt: Analytics & PDF Export Service"]
     end
 
     subgraph StorageEngine["Data & Persistence Tier"]
@@ -110,17 +141,17 @@ flowchart TD
 
 | Member | Module Name | Primary Technical Responsibility | Core Academic Deliverable |
 | :--- | :--- | :--- | :--- |
-| **Gourav** *(Lead)* | **Document Management & Processing** | File upload, validation, secure storage, PDF/DOCX parsing & extraction, document lifecycle states | Multipart upload APIs, text extraction engine, document metadata & status management |
-| **Dilip** | **Legal Analysis & Risk Detection** | Clause segmentation, legal risk classification, explainable scoring rules, risk severity matrix | Rule-based & regex clause parser, weighted risk score algorithm, analysis persistence |
-| **Abhishi** | **AI Legal Advisor / Q&A** | Context-bounded document Q&A, plain-language summaries, legal disclaimer enforcement, chat memory | AI service abstraction, prompt engineering with document grounding, conversation history APIs |
-| **Ayush** | **User, Authentication & Case Management** | User registration, authentication, JWT/session security, RBAC, user dashboard, ownership mapping | Spring Security filter chain, BCrypt hashing, multi-tenant document isolation & access control |
-| **Harsh** | **Reports, Analytics & Integration** | Analytical dashboards, aggregation metrics, structured report view, PDF export, system integration | Dashboard risk visualization, PDF report generation engine, end-to-end integration coordinator |
+| **Gourav Nagori** *(Lead)* | **Document Management & Processing** | File upload, validation, secure storage, PDF/DOCX parsing & extraction, document lifecycle states | Multipart upload APIs, text extraction engine, document metadata & status management |
+| **Dilip Kumawat** | **Legal Analysis & Risk Detection** | Clause segmentation, legal risk classification, explainable scoring rules, risk severity matrix | Rule-based & regex clause parser, weighted risk score algorithm, analysis persistence |
+| **Ayush Rathore** | **User, Authentication & Case Management** | User registration, authentication, JWT/session security, RBAC, user dashboard, ownership mapping | Spring Security filter chain, BCrypt hashing, multi-tenant document isolation & access control |
+| **Abhishi Samar** | **AI Legal Advisor / Q&A** | Context-bounded document Q&A, plain-language summaries, legal disclaimer enforcement, chat memory | AI service abstraction, prompt engineering with document grounding, conversation history APIs |
+| **Harshvardhan Bhatt** | **Reports, Analytics & Integration** | Analytical dashboards, aggregation metrics, structured report view, PDF export, system integration | Dashboard risk visualization, PDF report generation engine, end-to-end integration coordinator |
 
 ---
 
 ### 📦 Deep-Dive: Module Breakdown & Demo Paths
 
-#### 1. Gourav — Document Management & Processing
+#### 1. Gourav Nagori — Document Management & Processing
 * **Module Scope:** Serves as the ingestion gateway for legal contracts.
 * **Key Responsibilities:**
   - Secure Multipart upload supporting `.pdf` and `.docx` with mime-type and size validation (max 15MB).
@@ -136,7 +167,7 @@ flowchart TD
 
 ---
 
-#### 2. Dilip — Legal Analysis & Risk Detection
+#### 2. Dilip Kumawat — Legal Analysis & Risk Detection
 * **Module Scope:** Serves as the core analytical engine parsing clauses and scoring contractual liability.
 * **Key Responsibilities:**
   - Ingestion of extracted text from Gourav's module.
@@ -151,22 +182,7 @@ flowchart TD
 
 ---
 
-#### 3. Abhishi — AI Legal Advisor / Q&A
-* **Module Scope:** Document-aware conversational assistant providing plain-language legal interpretations.
-* **Key Responsibilities:**
-  - Designing prompt pipelines that inject document clauses into LLM context window (grounded Q&A).
-  - Preventing hallucination and enforcing informational guardrails.
-  - Plain-language simplification of archaic legal jargon ("legalese" to plain English).
-  - Multi-turn conversation persistence tied to document and user sessions.
-  - Static and dynamic legal advisory disclaimer rendering.
-* **Demo Path:** `Open Document` ➔ `Ask Document Question ("What are my termination obligations?")` ➔ `Receive Grounded Answer with Source Clause` ➔ `Review Chat History`.
-* **Key API Contracts:**
-  - `POST /api/advisor/chat` — Submit query with `documentId` and return contextual advice.
-  - `GET /api/advisor/history/{documentId}` — Retrieve conversation thread.
-
----
-
-#### 4. Ayush — User, Authentication & Case Management
+#### 3. Ayush Rathore — User, Authentication & Case Management
 * **Module Scope:** Security perimeter, identity management, and case folder organization.
 * **Key Responsibilities:**
   - User registration, login, and profile management with robust validation.
@@ -182,7 +198,22 @@ flowchart TD
 
 ---
 
-#### 5. Harsh — Reports, Analytics & Integration
+#### 4. Abhishi Samar — AI Legal Advisor / Q&A
+* **Module Scope:** Document-aware conversational assistant providing plain-language legal interpretations.
+* **Key Responsibilities:**
+  - Designing prompt pipelines that inject document clauses into LLM context window (grounded Q&A).
+  - Preventing hallucination and enforcing informational guardrails.
+  - Plain-language simplification of archaic legal jargon ("legalese" to plain English).
+  - Multi-turn conversation persistence tied to document and user sessions.
+  - Static and dynamic legal advisory disclaimer rendering.
+* **Demo Path:** `Open Document` ➔ `Ask Document Question ("What are my termination obligations?")` ➔ `Receive Grounded Answer with Source Clause` ➔ `Review Chat History`.
+* **Key API Contracts:**
+  - `POST /api/advisor/chat` — Submit query with `documentId` and return contextual advice.
+  - `GET /api/advisor/history/{documentId}` — Retrieve conversation thread.
+
+---
+
+#### 5. Harshvardhan Bhatt — Reports, Analytics & Integration
 * **Module Scope:** Aggregate intelligence presentation, exportable reports, and full-stack integration.
 * **Key Responsibilities:**
   - Interactive analytics dashboard (e.g., risk distribution charts, document processing counts, critical clause alerts).
@@ -218,13 +249,14 @@ To simulate an authentic 12-week semester-long engineering trajectory in an inte
   - Confirm functional & non-functional requirements.
   - Initialize Git repository, branch topology, and issue tracker.
   - Finalize relational database schema (ERD draft) and inter-module REST contracts.
+  - Submit academic project registration: `Team formation + Guide selection + Abstract (submitted via portal)`.
 * **Member Deliverables:**
-  - **Gourav:** Document JPA entity, multipart file upload endpoint skeleton, file type/size validation logic, local file storage manager.
-  - **Dilip:** Analysis, Clause, and Risk JPA entities; legal analysis service/controller skeleton; mock risk classification response.
-  - **Abhishi:** Legal advisor controller/service skeleton; `AIService` abstraction interface and prompt template draft.
-  - **Ayush:** User JPA entity, User repository, registration & login controller skeleton, BCrypt password encoder configuration.
-  - **Harsh:** Base layout UI, CSS theme tokens, main navigation bar, dashboard shell, and initial report mockups.
-* **Milestone Evidence:** Architecture diagram, database schema draft, five member feature branches, initial commit series.
+  - **Gourav Nagori:** Document JPA entity, multipart file upload endpoint skeleton, file type/size validation logic, local file storage manager.
+  - **Dilip Kumawat:** Analysis, Clause, and Risk JPA entities; legal analysis service/controller skeleton; mock risk classification response.
+  - **Ayush Rathore:** User JPA entity, User repository, registration & login controller skeleton, BCrypt password encoder configuration.
+  - **Abhishi Samar:** Legal advisor controller/service skeleton; `AIService` abstraction interface and prompt template draft.
+  - **Harshvardhan Bhatt:** Base layout UI, CSS theme tokens, main navigation bar, dashboard shell, and initial report mockups.
+* **Milestone Evidence:** Architecture diagram, database schema draft, official Abstract document, five member feature branches, initial commit series.
 
 ---
 
@@ -232,11 +264,11 @@ To simulate an authentic 12-week semester-long engineering trajectory in an inte
 * **Collaborative Objectives:**
   - Independent feature development on member branches with isolated test mocks.
 * **Member Deliverables:**
-  - **Gourav:** Production-grade text extraction pipeline for `.pdf` (Apache PDFBox) and `.docx` (Apache POI/Tika); extraction of document metadata (pages, word count, encoding).
-  - **Dilip:** Rule-based legal clause segmenter (regex/keyword heuristics) and initial risk scoring engine with severity weighting.
-  - **Abhishi:** Integration with external AI provider; document context injection with safety guardrails and anti-hallucination prompts.
-  - **Ayush:** Spring Security filter chain configuration, JWT token generation/validation, authentication provider, protected user dashboard.
-  - **Harsh:** Dynamic document listing screen, analysis visualizer components, and responsive report layout with preliminary metrics.
+  - **Gourav Nagori:** Production-grade text extraction pipeline for `.pdf` (Apache PDFBox) and `.docx` (Apache POI/Tika); extraction of document metadata (pages, word count, encoding).
+  - **Dilip Kumawat:** Rule-based legal clause segmenter (regex/keyword heuristics) and initial risk scoring engine with severity weighting.
+  - **Ayush Rathore:** Spring Security filter chain configuration, JWT token generation/validation, authentication provider, protected user dashboard.
+  - **Abhishi Samar:** Integration with external AI provider; document context injection with safety guardrails and anti-hallucination prompts.
+  - **Harshvardhan Bhatt:** Dynamic document listing screen, analysis visualizer components, and responsive report layout with preliminary metrics.
 * **Milestone Evidence:** Each member demonstrates one working, isolated functional feature locally with unit tests.
 
 ---
@@ -246,11 +278,11 @@ To simulate an authentic 12-week semester-long engineering trajectory in an inte
   - Cross-module contract wiring and full pipeline integration.
   - **Integration Target Flow:** `Login` ➔ `Upload Document` ➔ `Extract Text` ➔ `Run Analysis` ➔ `Ask Contextual Question` ➔ `View Analysis Report`.
 * **Member Deliverables:**
-  - **Gourav:** Document status lifecycle persistence in PostgreSQL; seamless handoff of extracted text payload to Dilip's analysis service.
-  - **Dilip:** Persistent storage of detected clauses, highlighted risk flags, and aggregate numerical risk scores in database.
-  - **Abhishi:** Multi-turn conversational memory persistence linked to document IDs; structured JSON responses with clause citations.
-  - **Ayush:** Strict entity ownership relationships (`User` 1:N `Document`); multi-tenant query isolation preventing cross-user data leakage.
-  - **Harsh:** Wire frontend client to live REST endpoints; display dynamic analysis results, clause badges, and interactive risk score cards.
+  - **Gourav Nagori:** Document status lifecycle persistence in PostgreSQL; seamless handoff of extracted text payload to Dilip's analysis service.
+  - **Dilip Kumawat:** Persistent storage of detected clauses, highlighted risk flags, and aggregate numerical risk scores in database.
+  - **Ayush Rathore:** Strict entity ownership relationships (`User` 1:N `Document`); multi-tenant query isolation preventing cross-user data leakage.
+  - **Abhishi Samar:** Multi-turn conversational memory persistence linked to document IDs; structured JSON responses with clause citations.
+  - **Harshvardhan Bhatt:** Wire frontend client to live REST endpoints; display dynamic analysis results, clause badges, and interactive risk score cards.
 * **Milestone Evidence:** Successful end-to-end traversal of the primary user workflow without manual database interventions.
 
 ---
@@ -260,11 +292,11 @@ To simulate an authentic 12-week semester-long engineering trajectory in an inte
   - Merge verified feature branches into `develop`.
   - Comprehensive quality assurance, boundary condition validation, and exception handling.
 * **Member Deliverables:**
-  - **Gourav:** File security testing (corrupted PDFs, password-protected files, 0-byte files, oversized payloads, non-standard DOCX).
-  - **Dilip:** Edge cases in legal analysis (scanned empty pages, contracts without standard headings, extreme clauses, zero-risk documents).
-  - **Abhishi:** AI resilience (handling API rate limits, timeouts, token limit overflow, and graceful fallback to offline heuristic advice).
-  - **Ayush:** Security penetration testing (expired JWT tokens, unauthorized resource access, SQL injection vectors in query parameters).
-  - **Harsh:** End-to-end integration test execution, error state UI banners, and aggregation metrics validation across varying document sizes.
+  - **Gourav Nagori:** File security testing (corrupted PDFs, password-protected files, 0-byte files, oversized payloads, non-standard DOCX).
+  - **Dilip Kumawat:** Edge cases in legal analysis (scanned empty pages, contracts without standard headings, extreme clauses, zero-risk documents).
+  - **Ayush Rathore:** Security penetration testing (expired JWT tokens, unauthorized resource access, SQL injection vectors in query parameters).
+  - **Abhishi Samar:** AI resilience (handling API rate limits, timeouts, token limit overflow, and graceful fallback to offline heuristic advice).
+  - **Harshvardhan Bhatt:** End-to-end integration test execution, error state UI banners, and aggregation metrics validation across varying document sizes.
 * **Milestone Evidence:** Comprehensive test-case execution sheet documenting test ID, description, inputs, expected results, and actual status (Pass/Fail).
 
 ---
@@ -274,11 +306,11 @@ To simulate an authentic 12-week semester-long engineering trajectory in an inte
   - Cloud / Containerized deployment of the live web application.
   - Preparation of formal 5th-Semester academic documentation.
 * **Member Deliverables:**
-  - **Gourav:** Verification of live multipart uploads, ephemeral file handling, and production extraction performance.
-  - **Dilip:** Validation of live risk detection accuracy across benchmark legal documents (Standard NDA, SaaS Agreement, Employment Contract).
-  - **Abhishi:** Live verification of AI advisor latency, response quality, and prominent legal disclaimer display.
-  - **Ayush:** Live production user authentication, HTTPS/CORS policy verification, and session persistence.
-  - **Harsh:** Production hosting configuration, live analytics aggregation, and high-fidelity PDF report export generation.
+  - **Gourav Nagori:** Verification of live multipart uploads, ephemeral file handling, and production extraction performance.
+  - **Dilip Kumawat:** Validation of live risk detection accuracy across benchmark legal documents (Standard NDA, SaaS Agreement, Employment Contract).
+  - **Ayush Rathore:** Live production user authentication, HTTPS/CORS policy verification, and session persistence.
+  - **Abhishi Samar:** Live verification of AI advisor latency, response quality, and prominent legal disclaimer display.
+  - **Harshvardhan Bhatt:** Production hosting configuration, live analytics aggregation, and high-fidelity PDF report export generation.
 * **Documentation Deliverables:**
   - Detailed System Architecture & Design Document (SADD).
   - Draft of academic PBL Research Paper / Conference Paper.
@@ -290,11 +322,11 @@ To simulate an authentic 12-week semester-long engineering trajectory in an inte
 * **Collaborative Objectives:**
   - Complete regression testing, presentation rehearsal, and academic defense.
 * **Member Deliverables:**
-  - **Gourav:** Document ingestion demo and architectural explanation of stream processing & memory efficiency in Java.
-  - **Dilip:** Legal risk engine demo, clause extraction heuristics, and explainable AI risk scoring defense.
-  - **Abhishi:** Interactive AI Q&A demo, contextual grounding demonstration, and legal safety guardrails explanation.
-  - **Ayush:** Security infrastructure demo, JWT architecture, BCrypt cryptography, and database relational mapping defense.
-  - **Harsh:** Live deployment walkthrough, dashboard analytics, PDF generation demo, and presentation coordination.
+  - **Gourav Nagori:** Document ingestion demo and architectural explanation of stream processing & memory efficiency in Java.
+  - **Dilip Kumawat:** Legal risk engine demo, clause extraction heuristics, and explainable AI risk scoring defense.
+  - **Ayush Rathore:** Security infrastructure demo, JWT architecture, BCrypt cryptography, and database relational mapping defense.
+  - **Abhishi Samar:** Interactive AI Q&A demo, contextual grounding demonstration, and legal safety guardrails explanation.
+  - **Harshvardhan Bhatt:** Live deployment walkthrough, dashboard analytics, PDF generation demo, and presentation coordination.
 * **Final Submission Package:**
   - ✅ Production GitHub Repository with complete commit history.
   - ✅ Live Deployment URL & API Documentation (Swagger / OpenAPI).
@@ -315,21 +347,21 @@ To maintain clean version control and provide indisputable academic contribution
                    \                                           /
 [develop]           ───●──────────●──────────●──────────●───── (Integration)
                       /          /          /          /
-[gourav]   ──────────●──────────                │          │   (Document Processing)
-[dilip]    ────────────────────●────────────────           │   (Legal Risk Engine)
-[abhishi]  ───────────────────────────────●────            │   (AI Advisor & Q&A)
-[ayush]    ───────────────────────────────────────●───────     (Auth & Security)
-[harsh]    ──────────────────────────────────────────────●     (Reports & Analytics)
+[gourav]   ──────────●──────────                │          │   (Gourav Nagori: Document Processing)
+[dilip]    ────────────────────●────────────────           │   (Dilip Kumawat: Legal Risk Engine)
+[ayush]    ───────────────────────────────────────●───────     (Ayush Rathore: Auth & Security)
+[abhishi]  ───────────────────────────────●────            │   (Abhishi Samar: AI Advisor & Q&A)
+[harsh]    ──────────────────────────────────────────────●     (Harshvardhan Bhatt: Reports & Analytics)
 ```
 
 1. **`main`**: Protected branch. Only stable, fully integrated releases with instructor-ready demos.
 2. **`develop`**: Central integration branch where feature branches merge after passing unit tests.
 3. **Dedicated Member Branches:**
-   - `gourav` — Document upload, parsing & extraction
-   - `dilip` — Clause detection & risk engine
-   - `abhishi` — AI Q&A and advisor service
-   - `ayush` — Authentication, security & user cases
-   - `harsh` — Reports, UI analytics & PDF export
+   - `gourav` — Gourav Nagori (Document upload, parsing & extraction)
+   - `dilip` — Dilip Kumawat (Clause detection & risk engine)
+   - `ayush` — Ayush Rathore (Authentication, security & user cases)
+   - `abhishi` — Abhishi Samar (AI Q&A and advisor service)
+   - `harsh` — Harshvardhan Bhatt (Reports, UI analytics & PDF export)
 4. **Pull Request Protocol:** Each merge requires peer review, clean build pass, and zero merge conflicts.
 
 ---
@@ -345,9 +377,10 @@ To maintain clean version control and provide indisputable academic contribution
 │ Build Tool        │ Apache Maven 3.9+                       │
 │ Security          │ Spring Security 6.x + jjwt (JWT)        │
 │ Document Parsing  │ Apache PDFBox 3.x / Apache POI 5.x      │
+│ OCR Engine        │ Tess4J 5.x (Tesseract OCR)              │
 │ Database          │ PostgreSQL / H2 Database (Dev)          │
 │ PDF Generation    │ OpenPDF / iText 7                       │
-│ AI Integration    │ Spring AI / LangChain4j / OpenAI REST   │
+│ AI Integration    │ Spring AI / LangChain4j / RAG Pipeline  │
 │ Testing Framework │ JUnit 5, Mockito, AssertJ, MockMvc      │
 └───────────────────┴─────────────────────────────────────────┘
 ```
@@ -378,10 +411,10 @@ git checkout gourav
 
 | Team Member | Module | Week 1-2 | Week 3-4 | Week 5-6 | Week 7-8 | Week 9-10 | Week 11-12 |
 | :--- | :--- | :---: | :---: | :---: | :---: | :---: | :---: |
-| **Gourav** | Document Management | Ingestion Skeleton | PDF/DOCX Extract | DB & API Pipe | File Edge Tests | Live Upload Test | Final Demo |
-| **Dilip** | Analysis & Risk | Risk Entities | Clause Parser | Persistence | Edge Clauses | Accuracy Test | Algorithm Defense |
-| **Abhishi** | AI Advisor & Q&A | AIService Draft | Context Grounding | Chat History | AI Fallbacks | Safety Disclaimer | AI Limitations Demo |
-| **Ayush** | Auth & Case Mgmt | User Model | JWT Security | Ownership Isolation | Security PenTest | Live Auth Test | Security Defense |
-| **Harsh** | Reports & Analytics | Dashboard Base | Screen Mockups | Live Wireup | QA & Reports | Deployment | Final Presentation |
+| **Gourav Nagori** | Document Management | Ingestion Skeleton | PDF/DOCX Extract | DB & API Pipe | File Edge Tests | Live Upload Test | Final Demo |
+| **Dilip Kumawat** | Analysis & Risk | Risk Entities | Clause Parser | Persistence | Edge Clauses | Accuracy Test | Algorithm Defense |
+| **Ayush Rathore** | Auth & Case Mgmt | User Model | JWT Security | Ownership Isolation | Security PenTest | Live Auth Test | Security Defense |
+| **Abhishi Samar** | AI Advisor & Q&A | AIService Draft | Context Grounding | Chat History | AI Fallbacks | Safety Disclaimer | AI Limitations Demo |
+| **Harshvardhan Bhatt** | Reports & Analytics | Dashboard Base | Screen Mockups | Live Wireup | QA & Reports | Deployment | Final Presentation |
 
 
