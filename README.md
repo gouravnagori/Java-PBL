@@ -100,3 +100,97 @@ flowchart TD
     AISvc --> DB
     ReportSvc --> DB
 ```
+
+---
+
+## 👥 Team Members & 5-Module Ownership
+
+> **🚨 Strict Team Policy:**  
+> Every team member owns a complete functional module end-to-end. No member is solely assigned to documentation, slides, or repository maintenance. Each individual has dedicated backend/frontend source code, unit tests, and a demonstrable live feature path.
+
+| Member | Module Name | Primary Technical Responsibility | Core Academic Deliverable |
+| :--- | :--- | :--- | :--- |
+| **Gourav** *(Lead)* | **Document Management & Processing** | File upload, validation, secure storage, PDF/DOCX parsing & extraction, document lifecycle states | Multipart upload APIs, text extraction engine, document metadata & status management |
+| **Dilip** | **Legal Analysis & Risk Detection** | Clause segmentation, legal risk classification, explainable scoring rules, risk severity matrix | Rule-based & regex clause parser, weighted risk score algorithm, analysis persistence |
+| **Abhishi** | **AI Legal Advisor / Q&A** | Context-bounded document Q&A, plain-language summaries, legal disclaimer enforcement, chat memory | AI service abstraction, prompt engineering with document grounding, conversation history APIs |
+| **Ayush** | **User, Authentication & Case Management** | User registration, authentication, JWT/session security, RBAC, user dashboard, ownership mapping | Spring Security filter chain, BCrypt hashing, multi-tenant document isolation & access control |
+| **Harsh** | **Reports, Analytics & Integration** | Analytical dashboards, aggregation metrics, structured report view, PDF export, system integration | Dashboard risk visualization, PDF report generation engine, end-to-end integration coordinator |
+
+---
+
+### 📦 Deep-Dive: Module Breakdown & Demo Paths
+
+#### 1. Gourav — Document Management & Processing
+* **Module Scope:** Serves as the ingestion gateway for legal contracts.
+* **Key Responsibilities:**
+  - Secure Multipart upload supporting `.pdf` and `.docx` with mime-type and size validation (max 15MB).
+  - Persistence of file metadata (filename, storage URI, checksum, page count, upload timestamp).
+  - High-performance text extraction using Apache Tika / PDFBox / POI.
+  - Document lifecycle management: `UPLOADED` ➔ `PROCESSING` ➔ `PROCESSED` ➔ `FAILED`.
+  - Exposing document retrieval and raw content APIs for downstream analysis modules.
+* **Demo Path:** `Login` ➔ `Upload Contract (.pdf/.docx)` ➔ `View Extracted Text & Metadata` ➔ `Verify Lifecycle Status`.
+* **Key API Contracts:**
+  - `POST /api/documents/upload` — Ingest document & initiate asynchronous extraction.
+  - `GET /api/documents/{id}` — Fetch document metadata and status.
+  - `GET /api/documents/{id}/content` — Stream extracted clean text payload.
+
+---
+
+#### 2. Dilip — Legal Analysis & Risk Detection
+* **Module Scope:** Serves as the core analytical engine parsing clauses and scoring contractual liability.
+* **Key Responsibilities:**
+  - Ingestion of extracted text from Gourav's module.
+  - Clause identification and boundary classification (e.g., *Confidentiality*, *Indemnification*, *Non-Compete*, *Termination*, *Governing Law*).
+  - Rule-based risk detection identifying predatory or ambiguous language (e.g., unlimited liability, unilateral renewal).
+  - Severity classification (`LOW`, `MEDIUM`, `HIGH`, `CRITICAL`).
+  - Explainable aggregate risk score calculation (0–100 scale) with line references.
+* **Demo Path:** `Select Document` ➔ `Trigger Analysis` ➔ `View Identified Clauses` ➔ `Review Flagged Risks` ➔ `Inspect Risk Score Breakdown`.
+* **Key API Contracts:**
+  - `POST /api/analysis/{documentId}` — Execute legal analysis pipeline on document.
+  - `GET /api/analysis/{documentId}` — Retrieve parsed clauses, risk flags, and composite score.
+
+---
+
+#### 3. Abhishi — AI Legal Advisor / Q&A
+* **Module Scope:** Document-aware conversational assistant providing plain-language legal interpretations.
+* **Key Responsibilities:**
+  - Designing prompt pipelines that inject document clauses into LLM context window (grounded Q&A).
+  - Preventing hallucination and enforcing informational guardrails.
+  - Plain-language simplification of archaic legal jargon ("legalese" to plain English).
+  - Multi-turn conversation persistence tied to document and user sessions.
+  - Static and dynamic legal advisory disclaimer rendering.
+* **Demo Path:** `Open Document` ➔ `Ask Document Question ("What are my termination obligations?")` ➔ `Receive Grounded Answer with Source Clause` ➔ `Review Chat History`.
+* **Key API Contracts:**
+  - `POST /api/advisor/chat` — Submit query with `documentId` and return contextual advice.
+  - `GET /api/advisor/history/{documentId}` — Retrieve conversation thread.
+
+---
+
+#### 4. Ayush — User, Authentication & Case Management
+* **Module Scope:** Security perimeter, identity management, and case folder organization.
+* **Key Responsibilities:**
+  - User registration, login, and profile management with robust validation.
+  - Password hashing via Spring Security `BCryptPasswordEncoder`.
+  - Stateless JWT token generation, verification, and expiration handling.
+  - Data isolation: users can only view, analyse, and query documents they own.
+  - Case management: grouping related contracts under legal case categories.
+* **Demo Path:** `Register New Account` ➔ `Login (Receive JWT)` ➔ `Access Protected Dashboard` ➔ `Manage Document Cases & History`.
+* **Key API Contracts:**
+  - `POST /api/auth/register` — User signup.
+  - `POST /api/auth/login` — Authenticate and issue JWT.
+  - `GET /api/cases` — Retrieve user-specific document cases and folders.
+
+---
+
+#### 5. Harsh — Reports, Analytics & Integration
+* **Module Scope:** Aggregate intelligence presentation, exportable reports, and full-stack integration.
+* **Key Responsibilities:**
+  - Interactive analytics dashboard (e.g., risk distribution charts, document processing counts, critical clause alerts).
+  - Generation of structured legal audit reports containing clauses, detected risks, and advisor summaries.
+  - Professional PDF export using iText / OpenPDF / Flying Saucer.
+  - Cross-module integration testing, frontend-backend wireup, and continuous deployment verification.
+* **Demo Path:** `Dashboard Overview` ➔ `View Document Analysis Metrics` ➔ `Generate Audit Report` ➔ `Export Official PDF Report`.
+* **Key API Contracts:**
+  - `GET /api/analytics/dashboard` — Global and user analytics metrics.
+  - `GET /api/reports/{documentId}/pdf` — Generate and download official PDF audit report.
+
