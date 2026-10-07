@@ -1,10 +1,11 @@
 # ⚖️ Legal Document Analyser & Advisor
 ### *Advanced Java Project-Based Learning (PBL) — 5th Semester*
 
-[![Java](https://img.shields.io/badge/Java-17%2B-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
+[![Java](https://img.shields.io/badge/Java-17%2B%20%7C%2021-ED8B00?style=for-the-badge&logo=openjdk&logoColor=white)](https://www.oracle.com/java/)
 [![Spring Boot](https://img.shields.io/badge/Spring_Boot-3.x-6DB33F?style=for-the-badge&logo=spring-boot&logoColor=white)](https://spring.io/projects/spring-boot)
 [![Spring Security](https://img.shields.io/badge/Spring_Security-JWT-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)](https://spring.io/projects/spring-security)
-[![Database](https://img.shields.io/badge/Database-PostgreSQL%20%7C%20H2-336791?style=for-the-badge&logo=postgresql&logoColor=white)](https://www.postgresql.org/)
+[![Database](https://img.shields.io/badge/Database-MongoDB%207.x-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
+[![AI & Vision OCR](https://img.shields.io/badge/AI_%26_OCR-Groq_Vision_API-f55036?style=for-the-badge)](https://groq.com/)
 [![Build](https://img.shields.io/badge/Build-Maven-C71A36?style=for-the-badge&logo=apache-maven&logoColor=white)](https://maven.apache.org/)
 [![Architecture](https://img.shields.io/badge/Architecture-Modular_REST_API-blue?style=for-the-badge)](#system-architecture)
 
@@ -14,11 +15,11 @@
 
 **Legal Document Analyser & Advisor** is an enterprise-grade Java web application designed to automate the ingestion, analysis, clause risk assessment, and document-aware advisory for complex legal contracts and agreements (e.g., NDAs, Employment Agreements, Service Contracts, Terms of Service).
 
-The application extracts raw textual content from uploaded legal documents (`.pdf`, `.docx`), identifies critical contractual clauses, evaluates legal liabilities using an explainable risk-scoring engine, and enables conversational AI interaction constrained strictly to the document's context.
+The application extracts raw textual content from uploaded legal documents (`.pdf`, `.docx`, `.txt`, and scanned images), identifies critical contractual clauses, evaluates legal liabilities using an explainable risk-scoring engine, and enables conversational AI interaction constrained strictly to the document's context.
 
 > 🔗 **Reference Prototype:** This repository represents the modular, production-ready Advanced Java rebuild of our initial proof-of-concept prototype:  
 > **[Legal-Document-analyser-and-adviser- (Reference Prototype)](https://github.com/gouravnagori/Legal-Document-analyser-and-adviser-)**  
-> *The prototype serves as an algorithmic and functional reference while this codebase implements clean enterprise Java standards, layered architecture, strict database persistence, and modular ownership.*
+> *The prototype serves as an algorithmic and functional reference while this codebase implements clean enterprise Java standards, layered architecture, strict MongoDB persistence, and modular ownership.*
 
 ---
 
@@ -39,9 +40,9 @@ This project strictly adheres to 5th-Semester Advanced Java curriculum standards
 | Core Concept | Implementation Detail |
 | :--- | :--- |
 | **Framework & REST Services** | Spring Boot 3 web layer providing clean, stateless RESTful APIs. |
-| **Persistence & ORM** | Spring Data JPA with Hibernate for relational mapping, entity lifecycle management, and transactional boundaries. |
+| **Persistence & NoSQL Database** | Spring Data MongoDB with `MongoRepository`, `@Document` mapping, compound indexes, and TTL expiration. |
 | **Authentication & Security** | Spring Security with BCrypt password hashing, role/ownership enforcement, and stateless session management / JWT. |
-| **File I/O & Extraction** | Apache Tika / Apache POI / PDFBox for high-throughput stream processing of multi-page legal documents. |
+| **File I/O & Extraction** | Apache PDFBox, Apache POI, and Groq Multimodal Vision OCR for high-throughput stream and image processing. |
 | **Robust Exception Handling** | Global exception handlers (`@ControllerAdvice`, `@ExceptionHandler`) with standardized API error responses. |
 | **Design Patterns** | Controller-Service-Repository pattern, DTO pattern, Factory & Strategy patterns for clause analysis, and Service Abstractions. |
 | **Testing & Quality** | Unit & integration testing using JUnit 5, Mockito, and Spring Boot Test slices. |
@@ -104,9 +105,9 @@ flowchart TD
     end
 
     subgraph StorageEngine["Data & Persistence Tier"]
-        DB[(PostgreSQL / Relational DB)]
+        DB[(MongoDB Database)]
         FileStore[Secure Local / Object Storage]
-        AIProvider[External LLM / AI Engine]
+        AIProvider[Groq AI & Multimodal Vision Engine]
     end
 
     UI --> AuthFilter
@@ -372,15 +373,15 @@ To maintain clean version control and provide indisputable academic contribution
 ┌─────────────────────────────────────────────────────────────┐
 │                       TECH STACK                            │
 ├───────────────────┬─────────────────────────────────────────┤
-│ Language          │ Java 17 (LTS) / Java 21                 │
-│ Web Framework     │ Spring Boot 3.x (Web, Data JPA, Security)│
+│ Language          │ Java 17 (LTS) / Java 21 / Java 25       │
+│ Web Framework     │ Spring Boot 3.x (Web, Validation, Sec)  │
 │ Build Tool        │ Apache Maven 3.9+                       │
-│ Security          │ Spring Security 6.x + jjwt (JWT)        │
-│ Document Parsing  │ Apache PDFBox 3.x / Apache POI 5.x      │
-│ OCR Engine        │ Tess4J 5.x (Tesseract OCR)              │
-│ Database          │ PostgreSQL / H2 Database (Dev)          │
+│ Security          │ Spring Security 6.x + BCrypt + JWT      │
+│ Document Parsing  │ Apache PDFBox 2.x / Apache POI 5.x      │
+│ OCR & Vision      │ Groq Multimodal Vision API (Llama 4)    │
+│ AI / LLM Engine   │ Groq API (Llama 3.3 70B Versatile)      │
+│ Database          │ MongoDB 7.x (Spring Data MongoDB)       │
 │ PDF Generation    │ OpenPDF / iText 7                       │
-│ AI Integration    │ Spring AI / LangChain4j / RAG Pipeline  │
 │ Testing Framework │ JUnit 5, Mockito, AssertJ, MockMvc      │
 └───────────────────┴─────────────────────────────────────────┘
 ```
@@ -392,17 +393,25 @@ To maintain clean version control and provide indisputable academic contribution
 ### Prerequisites
 - **JDK 17 or higher** installed (`java -version`)
 - **Apache Maven 3.8+** installed (`mvn -version`)
-- **PostgreSQL 14+** (or use default embedded H2 for quick start)
+- **MongoDB 6.0+** running locally on port 27017 (or MongoDB Atlas URI)
+- **Groq API Key** (optional for OCR, auto-falls back to offline simulation if unconfigured)
 - **Git**
 
-### Installation
+### Configuration
+Set environment variables or adjust `src/main/resources/application.properties`:
+```bash
+export GROQ_API_KEY="gsk_..."
+export MONGODB_URI="mongodb://localhost:27017/legaladvisor"
+```
+
+### Installation & Run
 ```bash
 # Clone the repository
 git clone https://github.com/gouravnagori/Java-PBL.git
 cd Java-PBL
 
-# Switch to your feature branch
-git checkout gourav
+# Build and run
+mvn clean spring-boot:run
 ```
 
 ---
