@@ -1,0 +1,355 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>LexAdvisor | Simple English & Hindi Legal Analysis, Risk Audit & Next Steps</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+
+    <!-- Professional Legal Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="brand-wrapper">
+                <div class="brand-crest">⚖</div>
+                <div class="brand-info">
+                    <h1>LexAdvisor</h1>
+                    <p>Legal Document Review & Advisory</p>
+                </div>
+            </a>
+            <div class="user-nav-slot" id="nav-user-slot">
+                <button class="btn-header-outline" id="nav-auth-toggle" onclick="showAuthView()">Sign In / Register</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- ====================================================================== -->
+    <!-- COOL, CLASSY & EYE-CATCHY HERO SECTION                                  -->
+    <!-- ====================================================================== -->
+    <section class="hero-section" id="hero-section">
+        <div class="hero-container">
+            <div class="hero-badge-pill">
+                <span>⚖️</span>
+                <span>Bilingual Contract Review • सरल और आसान कानूनी सहायता</span>
+            </div>
+
+            <h2 class="hero-title">
+                Never Sign a Blind Contract Again.<br>
+                <span>Understand Every Clause in Simple English & Hindi.</span>
+            </h2>
+
+            <p class="hero-subtitle">
+                Upload any employment contract, rental lease, NDA, or legal agreement. 
+                Get an instant plain-language breakdown, uncover hidden liability traps, and receive an exact checklist of what to do next.
+            </p>
+
+            <div class="hero-cta-group">
+                <button class="btn btn-gold" onclick="scrollToUpload()">
+                    🚀 Upload & Analyze Contract — It's Free
+                </button>
+                <button class="btn-header-outline" onclick="scrollToFeatures()" style="padding: 12px 22px; font-size: 15px;">
+                    📖 Explore How It Works
+                </button>
+            </div>
+
+            <!-- 3 High Impact Feature Pillars -->
+            <div class="hero-features-grid" id="features-section">
+                <div class="hero-feature-card">
+                    <span class="feature-card-icon">🌐</span>
+                    <h3>Bilingual Plain Explanations</h3>
+                    <p>No dense legal jargon. Read crystal-clear summaries in simple everyday English and natural Hindi (सरल हिंदी व्याख्या) in seconds.</p>
+                </div>
+                <div class="hero-feature-card">
+                    <span class="feature-card-icon">⚠️</span>
+                    <h3>13-Point Risk & Trap Scanner</h3>
+                    <p>Instantly flags unlimited liabilities, unilateral termination without notice, and unfair waivers before you put pen to paper.</p>
+                </div>
+                <div class="hero-feature-card">
+                    <span class="feature-card-icon">🧭</span>
+                    <h3>Actionable Next Steps Plan</h3>
+                    <p>Tells you exactly what action to take next: what terms to renegotiate, counter-clauses to propose, and whether it's safe to sign.</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================================== -->
+    <!-- MAIN WORKSPACE & INTERACTIVE APPLICATION CONTAINER                      -->
+    <!-- ====================================================================== -->
+    <main class="app-container" id="workspace-container">
+
+        <!-- ================================================================== -->
+        <!-- VIEW 1: AUTHENTICATION (Sign In / Register / Guest Access)         -->
+        <!-- ================================================================== -->
+        <section class="auth-wrapper" id="auth-view" style="display: none;">
+            <div class="card">
+                <div class="auth-header">
+                    <h2 id="auth-heading">Sign In to LexAdvisor</h2>
+                    <p id="auth-subheading">Access contract clause auditing and actionable legal advice.</p>
+                </div>
+
+                <div class="auth-tabs">
+                    <button class="auth-tab-btn active" id="tab-login" onclick="switchAuthTab('login')">Sign In</button>
+                    <button class="auth-tab-btn" id="tab-register" onclick="switchAuthTab('register')">Create Account</button>
+                </div>
+
+                <div id="auth-alert" class="alert-message"></div>
+
+                <!-- Sign In Form -->
+                <form id="form-login" onsubmit="handleLoginSubmit(event)">
+                    <div class="form-group">
+                        <label for="login-email">Email Address</label>
+                        <input type="email" id="login-email" class="form-control" required placeholder="name@organization.com" autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="login-password">Password</label>
+                        <input type="password" id="login-password" class="form-control" required placeholder="••••••••" autocomplete="current-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;" id="btn-login-submit">
+                        Sign In
+                    </button>
+                </form>
+
+                <!-- Register Form -->
+                <form id="form-register" style="display: none;" onsubmit="handleRegisterSubmit(event)">
+                    <div class="form-group">
+                        <label for="reg-name">Full Legal Name</label>
+                        <input type="text" id="reg-name" class="form-control" required placeholder="Gourav Nagori" autocomplete="name">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-email">Email Address</label>
+                        <input type="email" id="reg-email" class="form-control" required placeholder="name@organization.com" autocomplete="email">
+                    </div>
+                    <div class="form-group">
+                        <label for="reg-password">Password (minimum 6 characters)</label>
+                        <input type="password" id="reg-password" class="form-control" minlength="6" required placeholder="••••••••" autocomplete="new-password">
+                    </div>
+                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;" id="btn-register-submit">
+                        Create Account & Continue
+                    </button>
+                </form>
+
+                <p class="auth-note">
+                    Confidential contract parsing with multi-format OCR and rule-based risk advisory.
+                </p>
+                
+                <div style="text-align: center; margin-top: 20px; border-top: 1px solid var(--color-border); padding-top: 16px;">
+                    <button type="button" class="btn btn-outline btn-sm" onclick="bypassAuthForReview()" style="font-size: 13.5px; color: var(--color-text-muted);">
+                        Continue as Guest Reviewer →
+                    </button>
+                </div>
+            </div>
+        </section>
+
+        <!-- ================================================================== -->
+        <!-- VIEW 2: LEGAL WORKSPACE (Upload & Advisory Report)                -->
+        <!-- ================================================================== -->
+        <section id="workspace-view">
+
+            <!-- STEP 1: Upload Card -->
+            <div class="card" id="upload-card">
+                <div class="workspace-intro">
+                    <h2>Review a Legal Document</h2>
+                    <p>Upload a contract, lease, employment agreement, NDA, or scanned legal notice. Our engine will review every clause, flag liability risks, and provide plain-English & Hindi explanations with next steps.</p>
+                </div>
+
+                <!-- Dropzone -->
+                <div class="upload-dropzone" id="dropzone" onclick="triggerFileInput()">
+                    <div class="upload-icon">📄</div>
+                    <h3>Choose a legal document or drag it here</h3>
+                    <p>Supported file types: PDF, Word (DOCX), Plain Text (TXT), or Scanned Images (PNG, JPG, WEBP)</p>
+                    <span class="format-hints">Maximum document size: 20 MB</span>
+
+                    <input type="file" id="file-input" style="display: none;" accept=".pdf,.docx,.txt,image/png,image/jpeg,image/webp">
+
+                    <!-- Selected File Pill -->
+                    <div class="file-selected-badge" id="file-badge">
+                        <div class="file-selected-info">
+                            <span style="font-size: 22px;">📎</span>
+                            <div>
+                                <div class="file-selected-name" id="file-name-text">filename.pdf</div>
+                                <div class="file-selected-size" id="file-size-text">0 KB</div>
+                            </div>
+                        </div>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="clearSelectedFile(event)" style="padding: 4px 10px;">Change</button>
+                    </div>
+                </div>
+
+                <div style="display: flex; justify-content: flex-end;">
+                    <button type="button" class="btn btn-primary" id="btn-start-analysis" onclick="executeUploadAndAnalysis()" disabled>
+                        Analyze Document & Generate Legal Advice →
+                    </button>
+                </div>
+            </div>
+
+            <!-- In-Progress Spinner Card -->
+            <div class="card analysis-progress-card" id="progress-card">
+                <div class="spinner"></div>
+                <div class="progress-title" id="progress-step-title">Analyzing Legal Document...</div>
+                <p class="progress-status" id="progress-step-detail">Extracting text, segmenting clauses, formulating bilingual explanations, and planning next steps.</p>
+            </div>
+
+            <!-- STEP 2: Legal Analysis, Bilingual Explanation & Advisory Report -->
+            <div class="report-view" id="report-view">
+                
+                <!-- Action Verdict Banner -->
+                <div class="verdict-banner" id="rep-verdict-banner">
+                    <div class="verdict-info">
+                        <h3 id="rep-verdict-title">ACTION VERDICT</h3>
+                        <p id="rep-verdict-desc">Recommended immediate action regarding this agreement.</p>
+                    </div>
+                    <span class="score-badge" id="rep-verdict-badge">VERDICT</span>
+                </div>
+
+                <!-- Report Header & Risk Score Card -->
+                <div class="card">
+                    <div class="doc-meta-bar">
+                        <div class="doc-title-block">
+                            <span class="doc-type-pill" id="rep-doc-type">LEGAL CONTRACT</span>
+                            <h2 id="rep-doc-title" style="margin-top: 6px;">Document Title</h2>
+                            <p style="font-size: 13.5px; color: var(--color-text-muted);" id="rep-doc-meta">Analyzed on —</p>
+                        </div>
+                        <div>
+                            <button class="btn btn-outline btn-sm" onclick="resetToUploadView()">
+                                ↺ Upload Another Document
+                            </button>
+                        </div>
+                    </div>
+
+                    <!-- Risk Scorecard -->
+                    <div class="risk-scorecard">
+                        <div class="score-display">
+                            <div class="score-label">Overall Risk Score</div>
+                            <div class="score-number" id="rep-score-num">0</div>
+                            <span class="score-badge" id="rep-score-badge">LOW RISK</span>
+                        </div>
+                        <div class="executive-summary-block">
+                            <h4>Legal Posture Summary</h4>
+                            <p class="executive-summary-text" id="rep-executive-summary">
+                                Summary analysis will appear here...
+                            </p>
+                        </div>
+                    </div>
+
+                    <!-- Summary Metrics Strip -->
+                    <div class="stats-grid">
+                        <div class="stat-box">
+                            <div class="stat-num" id="stat-total-clauses">0</div>
+                            <div class="stat-label">Clauses Reviewed</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-num" id="stat-critical-risks" style="color: var(--color-risk-critical-text);">0</div>
+                            <div class="stat-label">Critical Red Flags</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-num" id="stat-high-risks" style="color: var(--color-risk-high-text);">0</div>
+                            <div class="stat-label">High Priority Risks</div>
+                        </div>
+                        <div class="stat-box">
+                            <div class="stat-num" id="stat-clean-clauses" style="color: var(--color-risk-low-text);">0</div>
+                            <div class="stat-label">Standard Clauses</div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- BILINGUAL EASY EXPLANATION (ENGLISH & HINDI)               -->
+                <!-- ========================================================== -->
+                <div class="bilingual-section">
+                    <div class="bilingual-header">
+                        <div class="bilingual-header-title">
+                            <h3>Complete Document Explanation</h3>
+                            <p>Explained in clear, everyday language without complex legal jargon.</p>
+                        </div>
+                        <div class="language-tabs">
+                            <button class="lang-tab-btn active" id="btn-lang-en" onclick="switchLanguage('en')">
+                                🇬🇧 Simple English
+                            </button>
+                            <button class="lang-tab-btn" id="btn-lang-hi" onclick="switchLanguage('hi')">
+                                🇮🇳 सरल हिंदी व्याख्या (Hindi)
+                            </button>
+                        </div>
+                    </div>
+                    <div class="bilingual-body">
+                        <!-- English Panel -->
+                        <div class="explanation-panel active" id="panel-explanation-en">
+                            <div class="english-text" id="text-explanation-en">
+                                Generating easy English explanation...
+                            </div>
+                        </div>
+                        <!-- Hindi Panel -->
+                        <div class="explanation-panel" id="panel-explanation-hi">
+                            <div class="hindi-text" id="text-explanation-hi">
+                                सरल हिंदी व्याख्या लोड हो रही है...
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- ACTIONABLE NEXT STEPS CHECKLIST (WHAT TO DO NEXT)          -->
+                <!-- ========================================================== -->
+                <div class="next-steps-card">
+                    <div class="next-steps-header">
+                        <h3>🧭 Recommended Next Steps & Action Plan</h3>
+                        <p>Follow this checklist of concrete actions to take according to this document before or after signing.</p>
+                    </div>
+                    <div class="next-steps-list" id="next-steps-container">
+                        <!-- Populated dynamically -->
+                    </div>
+                </div>
+
+                <!-- ========================================================== -->
+                <!-- CLAUSE-BY-CLAUSE AUDIT & ADVISORY SECTION                 -->
+                <!-- ========================================================== -->
+                <div class="card">
+                    <div class="advisory-section-header">
+                        <h3>Actionable Legal Advisory & Clause Analysis</h3>
+                        <p>Detailed legal findings with quoted contract clauses, risk rationales, and recommended counter-clauses or negotiation points.</p>
+                    </div>
+
+                    <!-- Tab Switcher -->
+                    <div class="view-filter-tabs">
+                        <button class="filter-tab active" id="tab-show-risks" onclick="switchReportTab('risks')">
+                            Flagged Risks & Advisory (<span id="count-risks-tab">0</span>)
+                        </button>
+                        <button class="filter-tab" id="tab-show-all" onclick="switchReportTab('all')">
+                            All Document Clauses (<span id="count-all-tab">0</span>)
+                        </button>
+                    </div>
+
+                    <!-- Flagged Risks & Legal Advice Cards Container -->
+                    <div id="advisory-cards-list">
+                        <!-- Dynamically populated -->
+                    </div>
+
+                    <!-- Full Clause By Clause Container (toggled) -->
+                    <div id="all-clauses-list" style="display: none;">
+                        <!-- Dynamically populated -->
+                    </div>
+
+                    <!-- Actions Toolbar -->
+                    <div class="report-action-bar">
+                        <button class="btn btn-outline" onclick="resetToUploadView()">
+                            ← Upload Another Document
+                        </button>
+                        <button class="btn btn-primary" onclick="window.print()">
+                            🖨️ Print / Save Advisory Memo
+                        </button>
+                    </div>
+                </div>
+
+            </div>
+
+        </section>
+
+    </main>
+
+    <!-- Client Application Logic -->
+    <script src="script.js"></script>
+</body>
+</html>
