@@ -1,0 +1,114 @@
+<!DOCTYPE html>
+<html lang="en" data-theme="dark">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>AI Legal Advisor & Q&A — Indian Legal Document Analyzer</title>
+    <meta name="description" content="Document-aware AI Legal Advisor. Ask legal questions, get plain-language explanations, recommendations, and context-aware guidance.">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="advisor.css">
+</head>
+<body>
+    <div class="bg-effects">
+        <div class="orb orb-1"></div>
+        <div class="orb orb-2"></div>
+    </div>
+
+    <div class="app-container">
+        <!-- Top Navbar -->
+        <nav class="navbar glass-card">
+            <div class="nav-brand">
+                <div class="logo-icon">⚖️</div>
+                <div class="brand-text">
+                    <span class="brand-title">LegalAdvisor<span class="accent">AI</span></span>
+                    <span class="module-badge">Module 3: AI Legal Advisor (Abhishi)</span>
+                </div>
+            </div>
+            <div class="nav-actions">
+                <span class="helpline">🇮🇳 NALSA Legal Aid: <strong>15100</strong></span>
+            </div>
+        </nav>
+
+        <!-- Main Workspace -->
+        <main class="advisor-workspace">
+            <!-- Sidebar: Document Context & History -->
+            <aside class="sidebar glass-card">
+                <div class="sidebar-header">
+                    <h3>📁 Document Context</h3>
+                </div>
+                
+                <div class="doc-selector-box">
+                    <label for="document-select">Select Active Document:</label>
+                    <select id="document-select" class="custom-select">
+                        <option value="">-- Direct Prompt / Manual Context --</option>
+                    </select>
+                </div>
+
+                <div class="context-preview-box">
+                    <label>Active Context Snippet:</label>
+                    <div id="context-preview" class="context-preview">
+                        No active document selected. Type your question directly or select a document to load context.
+                    </div>
+                </div>
+
+                <div class="sidebar-header" style="margin-top: 1.5rem;">
+                    <h3>📜 Q&A History</h3>
+                    <button id="clear-history-btn" class="text-btn">Clear</button>
+                </div>
+
+                <div id="history-list" class="history-list">
+                    <div class="empty-history">No prior Q&A recorded.</div>
+                </div>
+            </aside>
+
+            <!-- Center Panel: Interactive Chat Stream & Q&A -->
+            <section class="chat-section glass-card">
+                <!-- Informational & Legal Disclaimer Banner -->
+                <div class="disclaimer-banner">
+                    <div class="disclaimer-icon">⚠️</div>
+                    <div class="disclaimer-text">
+                        <strong>Informational & Legal Disclaimer:</strong>
+                        This AI Legal Advisor provides document-aware educational assistance. It is not a substitute for formal legal advice or representation by a certified legal advocate under Indian law.
+                    </div>
+                </div>
+
+                <!-- Chat Messages Stream -->
+                <div id="chat-stream" class="chat-stream">
+                    <!-- Welcome AI Message -->
+                    <div class="chat-bubble ai-bubble">
+                        <div class="bubble-header">
+                            <span class="avatar">🤖</span>
+                            <span class="sender-name">AI Legal Advisor</span>
+                            <span class="time">Just now</span>
+                        </div>
+                        <div class="bubble-content">
+                            <p>Namaste! I am your <strong>AI Legal Advisor</strong>. You can ask me any question about your contract, FIR, summons, or legal agreement.</p>
+                            <p>I will analyze your document text, break down legal terminology into simple plain English, highlight your rights, and provide practical recommendations.</p>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Quick Prompt Chips -->
+                <div class="prompt-chips">
+                    <button class="chip" data-prompt="What are my key obligations under this document?">Obligations</button>
+                    <button class="chip" data-prompt="What are the penalties or hidden risks mentioned?">Risks & Penalties</button>
+                    <button class="chip" data-prompt="Explain this document in simple plain English and Hindi.">Plain Language Summary</button>
+                    <button class="chip" data-prompt="What constitutional or legal rights protect me here?">Your Rights</button>
+                    <button class="chip" data-prompt="What are the critical deadlines and next steps?">Deadlines & Steps</button>
+                </div>
+
+                <!-- Chat Input Controls -->
+                <form id="chat-form" class="chat-input-box">
+                    <textarea id="question-input" placeholder="Ask a question about your legal document (e.g., 'What happens if I terminate early?')..." rows="2" required></textarea>
+                    <button type="submit" id="send-btn" class="primary-btn">
+                        <span>Ask AI Advisor</span>
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><line x1="22" y1="2" x2="11" y2="13"/><polygon points="22 2 15 22 11 13 2 9 22 2"/></svg>
+                    </button>
+                </form>
+            </section>
+        </main>
+    </div>
+
+    <script src="advisor.js"></script>
+</body>
+</html>
