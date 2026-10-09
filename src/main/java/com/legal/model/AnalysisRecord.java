@@ -93,4 +93,45 @@ public class AnalysisRecord {
     public void setAdvice(String advice) { this.advice = advice; }
     public String getLegalAidInfo() { return legalAidInfo; }
     public void setLegalAidInfo(String legalAidInfo) { this.legalAidInfo = legalAidInfo; }
+
+    // Analytics and Audit Report Integration Fields
+    private String documentId;
+    private double overallRiskScore;
+    private java.util.List<String> clauses = new java.util.ArrayList<>();
+    private java.util.List<RiskFlag> riskFlags = new java.util.ArrayList<>();
+
+    public String getDocumentId() { return documentId; }
+    public void setDocumentId(String documentId) { this.documentId = documentId; }
+
+    public double getOverallRiskScore() { return overallRiskScore; }
+    public void setOverallRiskScore(double overallRiskScore) { this.overallRiskScore = overallRiskScore; }
+
+    public String getExecutiveSummary() { return summary; }
+    public void setExecutiveSummary(String executiveSummary) { this.summary = executiveSummary; }
+
+    public java.util.List<String> getClauses() { return clauses; }
+    public void setClauses(java.util.List<String> clauses) { this.clauses = clauses; }
+
+    public java.util.List<RiskFlag> getRiskFlags() { return riskFlags; }
+    public void setRiskFlags(java.util.List<RiskFlag> riskFlags) { this.riskFlags = riskFlags; }
+
+    public static class RiskFlag {
+        private String clauseType;
+        private String description;
+        private String severity;
+
+        public RiskFlag() {}
+        public RiskFlag(String clauseType, String description, String severity) {
+            this.clauseType = clauseType;
+            this.description = description;
+            this.severity = severity;
+        }
+
+        public String getClauseType() { return clauseType; }
+        public void setClauseType(String clauseType) { this.clauseType = clauseType; }
+        public String getDescription() { return description; }
+        public void setDescription(String description) { this.description = description; }
+        public String getSeverity() { return severity; }
+        public void setSeverity(String severity) { this.severity = severity; }
+    }
 }

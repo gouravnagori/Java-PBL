@@ -21,6 +21,11 @@ public interface DocumentService {
     DocumentUploadResponse uploadAndProcessDocument(MultipartFile file, String title, String userId);
 
     /**
+     * Retrieve full LegalDocument entity by ID.
+     */
+    com.legal.model.LegalDocument getDocument(String id);
+
+    /**
      * Retrieve metadata and processing status of a document.
      */
     DocumentMetadataResponse getDocumentById(String id, String userId);

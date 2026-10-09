@@ -63,6 +63,14 @@ public class LegalDocument {
     public String getOriginalFileName() { return originalFileName; }
     public void setOriginalFileName(String originalFileName) { this.originalFileName = originalFileName; }
 
+    public String getFilename() {
+        return originalFileName != null ? originalFileName : (title != null ? title : "contract");
+    }
+
+    public void setFilename(String filename) {
+        this.originalFileName = filename;
+    }
+
     public String getStoragePath() { return storagePath; }
     public void setStoragePath(String storagePath) { this.storagePath = storagePath; }
 

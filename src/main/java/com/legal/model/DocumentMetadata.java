@@ -30,6 +30,20 @@ public class DocumentMetadata {
     public String getContentType() { return contentType; }
     public void setContentType(String contentType) { this.contentType = contentType; }
 
+    public String getFileType() {
+        if (contentType != null && !contentType.isBlank()) {
+            if (contentType.contains("pdf")) return "PDF";
+            if (contentType.contains("wordprocessingml") || contentType.contains("docx")) return "DOCX";
+            if (contentType.contains("plain")) return "TXT";
+            if (contentType.contains("image")) return "IMAGE";
+            return contentType;
+        }
+        if (fileName != null && fileName.contains(".")) {
+            return fileName.substring(fileName.lastIndexOf('.') + 1).toUpperCase();
+        }
+        return "CONTRACT";
+    }
+
     public long getFileSize() { return fileSize; }
     public void setFileSize(long fileSize) { this.fileSize = fileSize; }
 
