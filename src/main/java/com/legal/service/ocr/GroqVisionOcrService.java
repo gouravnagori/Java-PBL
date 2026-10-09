@@ -34,7 +34,7 @@ public class GroqVisionOcrService {
     @Value("${groq.api.url:https://api.groq.com/openai/v1/chat/completions}")
     private String apiUrl;
 
-    @Value("${groq.api.vision.model:meta-llama/llama-4-scout-17b-16e-instruct}")
+    @Value("${groq.api.vision.model:qwen/qwen3.8-27b}")
     private String visionModelName;
 
     private final RestTemplate restTemplate;
