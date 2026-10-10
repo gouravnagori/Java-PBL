@@ -3,184 +3,39 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document Review Workspace | LexAdvisor</title>
+    <title>Contract Review Workspace | LexAdvisor</title>
     <link rel="stylesheet" href="style.css">
-    <link rel="preconnect" href="https://fonts.googleapis.com">
-    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     <style>
-        .workspace-top-banner {
-            background: #FFFFFF;
-            border-bottom: 1px solid var(--color-border);
-            padding: 20px 28px;
-            margin-bottom: 32px;
-        }
-        .workspace-top-inner {
-            max-width: 1180px;
-            margin: 0 auto;
-            display: flex;
-            justify-content: space-between;
+        .workspace-verdict-grid {
+            display: grid;
+            grid-template-columns: 1fr auto;
             align-items: center;
-            flex-wrap: wrap;
-            gap: 16px;
+            gap: 24px;
         }
-        .workspace-title-box h2 {
-            font-family: var(--font-serif);
-            font-size: 22px;
-            color: var(--color-primary);
-            margin-bottom: 4px;
-        }
-        .workspace-title-box p {
-            font-size: 14px;
-            color: var(--color-text-muted);
-        }
-        .user-badge-chip {
-            display: inline-flex;
-            align-items: center;
-            gap: 8px;
-            background: var(--color-bg-subtle);
-            border: 1px solid var(--color-border);
-            padding: 6px 14px;
-            border-radius: var(--radius-sm);
-            font-size: 14px;
-            font-weight: 600;
-            color: var(--color-primary);
-        }
-        .detailed-advisory-card {
-            background: #FFFFFF;
-            border: 1px solid var(--color-border);
-            border-radius: var(--radius-md);
-            padding: 32px;
-            margin-bottom: 28px;
-            box-shadow: var(--shadow-sm);
-        }
-        .advisory-tabs {
-            display: flex;
-            gap: 12px;
-            border-bottom: 2px solid var(--color-border);
-            margin-bottom: 24px;
-        }
-        .advisory-tab-btn {
-            background: transparent;
-            border: none;
-            font-family: var(--font-sans);
-            font-size: 16px;
-            font-weight: 600;
-            padding: 12px 20px;
-            cursor: pointer;
-            color: var(--color-text-light);
-            border-bottom: 2px solid transparent;
-            margin-bottom: -2px;
-            transition: all 0.2s ease;
-        }
-        .advisory-tab-btn.active {
-            color: var(--color-primary);
-            border-bottom-color: var(--color-brand-gold);
-        }
-        .advisory-tab-btn.hindi-tab.active {
-            border-bottom-color: #D97706;
-            color: #92400E;
-        }
-        .advisory-content-pane {
-            font-size: 15px;
-            line-height: 1.8;
-            color: var(--color-text-main);
-        }
-        .advisory-content-pane.hindi-text {
-            font-family: var(--font-hindi);
-            font-size: 16px;
-            background: var(--color-bg-hindi);
-            border: 1px solid #FDE68A;
-            padding: 24px;
-            border-radius: var(--radius-sm);
-        }
-        .advisory-content-pane.english-text {
-            background: #FAFAFA;
-            border: 1px solid #E5E7EB;
-            padding: 24px;
-            border-radius: var(--radius-sm);
-        }
-        .advisory-content-pane h3 {
-            font-family: var(--font-serif);
-            font-size: 18px;
-            color: var(--color-primary);
-            margin: 20px 0 10px;
-            border-bottom: 1px solid rgba(0,0,0,0.06);
-            padding-bottom: 6px;
-        }
-        .advisory-content-pane h3:first-child {
-            margin-top: 0;
-        }
-        .advisory-content-pane p {
-            margin-bottom: 14px;
-        }
-        .advisory-content-pane ul {
-            margin: 10px 0 16px 20px;
-        }
-        .advisory-content-pane li {
-            margin-bottom: 8px;
-        }
-        .next-steps-container {
-            background: #F0FDF4;
-            border: 1px solid #BBF7D0;
-            border-radius: var(--radius-md);
-            padding: 28px 32px;
-            margin-bottom: 28px;
-        }
-        .next-steps-container h3 {
-            font-family: var(--font-serif);
-            font-size: 20px;
-            color: #14532D;
-            margin-bottom: 8px;
-            display: flex;
-            align-items: center;
-            gap: 10px;
-        }
-        .next-steps-list-items {
-            list-style: none;
-            padding: 0;
-            margin: 16px 0 0;
-        }
-        .next-steps-list-items li {
-            font-size: 15px;
-            color: #166534;
-            margin-bottom: 12px;
-            display: flex;
-            align-items: flex-start;
-            gap: 12px;
-            line-height: 1.6;
-        }
-        .next-step-badge {
-            background: #22C55E;
-            color: #FFFFFF;
-            font-size: 12px;
-            font-weight: 700;
-            padding: 2px 8px;
-            border-radius: 50%;
-            display: inline-flex;
-            align-items: center;
-            justify-content: center;
-            flex-shrink: 0;
-            margin-top: 2px;
+        @media (max-width: 780px) {
+            .workspace-verdict-grid {
+                grid-template-columns: 1fr;
+            }
         }
     </style>
 </head>
 <body>
+    <div class="top-rule"></div>
 
     <!-- Header -->
     <header class="site-header">
         <div class="header-container">
-            <a href="/" class="brand-wrapper">
-                <div class="brand-crest">⚖</div>
-                <div class="brand-info">
-                    <h1>LexAdvisor</h1>
-                    <p>Document Review Workspace</p>
-                </div>
+            <a href="/" class="brand-wrapper" aria-label="LexAdvisor home">
+                <span class="brand-mark">L/</span>
+                <span class="brand-info">
+                    <span class="brand-name">LexAdvisor</span>
+                    <span class="brand-tag">Plain-language legal assistant</span>
+                </span>
             </a>
             <div class="user-nav-slot">
-                <a href="/admin.html" class="btn-header-outline">📊 Admin Panel</a>
+                <a href="/admin.html" class="btn-header-outline">Admin Panel</a>
                 <a href="/" class="btn-header-outline">Public Home</a>
-                <button onclick="logoutWorkspace()" class="btn-header-outline" style="background: #374151;">Logout</button>
+                <button onclick="logoutWorkspace()" class="btn-header-outline" style="background:var(--metal-light);">Logout</button>
             </div>
         </div>
     </header>
@@ -189,50 +44,52 @@
     <div class="workspace-top-banner">
         <div class="workspace-top-inner">
             <div class="workspace-title-box">
-                <h2>Contract Review & Advisory Workspace</h2>
-                <p>Upload your legal contract below for detailed bilingual analysis, risk scoring, and next steps.</p>
+                <div class="eyebrow" style="color:var(--metal-light);margin-bottom:6px;">Workspace / 01</div>
+                <h2>Document Review & Legal Clarity Desk</h2>
+                <p>Upload any contract or agreement to extract hidden liabilities, plain English & सरल हिंदी advice, and next moves.</p>
             </div>
             <div class="user-badge-chip">
-                <span>👤 Logged in as:</span>
+                <span>👤 Active Session:</span>
                 <span id="display-user-name">User</span>
             </div>
         </div>
     </div>
 
     <!-- Main Workspace Area -->
-    <main class="app-container" style="max-width: 1180px; margin: 0 auto; padding: 0 24px 60px;">
+    <main class="app-container" style="max-width: 1240px; width: min(1240px, calc(100% - 64px)); margin: 0 auto; padding-bottom: 70px;">
 
         <!-- ============================================================== -->
         <!-- DOCUMENT UPLOAD ZONE (Only Visible in Workspace)               -->
         <!-- ============================================================== -->
-        <section class="card upload-section" id="upload-panel">
+        <section class="card" id="upload-panel" style="padding: 36px 32px; margin-bottom: 30px;">
             <div class="card-header">
-                <h2>Upload Contract for Review</h2>
-                <p>Supports PDF, Word (DOCX), plain text (TXT), and scanned physical stamp-paper photos.</p>
+                <div class="eyebrow" style="margin-bottom: 6px;">Intake / Inspection</div>
+                <h2>Put the contract on the table</h2>
+                <p>Supports PDF, DOCX, TXT, and scanned image formats. Analysis extracts clauses, measures risk scores, and drafts plain-language advice.</p>
             </div>
 
             <div class="upload-dropzone" id="drop-zone" onclick="triggerFileInput()">
                 <div class="dropzone-content">
-                    <div class="dropzone-icon">📁</div>
-                    <h3>Drag & Drop Contract Here</h3>
+                    <div class="dropzone-icon">↑</div>
+                    <h3>Drop your contract file here</h3>
                     <p>or click to browse from your device</p>
-                    <span class="dropzone-hint">Accepted: PDF, DOCX, TXT, JPG, PNG • Max size: 20MB</span>
+                    <span class="dropzone-hint">PDF, DOCX, TXT, JPG, PNG • Up to 20 MB • 256-Bit Encrypted</span>
                 </div>
                 <input type="file" id="file-input" style="display: none;" accept=".pdf,.docx,.txt,.jpg,.jpeg,.png,.webp" onchange="handleFileSelected(event)">
             </div>
 
             <!-- Upload Progress Bar -->
             <div id="upload-progress-container" style="display: none; margin-top: 24px;">
-                <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;">
+                <div style="display: flex; justify-content: space-between; font: 600 11px var(--mono); text-transform: uppercase; margin-bottom: 8px;">
                     <span id="progress-status-text">Ingesting document...</span>
-                    <span id="progress-percent-text">20%</span>
+                    <span id="progress-percent-text">25%</span>
                 </div>
-                <div style="height: 8px; background: #E5E7EB; border-radius: 4px; overflow: hidden;">
-                    <div id="progress-bar-fill" style="width: 20%; height: 100%; background: var(--color-brand-gold); transition: width 0.3s ease;"></div>
+                <div style="height: 6px; background: var(--line); border-radius: 3px; overflow: hidden;">
+                    <div id="progress-bar-fill" style="width: 25%; height: 100%; background: linear-gradient(90deg, #343941, #D9342B); transition: width 0.3s ease;"></div>
                 </div>
             </div>
 
-            <div id="upload-error-alert" class="alert-message error" style="display: none; margin-top: 20px;"></div>
+            <div id="upload-error-alert" class="auth-alert-box error" style="display: none; margin-top: 20px;"></div>
         </section>
 
         <!-- ============================================================== -->
@@ -241,29 +98,27 @@
         <section id="results-panel" style="display: none;">
 
             <!-- Verdict & Composite Score Banner -->
-            <div class="card" id="verdict-banner-card" style="padding: 28px 32px; margin-bottom: 28px;">
-                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+            <div class="card" id="verdict-banner-card" style="padding: 32px 34px; margin-bottom: 30px;">
+                <div class="workspace-verdict-grid">
                     <div>
-                        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--color-text-light); margin-bottom: 4px;">
-                            Official Safety Verdict
-                        </div>
-                        <h2 id="result-verdict-title" style="font-family: var(--font-serif); font-size: 26px; color: var(--color-primary); margin-bottom: 6px;">
+                        <div class="eyebrow" style="margin-bottom: 8px;">Review Verdict / Audit Score</div>
+                        <h2 id="result-verdict-title" style="font: 800 clamp(24px, 4vw, 36px)/1.05 var(--display); text-transform: uppercase; margin-bottom: 8px;">
                             Evaluating Document...
                         </h2>
-                        <p id="result-doc-title" style="font-size: 14px; color: var(--color-text-muted); margin: 0;">
+                        <p id="result-doc-title" style="font: 600 11px var(--mono); color: var(--muted); text-transform: uppercase; margin: 0;">
                             Document: Contract.pdf • Type: General Agreement
                         </p>
                     </div>
-                    <div style="display: flex; align-items: center; gap: 24px;">
-                        <div style="text-align: right;">
-                            <div style="font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--color-text-light);">Risk Score</div>
-                            <div id="result-score-val" style="font-family: var(--font-serif); font-size: 38px; font-weight: 700; color: var(--color-brand-gold); line-height: 1;">
+                    <div style="display: flex; align-items: center; gap: 20px; flex-wrap: wrap;">
+                        <div style="background: linear-gradient(135deg, #F9FAFB, #E4E8ED); border: 1px solid var(--line); border-radius: 6px; padding: 14px 22px; text-align: center;">
+                            <div style="font: 700 9px var(--mono); text-transform: uppercase; color: var(--muted); margin-bottom: 4px;">Composite Risk</div>
+                            <div id="result-score-val" style="font: 800 42px/0.95 var(--display); color: var(--ink);">
                                 0 / 100
                             </div>
                         </div>
                         <div>
-                            <button id="btn-download-pdf" onclick="downloadPdfReport()" class="btn btn-outline" style="padding: 10px 18px; font-size: 14px;">
-                                📥 Download PDF Report
+                            <button id="btn-download-pdf" onclick="downloadPdfReport()" class="btn btn-outline" style="min-height: 48px;">
+                                Download PDF Report <span class="arrow">↓</span>
                             </button>
                         </div>
                     </div>
@@ -271,24 +126,23 @@
             </div>
 
             <!-- DETAILED BILINGUAL LEGAL ADVISORY (Detailed English & Hindi) -->
-            <div class="detailed-advisory-card">
-                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
-                    <div>
-                        <h2 style="font-family: var(--font-serif); font-size: 24px; color: var(--color-primary); margin-bottom: 4px;">
-                            Comprehensive Plain-Language Legal Breakdown
-                        </h2>
-                        <p style="font-size: 14px; color: var(--color-text-muted); margin: 0;">
-                            Read the complete, detailed breakdown in simple English or natural Hindi (विस्तृत और सरल हिंदी).
-                        </p>
-                    </div>
+            <div class="detailed-advisory-card" style="padding: 34px; margin-bottom: 30px;">
+                <div style="margin-bottom: 20px; padding-bottom: 16px; border-bottom: 1px solid var(--line);">
+                    <div class="eyebrow" style="margin-bottom: 6px;">Bilingual Translation / 02</div>
+                    <h2 style="font: 800 26px var(--display); text-transform: uppercase; margin-bottom: 4px;">
+                        Comprehensive Plain-Language Legal Breakdown
+                    </h2>
+                    <p style="font-size: 13px; color: var(--muted); margin: 0;">
+                        Read the complete, detailed breakdown in simple English or everyday natural Hindi (विस्तृत और सरल हिंदी).
+                    </p>
                 </div>
 
                 <div class="advisory-tabs">
                     <button class="advisory-tab-btn active" id="tab-btn-eng" onclick="switchAdvisoryTab('eng')">
-                        🇬🇧 Detailed English Breakdown
+                        English Plain Explanation
                     </button>
-                    <button class="advisory-tab-btn hindi-tab" id="tab-btn-hin" onclick="switchAdvisoryTab('hin')">
-                        🇮🇳 विस्तृत हिंदी सारांश (सरल और आसान)
+                    <button class="advisory-tab-btn" id="tab-btn-hin" onclick="switchAdvisoryTab('hin')">
+                        सरल हिंदी सारांश (Hindi)
                     </button>
                 </div>
 
@@ -304,13 +158,11 @@
             </div>
 
             <!-- ACTIONABLE NEXT STEPS CHECKLIST -->
-            <div class="next-steps-container">
-                <h3>
-                    <span>🧭</span>
-                    <span>Recommended Next Steps & Negotiation Plan</span>
-                </h3>
-                <p style="font-size: 14px; color: #166534; margin: 0;">
-                    Follow these step-by-step actions before putting your signature on this document.
+            <div class="next-steps-container" style="margin-bottom: 30px;">
+                <div class="eyebrow" style="color:var(--green);margin-bottom:6px;">Next Move / Action Plan</div>
+                <h3>Recommended Steps Before You Sign</h3>
+                <p style="font-size: 13px; color: #173823; margin: 0;">
+                    Follow these concrete actions, negotiation requests, and verification steps.
                 </p>
                 <ul class="next-steps-list-items" id="next-steps-list">
                     <!-- Populated dynamically -->
@@ -318,20 +170,21 @@
             </div>
 
             <!-- 13-POINT CLAUSE RISK BREAKDOWN TABLE -->
-            <div class="card" style="padding: 32px; margin-bottom: 32px;">
-                <div class="card-header" style="margin-bottom: 20px;">
-                    <h2>Detected Clauses & Risk Scanner Audit</h2>
-                    <p>Every extracted clause evaluated against 13 statutory compliance and consumer protection rules.</p>
+            <div class="card" style="padding: 34px; margin-bottom: 34px;">
+                <div class="card-header" style="margin-bottom: 22px;">
+                    <div class="eyebrow" style="margin-bottom: 6px;">Clause Audit / Risk Flags</div>
+                    <h2>Detected Clauses & Rule Breakdown</h2>
+                    <p>Every identified clause evaluated against Indian contract norms and consumer protection guidelines.</p>
                 </div>
 
                 <div style="overflow-x: auto;">
-                    <table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
+                    <table>
                         <thead>
-                            <tr style="border-bottom: 2px solid var(--color-border); background: var(--color-bg-subtle);">
-                                <th style="padding: 12px 16px; font-weight: 600; color: var(--color-primary);">Clause #</th>
-                                <th style="padding: 12px 16px; font-weight: 600; color: var(--color-primary);">Clause Type</th>
-                                <th style="padding: 12px 16px; font-weight: 600; color: var(--color-primary);">Risk Level</th>
-                                <th style="padding: 12px 16px; font-weight: 600; color: var(--color-primary);">Identified Issue & Advice</th>
+                            <tr>
+                                <th style="width: 120px;">Clause #</th>
+                                <th style="width: 180px;">Category</th>
+                                <th style="width: 130px;">Severity</th>
+                                <th>Clause Assessment & Proposed Amendment</th>
                             </tr>
                         </thead>
                         <tbody id="clauses-table-body">
@@ -342,15 +195,26 @@
             </div>
 
             <!-- Reset / Upload Another Button -->
-            <div style="text-align: center; margin-top: 32px;">
-                <button class="btn btn-outline" onclick="resetWorkspaceForNewUpload()" style="padding: 12px 28px;">
-                    🔄 Analyze Another Document
+            <div style="text-align: center; margin-top: 36px;">
+                <button class="btn btn-outline" onclick="resetWorkspaceForNewUpload()" style="min-height: 48px; padding: 0 28px;">
+                    ← Analyze Another Document
                 </button>
             </div>
 
         </section>
 
     </main>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-disclaimer">
+            <strong>Important Notice:</strong> LexAdvisor provides automated informational breakdown of contracts. It is not an attorney or formal legal representation. Always seek licensed legal counsel for disputes or high-stakes contracts.
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 LexAdvisor. 5th Sem Java PBL.</span>
+            <span><a href="/">Public Landing</a><a href="/admin.html">Admin Audit Center</a></span>
+        </div>
+    </footer>
 
     <script>
         // Check Authentication Gate
@@ -477,16 +341,16 @@
             const verdictEl = document.getElementById('result-verdict-title');
             verdictEl.textContent = verdict;
             if (verdict.includes('DO NOT SIGN')) {
-                verdictEl.style.color = 'var(--color-risk-critical-text)';
+                verdictEl.style.color = 'var(--red)';
             } else if (verdict.includes('CAUTION')) {
-                verdictEl.style.color = 'var(--color-risk-high-text)';
+                verdictEl.style.color = '#B94B05';
             } else {
-                verdictEl.style.color = 'var(--color-risk-low-text)';
+                verdictEl.style.color = 'var(--green)';
             }
 
             document.getElementById('result-score-val').textContent = `${Math.round(score)} / 100`;
 
-            // Detailed English Summary (Convert markdown headings to HTML)
+            // Detailed English Summary
             const engText = report.englishExplanation || 'Detailed analysis completed.';
             document.getElementById('english-explanation-text').innerHTML = formatMarkdownText(engText);
 
@@ -515,47 +379,43 @@
             const clauses = report.clauses || [];
 
             if (clauses.length === 0) {
-                tbody.innerHTML = `<tr><td colspan="4" style="padding: 20px; text-align: center; color: var(--color-text-muted);">No distinct clauses required flagging. All provisions within standard limits.</td></tr>`;
+                tbody.innerHTML = `<tr><td colspan="4" style="padding: 20px; text-align: center; color: var(--muted);">No distinct clauses required flagging. All provisions within standard limits.</td></tr>`;
             } else {
                 clauses.forEach(c => {
                     const tr = document.createElement('tr');
-                    tr.style.borderBottom = '1px solid var(--color-border)';
-
-                    const hasRisk = c.hasRisk;
                     const risks = c.risks || [];
                     const topSeverity = risks.length > 0 ? risks[0].severity : 'LOW';
 
-                    let badgeColor = '#059669';
-                    let badgeBg = '#ECFDF5';
-                    if (topSeverity === 'CRITICAL') { badgeColor = '#DC2626'; badgeBg = '#FEF2F2'; }
-                    else if (topSeverity === 'HIGH') { badgeColor = '#EA580C'; badgeBg = '#FFF7ED'; }
-                    else if (topSeverity === 'MEDIUM') { badgeColor = '#D97706'; badgeBg = '#FFFBEB'; }
+                    let severityClass = 'low';
+                    if (topSeverity === 'CRITICAL' || topSeverity === 'HIGH') {
+                        severityClass = 'critical';
+                    } else if (topSeverity === 'MEDIUM') {
+                        severityClass = 'medium';
+                    }
 
                     const explanation = risks.length > 0 
-                        ? `<strong>${escapeHtml(risks[0].riskTitle)}:</strong> ${escapeHtml(risks[0].explanation)}<br><span style="color: #4B5565; font-size: 13px;">💡 Suggestion: ${escapeHtml(risks[0].suggestion)}</span>`
-                        : `<span style="color: #6B7280;">Standard terms; no high-severity risk triggers found.</span>`;
+                        ? `<strong>${escapeHtml(risks[0].riskTitle)}:</strong> ${escapeHtml(risks[0].explanation)}<div style="color: var(--muted); font-size: 12px; margin-top: 6px;">💡 Suggested Amendment: ${escapeHtml(risks[0].suggestion)}</div>`
+                        : `<span style="color: var(--muted);">Standard provisions; no major risk triggers detected.</span>`;
 
                     tr.innerHTML = `
-                        <td style="padding: 14px 16px; font-weight: 600;">Clause ${c.clauseIndex || '-'}</td>
-                        <td style="padding: 14px 16px; font-weight: 500;">${escapeHtml(c.clauseType || 'GENERAL')}</td>
-                        <td style="padding: 14px 16px;">
-                            <span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 700; color: ${badgeColor}; background: ${badgeBg};">
+                        <td style="font: 700 11px var(--mono);">Clause ${c.clauseIndex || '-'}</td>
+                        <td style="font: 600 11px var(--mono); text-transform: uppercase;">${escapeHtml(c.clauseType || 'GENERAL')}</td>
+                        <td>
+                            <span class="risk-pill ${severityClass}">
                                 ${topSeverity}
                             </span>
                         </td>
-                        <td style="padding: 14px 16px; line-height: 1.6;">${explanation}</td>
+                        <td style="line-height: 1.6;">${explanation}</td>
                     `;
                     tbody.appendChild(tr);
                 });
             }
 
-            // Scroll to top of results
             document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
         }
 
         function formatMarkdownText(text) {
             if (!text) return '';
-            // Basic markdown parser for headings, bold, bullet points
             let html = escapeHtml(text);
             html = html.replace(/### (.*?)\n/g, '<h3>$1</h3>');
             html = html.replace(/## (.*?)\n/g, '<h3>$1</h3>');
