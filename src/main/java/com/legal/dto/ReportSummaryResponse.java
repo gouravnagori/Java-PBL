@@ -19,12 +19,19 @@ public class ReportSummaryResponse {
     private int flaggedRisksCount;
     private String downloadPdfUrl;
     private Instant generatedAt;
+    private String userId;
 
     public ReportSummaryResponse() {}
 
     public ReportSummaryResponse(String reportId, String documentId, String fileName, String documentType,
                                  double riskScore, String riskLevel, int totalClauses, int flaggedRisksCount,
                                  String downloadPdfUrl, Instant generatedAt) {
+        this(reportId, documentId, fileName, documentType, riskScore, riskLevel, totalClauses, flaggedRisksCount, downloadPdfUrl, generatedAt, null);
+    }
+
+    public ReportSummaryResponse(String reportId, String documentId, String fileName, String documentType,
+                                 double riskScore, String riskLevel, int totalClauses, int flaggedRisksCount,
+                                 String downloadPdfUrl, Instant generatedAt, String userId) {
         this.reportId = reportId;
         this.documentId = documentId;
         this.fileName = fileName;
@@ -35,6 +42,7 @@ public class ReportSummaryResponse {
         this.flaggedRisksCount = flaggedRisksCount;
         this.downloadPdfUrl = downloadPdfUrl;
         this.generatedAt = generatedAt;
+        this.userId = userId;
     }
 
     public String getReportId() {
@@ -115,5 +123,13 @@ public class ReportSummaryResponse {
 
     public void setGeneratedAt(Instant generatedAt) {
         this.generatedAt = generatedAt;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }

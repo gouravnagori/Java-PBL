@@ -143,8 +143,25 @@ public class ReportServiceImpl implements ReportService {
                 r.getKeyRiskFindings() != null ? r.getKeyRiskFindings().size() : 0,
                 r.getSeverityBreakdown() != null ? r.getSeverityBreakdown().getOrDefault("HIGH", 0) : 0,
                 "/api/reports/" + r.getDocumentId() + "/pdf",
-                r.getCreatedAt()
+                r.getCreatedAt(),
+                r.getUserId()
         )).toList();
+    }
+
+    @Override
+    public List<ReportSummaryResponse> getAllReportSummaries() {
+        // Automatically ensure any documents in the system have compiled reports
+        try {
+            List<LegalDocument> allDocs = documentRepository.findAll();
+            for (LegalDocument doc : allDocs) {
+                if (reportRepository.findByDocumentId(doc.getId()).isEmpty()) {
+                    try {
+                        generateReportForDocument(doc.getId(), doc.getUserId());
+                    } catch (Exception ignored) {}
+                }
+            }
+        } catch (Exception ignored) {}
+        return getUserReportSummaries(null);
     }
 
     @Override

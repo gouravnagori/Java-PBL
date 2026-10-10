@@ -33,6 +33,11 @@ public interface ReportService {
     List<ReportSummaryResponse> getUserReportSummaries(String userId);
 
     /**
+     * List all report summaries across the platform (Admin Control Panel).
+     */
+    List<ReportSummaryResponse> getAllReportSummaries();
+
+    /**
      * Export PDF report binary data for document.
      */
     byte[] exportReportPdf(String documentId);

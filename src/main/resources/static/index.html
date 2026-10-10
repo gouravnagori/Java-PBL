@@ -3,11 +3,340 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>LexAdvisor | Simple English & Hindi Legal Analysis, Risk Audit & Next Steps</title>
+    <title>LexAdvisor | Plain English & Hindi Legal Analysis, Risk Audit & Next Steps</title>
     <link rel="stylesheet" href="style.css">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        /* Landing Page Specific Sections */
+        .landing-nav-links {
+            display: flex;
+            align-items: center;
+            gap: 22px;
+        }
+        .landing-nav-links a {
+            color: #D1D5DB;
+            text-decoration: none;
+            font-size: 14px;
+            font-weight: 500;
+            transition: color 0.2s ease;
+        }
+        .landing-nav-links a:hover {
+            color: #FFFFFF;
+        }
+        .section-padding {
+            padding: 80px 24px;
+            max-width: 1180px;
+            margin: 0 auto;
+        }
+        .section-header {
+            text-align: center;
+            max-width: 760px;
+            margin: 0 auto 52px;
+        }
+        .section-badge {
+            display: inline-block;
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            color: var(--color-brand-gold);
+            background: rgba(163, 117, 54, 0.1);
+            padding: 4px 12px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 12px;
+        }
+        .section-title {
+            font-family: var(--font-serif);
+            font-size: 34px;
+            font-weight: 600;
+            color: var(--color-primary);
+            line-height: 1.3;
+            margin-bottom: 14px;
+        }
+        .section-desc {
+            font-size: 17px;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        /* 3-Column Grid */
+        .cards-grid-3 {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 28px;
+        }
+        .info-card {
+            background: #FFFFFF;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 32px 28px;
+            box-shadow: var(--shadow-sm);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+        .info-card:hover {
+            transform: translateY(-3px);
+            box-shadow: var(--shadow-md);
+            border-color: var(--color-border-dark);
+        }
+        .info-card-icon {
+            font-size: 32px;
+            margin-bottom: 18px;
+            display: inline-block;
+        }
+        .info-card h3 {
+            font-family: var(--font-serif);
+            font-size: 20px;
+            font-weight: 600;
+            color: var(--color-primary);
+            margin-bottom: 12px;
+        }
+        .info-card p {
+            font-size: 15px;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        /* How It Works Steps */
+        .steps-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 24px;
+            margin-top: 20px;
+        }
+        .step-card {
+            background: #FFFFFF;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 28px 24px;
+            position: relative;
+        }
+        .step-number {
+            font-family: var(--font-serif);
+            font-size: 28px;
+            font-weight: 700;
+            color: var(--color-brand-gold);
+            margin-bottom: 14px;
+        }
+        .step-card h4 {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+        .step-card p {
+            font-size: 14px;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        /* Before & After Interactive Showcase */
+        .comparison-wrapper {
+            background: #FFFFFF;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-lg);
+            box-shadow: var(--shadow-md);
+            overflow: hidden;
+            display: grid;
+            grid-template-columns: 1fr 1.2fr;
+        }
+        @media (max-width: 860px) {
+            .comparison-wrapper {
+                grid-template-columns: 1fr;
+            }
+        }
+        .comparison-col-before {
+            background: #FAFAFA;
+            border-right: 1px solid var(--color-border);
+            padding: 36px 32px;
+        }
+        .comparison-col-after {
+            background: #FFFFFF;
+            padding: 36px 32px;
+        }
+        .comparison-tag {
+            display: inline-block;
+            font-size: 11px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.8px;
+            padding: 4px 10px;
+            border-radius: var(--radius-sm);
+            margin-bottom: 16px;
+        }
+        .tag-raw {
+            background: #ECEFF1;
+            color: #455A64;
+        }
+        .tag-lex {
+            background: #FEF3C7;
+            color: #92400E;
+        }
+        .contract-quote {
+            font-family: 'Courier New', Courier, monospace;
+            font-size: 14px;
+            line-height: 1.7;
+            color: #374151;
+            background: #FFFFFF;
+            border: 1px solid #E5E7EB;
+            padding: 18px;
+            border-radius: var(--radius-sm);
+            border-left: 3px solid #9CA3AF;
+        }
+        .lex-translation-box {
+            margin-bottom: 20px;
+            padding: 16px;
+            border-radius: var(--radius-sm);
+            background: #F8F9FA;
+            border: 1px solid #E9ECEF;
+        }
+        .lex-translation-box.hindi {
+            background: var(--color-bg-hindi);
+            border-color: #FDE68A;
+            font-family: var(--font-hindi);
+        }
+        .lex-translation-box h5 {
+            font-size: 12px;
+            font-weight: 700;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+            margin-bottom: 6px;
+            color: var(--color-brand-gold);
+        }
+        .lex-translation-box p {
+            font-size: 14px;
+            color: var(--color-text-main);
+            line-height: 1.6;
+        }
+        .next-steps-list-preview {
+            list-style: none;
+            padding: 0;
+            margin: 12px 0 0;
+        }
+        .next-steps-list-preview li {
+            font-size: 13px;
+            color: var(--color-text-main);
+            margin-bottom: 8px;
+            display: flex;
+            align-items: flex-start;
+            gap: 8px;
+        }
+        .next-steps-list-preview li::before {
+            content: "✓";
+            color: #059669;
+            font-weight: bold;
+        }
+
+        /* Document Types Grid */
+        .doc-types-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+            gap: 18px;
+        }
+        .doc-type-pill {
+            background: #FFFFFF;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 20px 18px;
+            text-align: center;
+        }
+        .doc-type-pill span.icon {
+            font-size: 28px;
+            display: block;
+            margin-bottom: 8px;
+        }
+        .doc-type-pill h4 {
+            font-size: 16px;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+            font-family: var(--font-serif);
+        }
+        .doc-type-pill p {
+            font-size: 12px;
+            color: var(--color-text-muted);
+        }
+
+        /* FAQ Accordion */
+        .faq-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 24px;
+        }
+        @media (max-width: 768px) {
+            .faq-grid {
+                grid-template-columns: 1fr;
+            }
+        }
+        .faq-card {
+            background: #FFFFFF;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 24px;
+        }
+        .faq-card h4 {
+            font-family: var(--font-serif);
+            font-size: 17px;
+            color: var(--color-primary);
+            margin-bottom: 10px;
+        }
+        .faq-card p {
+            font-size: 14px;
+            color: var(--color-text-muted);
+            line-height: 1.6;
+        }
+
+        /* Final Banner */
+        .cta-banner-section {
+            background: linear-gradient(135deg, #121820 0%, #1F2937 100%);
+            color: #FFFFFF;
+            border-radius: var(--radius-lg);
+            padding: 56px 40px;
+            text-align: center;
+            margin: 40px auto 80px;
+            max-width: 1180px;
+        }
+        .cta-banner-section h2 {
+            font-family: var(--font-serif);
+            font-size: 32px;
+            margin-bottom: 14px;
+        }
+        .cta-banner-section p {
+            font-size: 17px;
+            color: #D1D5DB;
+            max-width: 640px;
+            margin: 0 auto 28px;
+        }
+
+        /* Footer */
+        .landing-footer {
+            background: #121820;
+            color: #9CA3AF;
+            border-top: 1px solid #374151;
+            padding: 48px 24px 32px;
+            margin-top: auto;
+        }
+        .footer-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            flex-wrap: wrap;
+            gap: 32px;
+            border-bottom: 1px solid #1F2937;
+            padding-bottom: 32px;
+            margin-bottom: 24px;
+        }
+        .footer-disclaimer {
+            font-size: 12px;
+            color: #6B7280;
+            line-height: 1.6;
+            max-width: 1180px;
+            margin: 0 auto;
+            text-align: center;
+        }
+    </style>
 </head>
 <body>
 
@@ -18,338 +347,399 @@
                 <div class="brand-crest">⚖</div>
                 <div class="brand-info">
                     <h1>LexAdvisor</h1>
-                    <p>Legal Document Review & Advisory</p>
+                    <p>Plain-Language Legal Assistant</p>
                 </div>
             </a>
-            <div class="user-nav-slot" id="nav-user-slot">
-                <button class="btn-header-outline" id="nav-auth-toggle" onclick="showAuthView()">Sign In / Register</button>
+            <nav class="landing-nav-links" id="landing-nav">
+                <a href="#how-it-works">How It Works</a>
+                <a href="#features">What We Check</a>
+                <a href="#supported-docs">Supported Contracts</a>
+                <a href="#faq">FAQ</a>
+                <a href="/admin.html" style="color: var(--color-brand-gold); font-weight: 600;">📊 Admin Panel</a>
+            </nav>
+            <div class="user-nav-slot" id="nav-auth-slot">
+                <a href="/auth.html" class="btn-header-outline" id="nav-login-btn">Sign In</a>
+                <a href="/auth.html" class="btn btn-gold btn-sm" id="nav-start-btn">Get Started Free</a>
             </div>
         </div>
     </header>
 
     <!-- ====================================================================== -->
-    <!-- COOL, CLASSY & EYE-CATCHY HERO SECTION                                  -->
+    <!-- HERO SECTION (Cool, Classy, Eye-Catchy, No Direct Upload Box)          -->
     <!-- ====================================================================== -->
     <section class="hero-section" id="hero-section">
         <div class="hero-container">
             <div class="hero-badge-pill">
                 <span>⚖️</span>
-                <span>Bilingual Contract Review • सरल और आसान कानूनी सहायता</span>
+                <span>Bilingual Legal Review • सरल और आसान कानूनी सहायता</span>
             </div>
 
             <h2 class="hero-title">
-                Never Sign a Blind Contract Again.<br>
-                <span>Understand Every Clause in Simple English & Hindi.</span>
+                Understand Any Legal Document in Plain English & Simple Hindi Before You Sign.
             </h2>
 
             <p class="hero-subtitle">
-                Upload any employment contract, rental lease, NDA, or legal agreement. 
-                Get an instant plain-language breakdown, uncover hidden liability traps, and receive an exact checklist of what to do next.
+                Upload your rental agreement, job offer letter, NDA, or service contract. In seconds, get an easy 8th-grade explanation, hidden trap alerts, and an exact checklist of what to do next.
             </p>
 
             <div class="hero-cta-group">
-                <button class="btn btn-gold" onclick="scrollToUpload()">
-                    🚀 Upload & Analyze Contract — It's Free
+                <button class="btn btn-gold" onclick="handleStartAction()" style="font-size: 16px; padding: 14px 28px;">
+                    🚀 Upload Document for Free Review
                 </button>
-                <button class="btn-header-outline" onclick="scrollToFeatures()" style="padding: 12px 22px; font-size: 15px;">
+                <a href="#how-it-works" class="btn-header-outline" style="padding: 14px 24px; font-size: 15px; text-decoration: none; display: inline-flex; align-items: center;">
                     📖 Explore How It Works
-                </button>
+                </a>
             </div>
 
-            <!-- 3 High Impact Feature Pillars -->
-            <div class="hero-features-grid" id="features-section">
-                <div class="hero-feature-card">
-                    <span class="feature-card-icon">🌐</span>
-                    <h3>Bilingual Plain Explanations</h3>
-                    <p>No dense legal jargon. Read crystal-clear summaries in simple everyday English and natural Hindi (सरल हिंदी व्याख्या) in seconds.</p>
+            <!-- Micro-Trust Indicators -->
+            <div style="margin-top: 26px; display: flex; justify-content: center; gap: 24px; flex-wrap: wrap; font-size: 14px; color: #D1D5DB;">
+                <span>✓ 100% Private & Confidential</span>
+                <span>✓ Supports PDF, Word & Scanned Photos</span>
+                <span>✓ Explanations in Simple English & सरल हिंदी</span>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================================== -->
+    <!-- THE PROBLEM SECTION                                                    -->
+    <!-- ====================================================================== -->
+    <section class="section-padding" id="the-problem">
+        <div class="section-header">
+            <span class="section-badge">The Hidden Trap</span>
+            <h2 class="section-title">Most People Sign Away Their Rights Without Knowing It.</h2>
+            <p class="section-desc">Legal contracts are intentionally drafted in dense jargon to favor corporate issuers. Without an attorney by your side, critical traps go unnoticed.</p>
+        </div>
+
+        <div class="cards-grid-3">
+            <div class="info-card">
+                <span class="info-card-icon">🔒</span>
+                <h3>Unfair Lock-in & Penalties</h3>
+                <p>Hidden clauses lock tenants into arbitrary rent escalations or force employees into punitive service bonds with zero equitable exit options.</p>
+            </div>
+            <div class="info-card">
+                <span class="info-card-icon">⚡</span>
+                <h3>Vague Termination Clauses</h3>
+                <p>One-sided cancellation rights enable employers or vendors to terminate without notice while imposing severe liquidated damages on you.</p>
+            </div>
+            <div class="info-card">
+                <span class="info-card-icon">💸</span>
+                <h3>Expensive Legal Consultation</h3>
+                <p>Spending ₹3,000 to ₹10,000 just to have a standard 3-page agreement reviewed by a certified advocate is out of reach for everyday consumers.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================================== -->
+    <!-- HOW IT WORKS (4 Step Process)                                          -->
+    <!-- ====================================================================== -->
+    <section class="section-padding" id="how-it-works" style="background: var(--color-bg-subtle); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+        <div class="section-header">
+            <span class="section-badge">Simple 4-Step Process</span>
+            <h2 class="section-title">From Legal Confusion to Total Clarity in 4 Steps</h2>
+            <p class="section-desc">Fast, automated, and designed for non-lawyers. No registration fees or complex legal training required.</p>
+        </div>
+
+        <div class="steps-container">
+            <div class="step-card">
+                <div class="step-number">01</div>
+                <h4>Upload Your Document</h4>
+                <p>Drag & drop your PDF, Word file (DOCX), text contract, or camera photo of physical stamp paper. High-accuracy OCR digitizes it instantly.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">02</div>
+                <h4>Instant Risk Audit</h4>
+                <p>Our rule engine scans against 13 critical risk parameters including uncapped liability, unilateral forfeiture, and unreasonable restrictions.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">03</div>
+                <h4>Read in Plain Language</h4>
+                <p>Switch seamlessly between simple English and natural Hindi (सरल हिंदी). Understand exactly what each obligation means in real life.</p>
+            </div>
+            <div class="step-card">
+                <div class="step-number">04</div>
+                <h4>Follow Action Plan</h4>
+                <p>Get an actionable verdict: whether it is safe to sign, specific clauses you must renegotiate, and counter-clauses to propose.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================================== -->
+    <!-- CORE VALUE PROPOSITIONS & FEATURES                                     -->
+    <!-- ====================================================================== -->
+    <section class="section-padding" id="features">
+        <div class="section-header">
+            <span class="section-badge">Platform Capabilities</span>
+            <h2 class="section-title">Everything You Need to Protect Yourself</h2>
+            <p class="section-desc">Engineered to demystify complex contractual legalities into actionable consumer intelligence.</p>
+        </div>
+
+        <div class="cards-grid-3">
+            <div class="info-card">
+                <span class="info-card-icon">🌐</span>
+                <h3>Simple English & स्वाभाविक हिंदी</h3>
+                <p>No archaic Latin phrases or courtroom legalese. Read conversational, crystal-clear explanations that anyone can understand without legal training.</p>
+            </div>
+            <div class="info-card">
+                <span class="info-card-icon">🎯</span>
+                <h3>0 to 100 Risk Scoring</h3>
+                <p>Get an immediate objective snapshot of contract fairness. Instantly identify whether a document is low risk, moderate caution, or high danger.</p>
+            </div>
+            <div class="info-card">
+                <span class="info-card-icon">⚠️</span>
+                <h3>Hidden Red-Flag Detection</h3>
+                <p>Uncapped indemnity, unilateral price changes, intellectual property overreaches, and non-compete locks are surfaced in high contrast.</p>
+            </div>
+            <div class="info-card">
+                <span class="info-card-icon">🧭</span>
+                <h3>Negotiation Playbook</h3>
+                <p>We do not just point out problems—we provide concrete renegotiation wording and specific questions to ask before putting your pen to paper.</p>
+            </div>
+            <div class="info-card">
+                <span class="info-card-icon">📸</span>
+                <h3>Scanned Stamp-Paper OCR</h3>
+                <p>Have a physical printed stamp paper contract? Upload a smartphone photo. Multimodal vision OCR extracts clean text for deep parsing.</p>
+            </div>
+            <div class="info-card">
+                <span class="info-card-icon">📄</span>
+                <h3>1-Click PDF Audit Export</h3>
+                <p>Export a formal, structured Legal Audit Report PDF containing clause breakdowns, executive summaries, and risk certificates.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================================== -->
+    <!-- REAL-WORLD BEFORE & AFTER COMPARISON                                   -->
+    <!-- ====================================================================== -->
+    <section class="section-padding" id="before-after" style="background: #FFFFFF; border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+        <div class="section-header">
+            <span class="section-badge">Clarity In Action</span>
+            <h2 class="section-title">See the Difference: Legal Jargon vs. LexAdvisor</h2>
+            <p class="section-desc">Compare the original confusing contract text against LexAdvisor's plain English and Hindi translation.</p>
+        </div>
+
+        <div class="comparison-wrapper">
+            <div class="comparison-col-before">
+                <span class="comparison-tag tag-raw">Original Contract Clause</span>
+                <p class="contract-quote">
+                    "The Licensor reserves the unilateral, unfettered discretion to forthwith terminate the License without cause, whereupon all advance security monies deposited hereunder shall be irrevocably forfeited in liquidated damages without recourse to judicial redress."
+                </p>
+                <div style="margin-top: 24px; padding: 12px; background: #FEE2E2; border-radius: var(--radius-sm); border: 1px solid #FCA5A5; color: #991B1B; font-size: 13px;">
+                    ⚠️ <strong>Hidden Trap Detected:</strong> You lose your entire security deposit without cause and cannot contest it in court.
                 </div>
-                <div class="hero-feature-card">
-                    <span class="feature-card-icon">⚠️</span>
-                    <h3>13-Point Risk & Trap Scanner</h3>
-                    <p>Instantly flags unlimited liabilities, unilateral termination without notice, and unfair waivers before you put pen to paper.</p>
+            </div>
+
+            <div class="comparison-col-after">
+                <span class="comparison-tag tag-lex">LexAdvisor Translation & Plan</span>
+
+                <div class="lex-translation-box">
+                    <h5>🇬🇧 Simple English Explanation</h5>
+                    <p>"The owner can kick you out at any moment without giving any reason, and they will keep all of your deposit money instead of returning it to you."</p>
                 </div>
-                <div class="hero-feature-card">
-                    <span class="feature-card-icon">🧭</span>
-                    <h3>Actionable Next Steps Plan</h3>
-                    <p>Tells you exactly what action to take next: what terms to renegotiate, counter-clauses to propose, and whether it's safe to sign.</p>
+
+                <div class="lex-translation-box hindi">
+                    <h5>🇮🇳 सरल हिंदी में अर्थ</h5>
+                    <p>"मालिक बिना कोई कारण बताए आपको कभी भी निकाल सकता है और आपका पूरा सिक्योरिटी डिपॉजिट जब्त कर लेगा। यह शर्त पूरी तरह से एकतरफा और अनुचित है।"</p>
+                </div>
+
+                <div>
+                    <h5 style="font-size: 12px; font-weight: 700; text-transform: uppercase; color: #065F46; margin-bottom: 8px;">Recommended Next Steps:</h5>
+                    <ul class="next-steps-list-preview">
+                        <li>Require a mandatory 30-day prior written notice period.</li>
+                        <li>Demand full deposit refund within 7 working days upon exit.</li>
+                        <li>Delete the clause stating that your deposit will be forfeited without cause.</li>
+                    </ul>
                 </div>
             </div>
         </div>
     </section>
 
     <!-- ====================================================================== -->
-    <!-- MAIN WORKSPACE & INTERACTIVE APPLICATION CONTAINER                      -->
+    <!-- SUPPORTED DOCUMENT TYPES                                               -->
     <!-- ====================================================================== -->
-    <main class="app-container" id="workspace-container">
+    <section class="section-padding" id="supported-docs">
+        <div class="section-header">
+            <span class="section-badge">Universal Compatibility</span>
+            <h2 class="section-title">Works on Every Everyday Legal Agreement</h2>
+            <p class="section-desc">Trained on statutory compliance laws, standard rental acts, labor regulations, and commercial covenants.</p>
+        </div>
 
-        <!-- ================================================================== -->
-        <!-- VIEW 1: AUTHENTICATION (Sign In / Register / Guest Access)         -->
-        <!-- ================================================================== -->
-        <section class="auth-wrapper" id="auth-view" style="display: none;">
-            <div class="card">
-                <div class="auth-header">
-                    <h2 id="auth-heading">Sign In to LexAdvisor</h2>
-                    <p id="auth-subheading">Access contract clause auditing and actionable legal advice.</p>
+        <div class="doc-types-grid">
+            <div class="doc-type-pill">
+                <span class="icon">🏠</span>
+                <h4>Rental Agreements</h4>
+                <p>किरायानामा • Deposits, notice periods, lock-in terms & repairs</p>
+            </div>
+            <div class="doc-type-pill">
+                <span class="icon">💼</span>
+                <h4>Employment Letters</h4>
+                <p>नौकरी अनुबंध • Non-compete, probation, bonds & IP rights</p>
+            </div>
+            <div class="doc-type-pill">
+                <span class="icon">🤫</span>
+                <h4>NDAs</h4>
+                <p>गोपनीयता समझौता • Secrecy duration & trade secret boundaries</p>
+            </div>
+            <div class="doc-type-pill">
+                <span class="icon">💻</span>
+                <h4>Freelance Contracts</h4>
+                <p>सेवा अनुबंध • Milestones, late fees, scope creep & delivery</p>
+            </div>
+            <div class="doc-type-pill">
+                <span class="icon">💳</span>
+                <h4>Loan Agreements</h4>
+                <p>ऋण अनुबंध • Compound penalties, default triggers & collateral</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================================== -->
+    <!-- PRIVACY & DATA SECURITY                                                -->
+    <!-- ====================================================================== -->
+    <section class="section-padding" id="privacy" style="background: var(--color-bg-subtle); border-top: 1px solid var(--color-border); border-bottom: 1px solid var(--color-border);">
+        <div class="section-header">
+            <span class="section-badge">Confidentiality Guarantee</span>
+            <h2 class="section-title">Your Confidential Documents Stay Private</h2>
+            <p class="section-desc">We adhere to bank-grade confidentiality and strict user data isolation.</p>
+        </div>
+
+        <div class="cards-grid-3">
+            <div class="info-card">
+                <span class="info-card-icon">🛡️</span>
+                <h3>Isolated User Sessions</h3>
+                <p>Uploaded documents are strictly linked to your authenticated user account and are never accessible to other platform users.</p>
+            </div>
+            <div class="info-card">
+                <span class="info-card-icon">🚫</span>
+                <h3>Never Sold or Shared</h3>
+                <p>We never sell your contractual data, personal identity, or financial details to third parties or marketing brokers.</p>
+            </div>
+            <div class="info-card">
+                <span class="info-card-icon">🗑️</span>
+                <h3>1-Click Permanent Deletion</h3>
+                <p>You have full ownership of your data. Delete any document or analysis record instantly with permanent removal.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================================== -->
+    <!-- FREQUENTLY ASKED QUESTIONS (FAQ)                                       -->
+    <!-- ====================================================================== -->
+    <section class="section-padding" id="faq">
+        <div class="section-header">
+            <span class="section-badge">Got Questions?</span>
+            <h2 class="section-title">Frequently Asked Questions</h2>
+            <p class="section-desc">Everything you need to know about LexAdvisor's legal auditing capabilities.</p>
+        </div>
+
+        <div class="faq-grid">
+            <div class="faq-card">
+                <h4>Does this replace an attorney?</h4>
+                <p>LexAdvisor provides automated informational summaries and clause risk detection. For high-stakes litigation or court disputes, consulting a certified attorney is recommended.</p>
+            </div>
+            <div class="faq-card">
+                <h4>Can I upload a phone photo of physical stamp paper?</h4>
+                <p>Yes. Our multimodal vision OCR engine accurately reads printed text, scanned PDFs, and camera snapshots of legal stamp papers.</p>
+            </div>
+            <div class="faq-card">
+                <h4>How simple is the Hindi translation?</h4>
+                <p>We use natural, everyday conversational Hindi (सरल बोलचाल की हिंदी) rather than confusing statutory courtroom Hindi. Anyone can understand it effortlessly.</p>
+            </div>
+            <div class="faq-card">
+                <h4>How fast is the analysis?</h4>
+                <p>Processing typically finishes within 3 to 10 seconds, delivering full bilingual explanations, risk scoring, and next steps immediately.</p>
+            </div>
+        </div>
+    </section>
+
+    <!-- ====================================================================== -->
+    <!-- FINAL CALL TO ACTION BANNER                                            -->
+    <!-- ====================================================================== -->
+    <div class="cta-banner-section">
+        <h2>Don't Sign in the Dark. Know What You Agree to Today.</h2>
+        <p>Log in or register now to upload your contract and get plain-language advice, risk alerts, and clear next steps in under a minute.</p>
+        <button class="btn btn-gold" onclick="handleStartAction()" style="font-size: 16px; padding: 15px 36px;">
+            🚀 Access Review Workspace Now
+        </button>
+        <p style="font-size: 13px; color: #9CA3AF; margin-top: 14px; margin-bottom: 0;">
+            100% Free for Academic Evaluation • No Payment Required
+        </p>
+    </div>
+
+    <!-- ====================================================================== -->
+    <!-- FOOTER                                                                 -->
+    <!-- ====================================================================== -->
+    <footer class="landing-footer">
+        <div class="footer-inner">
+            <div style="max-width: 380px;">
+                <div style="display: flex; align-items: center; gap: 10px; margin-bottom: 12px;">
+                    <span style="font-size: 24px; color: var(--color-brand-gold);">⚖</span>
+                    <strong style="color: #FFFFFF; font-size: 18px; font-family: var(--font-serif);">LexAdvisor</strong>
                 </div>
-
-                <div class="auth-tabs">
-                    <button class="auth-tab-btn active" id="tab-login" onclick="switchAuthTab('login')">Sign In</button>
-                    <button class="auth-tab-btn" id="tab-register" onclick="switchAuthTab('register')">Create Account</button>
-                </div>
-
-                <div id="auth-alert" class="alert-message"></div>
-
-                <!-- Sign In Form -->
-                <form id="form-login" onsubmit="handleLoginSubmit(event)">
-                    <div class="form-group">
-                        <label for="login-email">Email Address</label>
-                        <input type="email" id="login-email" class="form-control" required placeholder="name@organization.com" autocomplete="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="login-password">Password</label>
-                        <input type="password" id="login-password" class="form-control" required placeholder="••••••••" autocomplete="current-password">
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;" id="btn-login-submit">
-                        Sign In
-                    </button>
-                </form>
-
-                <!-- Register Form -->
-                <form id="form-register" style="display: none;" onsubmit="handleRegisterSubmit(event)">
-                    <div class="form-group">
-                        <label for="reg-name">Full Legal Name</label>
-                        <input type="text" id="reg-name" class="form-control" required placeholder="Gourav Nagori" autocomplete="name">
-                    </div>
-                    <div class="form-group">
-                        <label for="reg-email">Email Address</label>
-                        <input type="email" id="reg-email" class="form-control" required placeholder="name@organization.com" autocomplete="email">
-                    </div>
-                    <div class="form-group">
-                        <label for="reg-password">Password (minimum 6 characters)</label>
-                        <input type="password" id="reg-password" class="form-control" minlength="6" required placeholder="••••••••" autocomplete="new-password">
-                    </div>
-                    <button type="submit" class="btn btn-primary" style="width: 100%; margin-top: 10px;" id="btn-register-submit">
-                        Create Account & Continue
-                    </button>
-                </form>
-
-                <p class="auth-note">
-                    Confidential contract parsing with multi-format OCR and rule-based risk advisory.
+                <p style="font-size: 14px; line-height: 1.6;">Automated Legal Document Analyser & Risk Advisory Platform. Making legal contracts readable and fair for everyone.</p>
+            </div>
+            <div>
+                <strong style="color: #FFFFFF; font-size: 14px; display: block; margin-bottom: 12px;">Navigation</strong>
+                <ul style="list-style: none; font-size: 14px; line-height: 2;">
+                    <li><a href="#how-it-works" style="color: #9CA3AF; text-decoration: none;">How It Works</a></li>
+                    <li><a href="#features" style="color: #9CA3AF; text-decoration: none;">Risk Scanner</a></li>
+                    <li><a href="/admin.html" style="color: var(--color-brand-gold); text-decoration: none;">Admin Panel</a></li>
+                    <li><a href="/auth.html" style="color: #9CA3AF; text-decoration: none;">Sign In / Register</a></li>
+                </ul>
+            </div>
+            <div>
+                <strong style="color: #FFFFFF; font-size: 14px; display: block; margin-bottom: 12px;">Academic Project</strong>
+                <p style="font-size: 14px; line-height: 1.6; max-width: 280px;">
+                    5th Sem Java Project-Based Learning (PBL)<br>
+                    Team: Gourav Nagori, Ayush Rathore, Dilip Kumawat, Harshvardhan Bhatt, Abhishi Samar
                 </p>
-                
-                <div style="text-align: center; margin-top: 20px; border-top: 1px solid var(--color-border); padding-top: 16px;">
-                    <button type="button" class="btn btn-outline btn-sm" onclick="bypassAuthForReview()" style="font-size: 13.5px; color: var(--color-text-muted);">
-                        Continue as Guest Reviewer →
-                    </button>
-                </div>
             </div>
-        </section>
+        </div>
+        <p class="footer-disclaimer">
+            Disclaimer: LexAdvisor provides automated legal document analysis and informational summaries for educational and self-help awareness. It does not constitute formal legal representation or create an attorney-client relationship. If you require legal advice for formal litigation, consult a certified attorney.
+        </p>
+        <p style="text-align: center; font-size: 13px; color: #6B7280; margin-top: 14px;">
+            © 2026 LexAdvisor Platform. All rights reserved.
+        </p>
+    </footer>
 
-        <!-- ================================================================== -->
-        <!-- VIEW 2: LEGAL WORKSPACE (Upload & Advisory Report)                -->
-        <!-- ================================================================== -->
-        <section id="workspace-view">
+    <script>
+        // Check authentication state for navbar buttons
+        function updateNavState() {
+            const token = localStorage.getItem('auth_jwt_token');
+            const userName = localStorage.getItem('auth_user_name');
+            const navSlot = document.getElementById('nav-auth-slot');
 
-            <!-- STEP 1: Upload Card -->
-            <div class="card" id="upload-card">
-                <div class="workspace-intro">
-                    <h2>Review a Legal Document</h2>
-                    <p>Upload a contract, lease, employment agreement, NDA, or scanned legal notice. Our engine will review every clause, flag liability risks, and provide plain-English & Hindi explanations with next steps.</p>
-                </div>
+            if (token) {
+                navSlot.innerHTML = `
+                    <span style="color: #E5E7EB; font-size: 14px;">👤 <strong>${userName || 'User'}</strong></span>
+                    <a href="/workspace.html" class="btn btn-gold btn-sm">📂 My Workspace</a>
+                    <button onclick="logoutLanding()" class="btn-header-outline" style="padding: 6px 12px; font-size: 12px;">Logout</button>
+                `;
+            } else {
+                navSlot.innerHTML = `
+                    <a href="/auth.html" class="btn-header-outline">Sign In</a>
+                    <a href="/auth.html" class="btn btn-gold btn-sm">Get Started Free</a>
+                `;
+            }
+        }
 
-                <!-- Dropzone -->
-                <div class="upload-dropzone" id="dropzone" onclick="triggerFileInput()">
-                    <div class="upload-icon">📄</div>
-                    <h3>Choose a legal document or drag it here</h3>
-                    <p>Supported file types: PDF, Word (DOCX), Plain Text (TXT), or Scanned Images (PNG, JPG, WEBP)</p>
-                    <span class="format-hints">Maximum document size: 20 MB</span>
+        function handleStartAction() {
+            const token = localStorage.getItem('auth_jwt_token');
+            if (token) {
+                window.location.href = '/workspace.html';
+            } else {
+                window.location.href = '/auth.html';
+            }
+        }
 
-                    <input type="file" id="file-input" style="display: none;" accept=".pdf,.docx,.txt,image/png,image/jpeg,image/webp">
+        function logoutLanding() {
+            localStorage.removeItem('auth_jwt_token');
+            localStorage.removeItem('auth_user_name');
+            localStorage.removeItem('auth_user_email');
+            updateNavState();
+        }
 
-                    <!-- Selected File Pill -->
-                    <div class="file-selected-badge" id="file-badge">
-                        <div class="file-selected-info">
-                            <span style="font-size: 22px;">📎</span>
-                            <div>
-                                <div class="file-selected-name" id="file-name-text">filename.pdf</div>
-                                <div class="file-selected-size" id="file-size-text">0 KB</div>
-                            </div>
-                        </div>
-                        <button type="button" class="btn btn-outline btn-sm" onclick="clearSelectedFile(event)" style="padding: 4px 10px;">Change</button>
-                    </div>
-                </div>
-
-                <div style="display: flex; justify-content: flex-end;">
-                    <button type="button" class="btn btn-primary" id="btn-start-analysis" onclick="executeUploadAndAnalysis()" disabled>
-                        Analyze Document & Generate Legal Advice →
-                    </button>
-                </div>
-            </div>
-
-            <!-- In-Progress Spinner Card -->
-            <div class="card analysis-progress-card" id="progress-card">
-                <div class="spinner"></div>
-                <div class="progress-title" id="progress-step-title">Analyzing Legal Document...</div>
-                <p class="progress-status" id="progress-step-detail">Extracting text, segmenting clauses, formulating bilingual explanations, and planning next steps.</p>
-            </div>
-
-            <!-- STEP 2: Legal Analysis, Bilingual Explanation & Advisory Report -->
-            <div class="report-view" id="report-view">
-                
-                <!-- Action Verdict Banner -->
-                <div class="verdict-banner" id="rep-verdict-banner">
-                    <div class="verdict-info">
-                        <h3 id="rep-verdict-title">ACTION VERDICT</h3>
-                        <p id="rep-verdict-desc">Recommended immediate action regarding this agreement.</p>
-                    </div>
-                    <span class="score-badge" id="rep-verdict-badge">VERDICT</span>
-                </div>
-
-                <!-- Report Header & Risk Score Card -->
-                <div class="card">
-                    <div class="doc-meta-bar">
-                        <div class="doc-title-block">
-                            <span class="doc-type-pill" id="rep-doc-type">LEGAL CONTRACT</span>
-                            <h2 id="rep-doc-title" style="margin-top: 6px;">Document Title</h2>
-                            <p style="font-size: 13.5px; color: var(--color-text-muted);" id="rep-doc-meta">Analyzed on —</p>
-                        </div>
-                        <div>
-                            <button class="btn btn-outline btn-sm" onclick="resetToUploadView()">
-                                ↺ Upload Another Document
-                            </button>
-                        </div>
-                    </div>
-
-                    <!-- Risk Scorecard -->
-                    <div class="risk-scorecard">
-                        <div class="score-display">
-                            <div class="score-label">Overall Risk Score</div>
-                            <div class="score-number" id="rep-score-num">0</div>
-                            <span class="score-badge" id="rep-score-badge">LOW RISK</span>
-                        </div>
-                        <div class="executive-summary-block">
-                            <h4>Legal Posture Summary</h4>
-                            <p class="executive-summary-text" id="rep-executive-summary">
-                                Summary analysis will appear here...
-                            </p>
-                        </div>
-                    </div>
-
-                    <!-- Summary Metrics Strip -->
-                    <div class="stats-grid">
-                        <div class="stat-box">
-                            <div class="stat-num" id="stat-total-clauses">0</div>
-                            <div class="stat-label">Clauses Reviewed</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-num" id="stat-critical-risks" style="color: var(--color-risk-critical-text);">0</div>
-                            <div class="stat-label">Critical Red Flags</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-num" id="stat-high-risks" style="color: var(--color-risk-high-text);">0</div>
-                            <div class="stat-label">High Priority Risks</div>
-                        </div>
-                        <div class="stat-box">
-                            <div class="stat-num" id="stat-clean-clauses" style="color: var(--color-risk-low-text);">0</div>
-                            <div class="stat-label">Standard Clauses</div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ========================================================== -->
-                <!-- BILINGUAL EASY EXPLANATION (ENGLISH & HINDI)               -->
-                <!-- ========================================================== -->
-                <div class="bilingual-section">
-                    <div class="bilingual-header">
-                        <div class="bilingual-header-title">
-                            <h3>Complete Document Explanation</h3>
-                            <p>Explained in clear, everyday language without complex legal jargon.</p>
-                        </div>
-                        <div class="language-tabs">
-                            <button class="lang-tab-btn active" id="btn-lang-en" onclick="switchLanguage('en')">
-                                🇬🇧 Simple English
-                            </button>
-                            <button class="lang-tab-btn" id="btn-lang-hi" onclick="switchLanguage('hi')">
-                                🇮🇳 सरल हिंदी व्याख्या (Hindi)
-                            </button>
-                        </div>
-                    </div>
-                    <div class="bilingual-body">
-                        <!-- English Panel -->
-                        <div class="explanation-panel active" id="panel-explanation-en">
-                            <div class="english-text" id="text-explanation-en">
-                                Generating easy English explanation...
-                            </div>
-                        </div>
-                        <!-- Hindi Panel -->
-                        <div class="explanation-panel" id="panel-explanation-hi">
-                            <div class="hindi-text" id="text-explanation-hi">
-                                सरल हिंदी व्याख्या लोड हो रही है...
-                            </div>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- ========================================================== -->
-                <!-- ACTIONABLE NEXT STEPS CHECKLIST (WHAT TO DO NEXT)          -->
-                <!-- ========================================================== -->
-                <div class="next-steps-card">
-                    <div class="next-steps-header">
-                        <h3>🧭 Recommended Next Steps & Action Plan</h3>
-                        <p>Follow this checklist of concrete actions to take according to this document before or after signing.</p>
-                    </div>
-                    <div class="next-steps-list" id="next-steps-container">
-                        <!-- Populated dynamically -->
-                    </div>
-                </div>
-
-                <!-- ========================================================== -->
-                <!-- CLAUSE-BY-CLAUSE AUDIT & ADVISORY SECTION                 -->
-                <!-- ========================================================== -->
-                <div class="card">
-                    <div class="advisory-section-header">
-                        <h3>Actionable Legal Advisory & Clause Analysis</h3>
-                        <p>Detailed legal findings with quoted contract clauses, risk rationales, and recommended counter-clauses or negotiation points.</p>
-                    </div>
-
-                    <!-- Tab Switcher -->
-                    <div class="view-filter-tabs">
-                        <button class="filter-tab active" id="tab-show-risks" onclick="switchReportTab('risks')">
-                            Flagged Risks & Advisory (<span id="count-risks-tab">0</span>)
-                        </button>
-                        <button class="filter-tab" id="tab-show-all" onclick="switchReportTab('all')">
-                            All Document Clauses (<span id="count-all-tab">0</span>)
-                        </button>
-                    </div>
-
-                    <!-- Flagged Risks & Legal Advice Cards Container -->
-                    <div id="advisory-cards-list">
-                        <!-- Dynamically populated -->
-                    </div>
-
-                    <!-- Full Clause By Clause Container (toggled) -->
-                    <div id="all-clauses-list" style="display: none;">
-                        <!-- Dynamically populated -->
-                    </div>
-
-                    <!-- Actions Toolbar -->
-                    <div class="report-action-bar">
-                        <button class="btn btn-outline" onclick="resetToUploadView()">
-                            ← Upload Another Document
-                        </button>
-                        <button class="btn btn-primary" onclick="window.print()">
-                            🖨️ Print / Save Advisory Memo
-                        </button>
-                    </div>
-                </div>
-
-            </div>
-
-        </section>
-
-    </main>
-
-    <!-- Client Application Logic -->
-    <script src="script.js"></script>
+        document.addEventListener('DOMContentLoaded', updateNavState);
+    </script>
 </body>
 </html>

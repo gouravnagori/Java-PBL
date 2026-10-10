@@ -49,6 +49,12 @@ public class ReportController {
         return ResponseEntity.ok(ApiResponse.success("User report summaries retrieved successfully", summaries));
     }
 
+    @GetMapping("/all")
+    public ResponseEntity<ApiResponse<List<ReportSummaryResponse>>> getAllReports() {
+        List<ReportSummaryResponse> summaries = reportService.getAllReportSummaries();
+        return ResponseEntity.ok(ApiResponse.success("All platform audit reports retrieved successfully", summaries));
+    }
+
     @GetMapping("/{documentId}/pdf")
     public ResponseEntity<byte[]> downloadPdfReport(@PathVariable String documentId) {
         byte[] pdfBytes = reportService.exportReportPdf(documentId);

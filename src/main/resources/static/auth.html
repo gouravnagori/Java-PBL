@@ -2,13 +2,385 @@
 <html lang="en">
 <head>
     <meta charset="UTF-8">
-    <meta http-equiv="refresh" content="0; url=/">
-    <title>Redirecting to LexAdvisor...</title>
-    <script>
-        window.location.replace('/');
-    </script>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Sign In & Register | LexAdvisor Legal Tech</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,500;0,600;0,700;1,400&family=Source+Sans+3:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .auth-page-container {
+            min-height: 85vh;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 40px 20px;
+        }
+        .auth-card {
+            background: #FFFFFF;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            box-shadow: var(--shadow-md);
+            width: 100%;
+            max-width: 480px;
+            padding: 36px 32px;
+        }
+        .auth-card-header {
+            text-align: center;
+            margin-bottom: 28px;
+        }
+        .auth-card-header h2 {
+            font-family: var(--font-serif);
+            font-size: 26px;
+            color: var(--color-primary);
+            margin-bottom: 8px;
+        }
+        .auth-card-header p {
+            font-size: 14px;
+            color: var(--color-text-muted);
+        }
+        .auth-tabs-nav {
+            display: flex;
+            border-bottom: 2px solid var(--color-border);
+            margin-bottom: 24px;
+        }
+        .auth-tab-nav-btn {
+            flex: 1;
+            padding: 12px;
+            text-align: center;
+            background: transparent;
+            border: none;
+            font-family: var(--font-sans);
+            font-size: 15px;
+            font-weight: 600;
+            color: var(--color-text-light);
+            cursor: pointer;
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s ease;
+        }
+        .auth-tab-nav-btn.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-brand-gold);
+        }
+        .form-group {
+            margin-bottom: 20px;
+        }
+        .form-label {
+            display: block;
+            font-size: 13px;
+            font-weight: 600;
+            color: var(--color-text-main);
+            margin-bottom: 6px;
+        }
+        .form-input {
+            width: 100%;
+            padding: 11px 14px;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-sm);
+            font-size: 15px;
+            font-family: var(--font-sans);
+            color: var(--color-text-main);
+            background: #FAFAFA;
+            transition: border-color 0.2s ease;
+        }
+        .form-input:focus {
+            outline: none;
+            border-color: var(--color-primary);
+            background: #FFFFFF;
+        }
+        .btn-full {
+            width: 100%;
+            padding: 13px;
+            font-size: 16px;
+            margin-top: 10px;
+        }
+        .auth-alert-box {
+            padding: 12px 16px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            margin-bottom: 20px;
+            display: none;
+        }
+        .auth-alert-box.error {
+            background: #FDF2F2;
+            border: 1px solid #F6B8B8;
+            color: #8A1E1E;
+            display: block;
+        }
+        .auth-alert-box.success {
+            background: #F1F7F3;
+            border: 1px solid #CBE3D2;
+            color: #1C5933;
+            display: block;
+        }
+        .demo-box {
+            margin-top: 24px;
+            padding-top: 20px;
+            border-top: 1px dashed var(--color-border);
+            text-align: center;
+        }
+        .demo-box p {
+            font-size: 13px;
+            color: var(--color-text-light);
+            margin-bottom: 10px;
+        }
+        .auth-back-link {
+            display: block;
+            text-align: center;
+            margin-top: 20px;
+            font-size: 14px;
+            color: var(--color-text-muted);
+            text-decoration: none;
+        }
+        .auth-back-link:hover {
+            color: var(--color-primary);
+            text-decoration: underline;
+        }
+    </style>
 </head>
-<body style="font-family: 'Source Sans 3', sans-serif; background: #F7F7F4; display: flex; justify-content: center; align-items: center; height: 100vh; margin: 0;">
-    <p style="color: #525C6A;">Redirecting to <a href="/" style="color: #1C2532; font-weight: 600;">LexAdvisor Portal</a>...</p>
+<body>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="brand-wrapper">
+                <div class="brand-crest">⚖</div>
+                <div class="brand-info">
+                    <h1>LexAdvisor</h1>
+                    <p>Legal Document Review & Advisory</p>
+                </div>
+            </a>
+            <div class="user-nav-slot">
+                <a href="/admin.html" class="btn-header-outline">Admin Panel</a>
+                <a href="/" class="btn-header-outline">← Back to Home</a>
+            </div>
+        </div>
+    </header>
+
+    <div class="auth-page-container">
+        <div class="auth-card">
+            <div class="auth-card-header">
+                <h2 id="auth-main-title">Access LexAdvisor Portal</h2>
+                <p id="auth-main-desc">Log in or create your account to unlock private document analysis.</p>
+            </div>
+
+            <div class="auth-tabs-nav">
+                <button class="auth-tab-nav-btn active" id="tab-btn-login" onclick="setAuthMode('login')">Sign In</button>
+                <button class="auth-tab-nav-btn" id="tab-btn-register" onclick="setAuthMode('register')">Create Account</button>
+            </div>
+
+            <div id="auth-feedback" class="auth-alert-box"></div>
+
+            <!-- Login Form -->
+            <form id="form-login" onsubmit="handleLoginSubmit(event)">
+                <div class="form-group">
+                    <label class="form-label" for="login-email">Email Address</label>
+                    <input type="email" id="login-email" class="form-input" placeholder="name@example.com" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="login-password">Password</label>
+                    <input type="password" id="login-password" class="form-input" placeholder="••••••••" required autocomplete="current-password">
+                </div>
+                <button type="submit" id="btn-login-submit" class="btn btn-primary btn-full">
+                    Sign In to Workspace →
+                </button>
+            </form>
+
+            <!-- Register Form -->
+            <form id="form-register" style="display: none;" onsubmit="handleRegisterSubmit(event)">
+                <div class="form-group">
+                    <label class="form-label" for="reg-name">Full Name</label>
+                    <input type="text" id="reg-name" class="form-input" placeholder="e.g. Gourav Nagori" required autocomplete="name">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="reg-email">Email Address</label>
+                    <input type="email" id="reg-email" class="form-input" placeholder="name@example.com" required autocomplete="email">
+                </div>
+                <div class="form-group">
+                    <label class="form-label" for="reg-password">Password</label>
+                    <input type="password" id="reg-password" class="form-input" placeholder="Minimum 6 characters" required minlength="6" autocomplete="new-password">
+                </div>
+                <button type="submit" id="btn-reg-submit" class="btn btn-gold btn-full">
+                    Create Account & Continue →
+                </button>
+            </form>
+
+            <!-- Quick Demo Login -->
+            <div class="demo-box">
+                <p>Academic Evaluation / Instant Testing:</p>
+                <button type="button" class="btn btn-outline btn-sm" onclick="quickDemoLogin()" style="width: 100%;">
+                    ⚡ 1-Click Demo Login (Auto-Creates Evaluator Session)
+                </button>
+            </div>
+
+            <a href="/" class="auth-back-link">← Return to Public Landing Page</a>
+        </div>
+    </div>
+
+    <script>
+        let currentMode = 'login';
+
+        function setAuthMode(mode) {
+            currentMode = mode;
+            const tabLogin = document.getElementById('tab-btn-login');
+            const tabReg = document.getElementById('tab-btn-register');
+            const formLogin = document.getElementById('form-login');
+            const formReg = document.getElementById('form-register');
+            const feedback = document.getElementById('auth-feedback');
+            feedback.className = 'auth-alert-box';
+            feedback.style.display = 'none';
+
+            if (mode === 'login') {
+                tabLogin.classList.add('active');
+                tabReg.classList.remove('active');
+                formLogin.style.display = 'block';
+                formReg.style.display = 'none';
+                document.getElementById('auth-main-title').textContent = 'Sign In to LexAdvisor';
+                document.getElementById('auth-main-desc').textContent = 'Enter your credentials to access your document review workspace.';
+            } else {
+                tabReg.classList.add('active');
+                tabLogin.classList.remove('active');
+                formLogin.style.display = 'none';
+                formReg.style.display = 'block';
+                document.getElementById('auth-main-title').textContent = 'Create New Account';
+                document.getElementById('auth-main-desc').textContent = 'Set up your free account to upload and analyze legal contracts.';
+            }
+        }
+
+        function showMessage(msg, isError = false) {
+            const el = document.getElementById('auth-feedback');
+            el.textContent = msg;
+            el.className = isError ? 'auth-alert-box error' : 'auth-alert-box success';
+            el.style.display = 'block';
+        }
+
+        async function handleLoginSubmit(e) {
+            e.preventDefault();
+            const email = document.getElementById('login-email').value.trim();
+            const password = document.getElementById('login-password').value;
+            const btn = document.getElementById('btn-login-submit');
+
+            btn.disabled = true;
+            btn.textContent = 'Authenticating...';
+
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email, password })
+                });
+                const body = await res.json();
+
+                if (res.ok && body.success) {
+                    const token = body.data.token || body.data.accessToken;
+                    localStorage.setItem('auth_jwt_token', token);
+                    localStorage.setItem('auth_user_name', body.data.name || body.data.email || 'User');
+                    localStorage.setItem('auth_user_email', body.data.email || email);
+                    showMessage('Login successful! Redirecting to workspace...', false);
+                    setTimeout(() => {
+                        window.location.href = '/workspace.html';
+                    }, 600);
+                } else {
+                    showMessage(body.message || 'Invalid email or password. Please try again.', true);
+                }
+            } catch (err) {
+                showMessage('Network error connecting to authentication server: ' + err.message, true);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Sign In to Workspace →';
+            }
+        }
+
+        async function handleRegisterSubmit(e) {
+            e.preventDefault();
+            const name = document.getElementById('reg-name').value.trim();
+            const email = document.getElementById('reg-email').value.trim();
+            const password = document.getElementById('reg-password').value;
+            const btn = document.getElementById('btn-reg-submit');
+
+            btn.disabled = true;
+            btn.textContent = 'Creating Account...';
+
+            try {
+                const res = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name, email, password })
+                });
+                const body = await res.json();
+
+                if (res.ok && body.success) {
+                    const token = body.data.token || body.data.accessToken;
+                    localStorage.setItem('auth_jwt_token', token);
+                    localStorage.setItem('auth_user_name', body.data.name || name);
+                    localStorage.setItem('auth_user_email', body.data.email || email);
+                    showMessage('Account registered successfully! Redirecting...', false);
+                    setTimeout(() => {
+                        window.location.href = '/workspace.html';
+                    }, 600);
+                } else {
+                    showMessage(body.message || 'Registration failed. Email may already be in use.', true);
+                }
+            } catch (err) {
+                showMessage('Network error during registration: ' + err.message, true);
+            } finally {
+                btn.disabled = false;
+                btn.textContent = 'Create Account & Continue →';
+            }
+        }
+
+        async function quickDemoLogin() {
+            const demoEmail = 'evaluator@legalpbl.edu';
+            const demoPassword = 'password123';
+            
+            // Try login first
+            try {
+                const res = await fetch('/api/auth/login', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ email: demoEmail, password: demoPassword })
+                });
+                const body = await res.json();
+                if (res.ok && body.success) {
+                    const token = body.data.token || body.data.accessToken;
+                    localStorage.setItem('auth_jwt_token', token);
+                    localStorage.setItem('auth_user_name', 'Evaluator (Academic)');
+                    localStorage.setItem('auth_user_email', demoEmail);
+                    window.location.href = '/workspace.html';
+                    return;
+                }
+            } catch (ignored) {}
+
+            // If not found, register automatically
+            try {
+                const regRes = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: 'Project Evaluator', email: demoEmail, password: demoPassword })
+                });
+                const regBody = await regRes.json();
+                if (regRes.ok && regBody.success) {
+                    const token = regBody.data.token || regBody.data.accessToken;
+                    localStorage.setItem('auth_jwt_token', token);
+                    localStorage.setItem('auth_user_name', 'Project Evaluator');
+                    localStorage.setItem('auth_user_email', demoEmail);
+                    window.location.href = '/workspace.html';
+                } else {
+                    // Try login once more if already registered
+                    document.getElementById('login-email').value = demoEmail;
+                    document.getElementById('login-password').value = demoPassword;
+                    handleLoginSubmit(new Event('submit'));
+                }
+            } catch (e) {
+                showMessage('Demo login failed: ' + e.message, true);
+            }
+        }
+
+        // Auto-redirect if already logged in
+        if (localStorage.getItem('auth_jwt_token')) {
+            window.location.href = '/workspace.html';
+        }
+    </script>
 </body>
 </html>

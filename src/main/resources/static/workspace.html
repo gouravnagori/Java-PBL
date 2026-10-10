@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document Review Workspace | LexAdvisor</title>
+    <link rel="stylesheet" href="style.css">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Lora:ital,wght@0,400;0,500;0,600;0,700;1,400;1,500;1,600&family=Noto+Sans+Devanagari:wght@400;500;600;700&family=Source+Sans+3:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        .workspace-top-banner {
+            background: #FFFFFF;
+            border-bottom: 1px solid var(--color-border);
+            padding: 20px 28px;
+            margin-bottom: 32px;
+        }
+        .workspace-top-inner {
+            max-width: 1180px;
+            margin: 0 auto;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            flex-wrap: wrap;
+            gap: 16px;
+        }
+        .workspace-title-box h2 {
+            font-family: var(--font-serif);
+            font-size: 22px;
+            color: var(--color-primary);
+            margin-bottom: 4px;
+        }
+        .workspace-title-box p {
+            font-size: 14px;
+            color: var(--color-text-muted);
+        }
+        .user-badge-chip {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            background: var(--color-bg-subtle);
+            border: 1px solid var(--color-border);
+            padding: 6px 14px;
+            border-radius: var(--radius-sm);
+            font-size: 14px;
+            font-weight: 600;
+            color: var(--color-primary);
+        }
+        .detailed-advisory-card {
+            background: #FFFFFF;
+            border: 1px solid var(--color-border);
+            border-radius: var(--radius-md);
+            padding: 32px;
+            margin-bottom: 28px;
+            box-shadow: var(--shadow-sm);
+        }
+        .advisory-tabs {
+            display: flex;
+            gap: 12px;
+            border-bottom: 2px solid var(--color-border);
+            margin-bottom: 24px;
+        }
+        .advisory-tab-btn {
+            background: transparent;
+            border: none;
+            font-family: var(--font-sans);
+            font-size: 16px;
+            font-weight: 600;
+            padding: 12px 20px;
+            cursor: pointer;
+            color: var(--color-text-light);
+            border-bottom: 2px solid transparent;
+            margin-bottom: -2px;
+            transition: all 0.2s ease;
+        }
+        .advisory-tab-btn.active {
+            color: var(--color-primary);
+            border-bottom-color: var(--color-brand-gold);
+        }
+        .advisory-tab-btn.hindi-tab.active {
+            border-bottom-color: #D97706;
+            color: #92400E;
+        }
+        .advisory-content-pane {
+            font-size: 15px;
+            line-height: 1.8;
+            color: var(--color-text-main);
+        }
+        .advisory-content-pane.hindi-text {
+            font-family: var(--font-hindi);
+            font-size: 16px;
+            background: var(--color-bg-hindi);
+            border: 1px solid #FDE68A;
+            padding: 24px;
+            border-radius: var(--radius-sm);
+        }
+        .advisory-content-pane.english-text {
+            background: #FAFAFA;
+            border: 1px solid #E5E7EB;
+            padding: 24px;
+            border-radius: var(--radius-sm);
+        }
+        .advisory-content-pane h3 {
+            font-family: var(--font-serif);
+            font-size: 18px;
+            color: var(--color-primary);
+            margin: 20px 0 10px;
+            border-bottom: 1px solid rgba(0,0,0,0.06);
+            padding-bottom: 6px;
+        }
+        .advisory-content-pane h3:first-child {
+            margin-top: 0;
+        }
+        .advisory-content-pane p {
+            margin-bottom: 14px;
+        }
+        .advisory-content-pane ul {
+            margin: 10px 0 16px 20px;
+        }
+        .advisory-content-pane li {
+            margin-bottom: 8px;
+        }
+        .next-steps-container {
+            background: #F0FDF4;
+            border: 1px solid #BBF7D0;
+            border-radius: var(--radius-md);
+            padding: 28px 32px;
+            margin-bottom: 28px;
+        }
+        .next-steps-container h3 {
+            font-family: var(--font-serif);
+            font-size: 20px;
+            color: #14532D;
+            margin-bottom: 8px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+        .next-steps-list-items {
+            list-style: none;
+            padding: 0;
+            margin: 16px 0 0;
+        }
+        .next-steps-list-items li {
+            font-size: 15px;
+            color: #166534;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: flex-start;
+            gap: 12px;
+            line-height: 1.6;
+        }
+        .next-step-badge {
+            background: #22C55E;
+            color: #FFFFFF;
+            font-size: 12px;
+            font-weight: 700;
+            padding: 2px 8px;
+            border-radius: 50%;
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+            margin-top: 2px;
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="brand-wrapper">
+                <div class="brand-crest">⚖</div>
+                <div class="brand-info">
+                    <h1>LexAdvisor</h1>
+                    <p>Document Review Workspace</p>
+                </div>
+            </a>
+            <div class="user-nav-slot">
+                <a href="/admin.html" class="btn-header-outline">📊 Admin Panel</a>
+                <a href="/" class="btn-header-outline">Public Home</a>
+                <button onclick="logoutWorkspace()" class="btn-header-outline" style="background: #374151;">Logout</button>
+            </div>
+        </div>
+    </header>
+
+    <!-- Top Banner with Authenticated User Details -->
+    <div class="workspace-top-banner">
+        <div class="workspace-top-inner">
+            <div class="workspace-title-box">
+                <h2>Contract Review & Advisory Workspace</h2>
+                <p>Upload your legal contract below for detailed bilingual analysis, risk scoring, and next steps.</p>
+            </div>
+            <div class="user-badge-chip">
+                <span>👤 Logged in as:</span>
+                <span id="display-user-name">User</span>
+            </div>
+        </div>
+    </div>
+
+    <!-- Main Workspace Area -->
+    <main class="app-container" style="max-width: 1180px; margin: 0 auto; padding: 0 24px 60px;">
+
+        <!-- ============================================================== -->
+        <!-- DOCUMENT UPLOAD ZONE (Only Visible in Workspace)               -->
+        <!-- ============================================================== -->
+        <section class="card upload-section" id="upload-panel">
+            <div class="card-header">
+                <h2>Upload Contract for Review</h2>
+                <p>Supports PDF, Word (DOCX), plain text (TXT), and scanned physical stamp-paper photos.</p>
+            </div>
+
+            <div class="upload-dropzone" id="drop-zone" onclick="triggerFileInput()">
+                <div class="dropzone-content">
+                    <div class="dropzone-icon">📁</div>
+                    <h3>Drag & Drop Contract Here</h3>
+                    <p>or click to browse from your device</p>
+                    <span class="dropzone-hint">Accepted: PDF, DOCX, TXT, JPG, PNG • Max size: 20MB</span>
+                </div>
+                <input type="file" id="file-input" style="display: none;" accept=".pdf,.docx,.txt,.jpg,.jpeg,.png,.webp" onchange="handleFileSelected(event)">
+            </div>
+
+            <!-- Upload Progress Bar -->
+            <div id="upload-progress-container" style="display: none; margin-top: 24px;">
+                <div style="display: flex; justify-content: space-between; font-size: 14px; margin-bottom: 8px;">
+                    <span id="progress-status-text">Ingesting document...</span>
+                    <span id="progress-percent-text">20%</span>
+                </div>
+                <div style="height: 8px; background: #E5E7EB; border-radius: 4px; overflow: hidden;">
+                    <div id="progress-bar-fill" style="width: 20%; height: 100%; background: var(--color-brand-gold); transition: width 0.3s ease;"></div>
+                </div>
+            </div>
+
+            <div id="upload-error-alert" class="alert-message error" style="display: none; margin-top: 20px;"></div>
+        </section>
+
+        <!-- ============================================================== -->
+        <!-- ANALYSIS RESULTS PANEL (Renders on successful review)          -->
+        <!-- ============================================================== -->
+        <section id="results-panel" style="display: none;">
+
+            <!-- Verdict & Composite Score Banner -->
+            <div class="card" id="verdict-banner-card" style="padding: 28px 32px; margin-bottom: 28px;">
+                <div style="display: flex; justify-content: space-between; align-items: center; flex-wrap: wrap; gap: 20px;">
+                    <div>
+                        <div style="font-size: 12px; font-weight: 700; text-transform: uppercase; letter-spacing: 0.8px; color: var(--color-text-light); margin-bottom: 4px;">
+                            Official Safety Verdict
+                        </div>
+                        <h2 id="result-verdict-title" style="font-family: var(--font-serif); font-size: 26px; color: var(--color-primary); margin-bottom: 6px;">
+                            Evaluating Document...
+                        </h2>
+                        <p id="result-doc-title" style="font-size: 14px; color: var(--color-text-muted); margin: 0;">
+                            Document: Contract.pdf • Type: General Agreement
+                        </p>
+                    </div>
+                    <div style="display: flex; align-items: center; gap: 24px;">
+                        <div style="text-align: right;">
+                            <div style="font-size: 12px; font-weight: 600; text-transform: uppercase; color: var(--color-text-light);">Risk Score</div>
+                            <div id="result-score-val" style="font-family: var(--font-serif); font-size: 38px; font-weight: 700; color: var(--color-brand-gold); line-height: 1;">
+                                0 / 100
+                            </div>
+                        </div>
+                        <div>
+                            <button id="btn-download-pdf" onclick="downloadPdfReport()" class="btn btn-outline" style="padding: 10px 18px; font-size: 14px;">
+                                📥 Download PDF Report
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- DETAILED BILINGUAL LEGAL ADVISORY (Detailed English & Hindi) -->
+            <div class="detailed-advisory-card">
+                <div style="display: flex; justify-content: space-between; align-items: center; margin-bottom: 16px;">
+                    <div>
+                        <h2 style="font-family: var(--font-serif); font-size: 24px; color: var(--color-primary); margin-bottom: 4px;">
+                            Comprehensive Plain-Language Legal Breakdown
+                        </h2>
+                        <p style="font-size: 14px; color: var(--color-text-muted); margin: 0;">
+                            Read the complete, detailed breakdown in simple English or natural Hindi (विस्तृत और सरल हिंदी).
+                        </p>
+                    </div>
+                </div>
+
+                <div class="advisory-tabs">
+                    <button class="advisory-tab-btn active" id="tab-btn-eng" onclick="switchAdvisoryTab('eng')">
+                        🇬🇧 Detailed English Breakdown
+                    </button>
+                    <button class="advisory-tab-btn hindi-tab" id="tab-btn-hin" onclick="switchAdvisoryTab('hin')">
+                        🇮🇳 विस्तृत हिंदी सारांश (सरल और आसान)
+                    </button>
+                </div>
+
+                <!-- English Detailed Breakdown -->
+                <div id="pane-english" class="advisory-content-pane english-text">
+                    <div id="english-explanation-text">Analyzing clauses...</div>
+                </div>
+
+                <!-- Hindi Detailed Breakdown -->
+                <div id="pane-hindi" class="advisory-content-pane hindi-text" style="display: none;">
+                    <div id="hindi-explanation-text">विश्लेषण तैयार किया जा रहा है...</div>
+                </div>
+            </div>
+
+            <!-- ACTIONABLE NEXT STEPS CHECKLIST -->
+            <div class="next-steps-container">
+                <h3>
+                    <span>🧭</span>
+                    <span>Recommended Next Steps & Negotiation Plan</span>
+                </h3>
+                <p style="font-size: 14px; color: #166534; margin: 0;">
+                    Follow these step-by-step actions before putting your signature on this document.
+                </p>
+                <ul class="next-steps-list-items" id="next-steps-list">
+                    <!-- Populated dynamically -->
+                </ul>
+            </div>
+
+            <!-- 13-POINT CLAUSE RISK BREAKDOWN TABLE -->
+            <div class="card" style="padding: 32px; margin-bottom: 32px;">
+                <div class="card-header" style="margin-bottom: 20px;">
+                    <h2>Detected Clauses & Risk Scanner Audit</h2>
+                    <p>Every extracted clause evaluated against 13 statutory compliance and consumer protection rules.</p>
+                </div>
+
+                <div style="overflow-x: auto;">
+                    <table style="width: 100%; border-collapse: collapse; font-size: 14px; text-align: left;">
+                        <thead>
+                            <tr style="border-bottom: 2px solid var(--color-border); background: var(--color-bg-subtle);">
+                                <th style="padding: 12px 16px; font-weight: 600; color: var(--color-primary);">Clause #</th>
+                                <th style="padding: 12px 16px; font-weight: 600; color: var(--color-primary);">Clause Type</th>
+                                <th style="padding: 12px 16px; font-weight: 600; color: var(--color-primary);">Risk Level</th>
+                                <th style="padding: 12px 16px; font-weight: 600; color: var(--color-primary);">Identified Issue & Advice</th>
+                            </tr>
+                        </thead>
+                        <tbody id="clauses-table-body">
+                            <!-- Populated dynamically -->
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Reset / Upload Another Button -->
+            <div style="text-align: center; margin-top: 32px;">
+                <button class="btn btn-outline" onclick="resetWorkspaceForNewUpload()" style="padding: 12px 28px;">
+                    🔄 Analyze Another Document
+                </button>
+            </div>
+
+        </section>
+
+    </main>
+
+    <script>
+        // Check Authentication Gate
+        const token = localStorage.getItem('auth_jwt_token');
+        const userName = localStorage.getItem('auth_user_name');
+        if (!token) {
+            window.location.href = '/auth.html';
+        } else {
+            document.getElementById('display-user-name').textContent = userName || 'Registered User';
+        }
+
+        let currentDocumentId = null;
+
+        function triggerFileInput() {
+            document.getElementById('file-input').click();
+        }
+
+        // Drag & Drop Handlers
+        const dropZone = document.getElementById('drop-zone');
+        ['dragenter', 'dragover'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.add('dragover');
+            }, false);
+        });
+        ['dragleave', 'drop'].forEach(eventName => {
+            dropZone.addEventListener(eventName, (e) => {
+                e.preventDefault();
+                dropZone.classList.remove('dragover');
+            }, false);
+        });
+        dropZone.addEventListener('drop', (e) => {
+            const dt = e.dataTransfer;
+            const files = dt.files;
+            if (files.length > 0) {
+                uploadContractFile(files[0]);
+            }
+        });
+
+        function handleFileSelected(e) {
+            if (e.target.files.length > 0) {
+                uploadContractFile(e.target.files[0]);
+            }
+        }
+
+        async function uploadContractFile(file) {
+            const errorAlert = document.getElementById('upload-error-alert');
+            const progressContainer = document.getElementById('upload-progress-container');
+            const progressBar = document.getElementById('progress-bar-fill');
+            const progressStatus = document.getElementById('progress-status-text');
+            const progressPercent = document.getElementById('progress-percent-text');
+
+            errorAlert.style.display = 'none';
+            progressContainer.style.display = 'block';
+            progressBar.style.width = '25%';
+            progressPercent.textContent = '25%';
+            progressStatus.textContent = 'Uploading & extracting contract text...';
+
+            const formData = new FormData();
+            formData.append('file', file);
+
+            try {
+                // Step 1: Upload
+                const uploadRes = await fetch('/api/documents/upload', {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token
+                    },
+                    body: formData
+                });
+                const uploadData = await uploadRes.json();
+
+                if (!uploadRes.ok || !uploadData.success) {
+                    throw new Error(uploadData.message || 'File upload failed. Ensure file is under 20MB.');
+                }
+
+                const docId = uploadData.data.documentId || uploadData.data.id;
+                currentDocumentId = docId;
+
+                progressBar.style.width = '60%';
+                progressPercent.textContent = '60%';
+                progressStatus.textContent = 'Running 13-rule risk audit & synthesizing detailed advisory...';
+
+                // Step 2: Analyze
+                const analysisRes = await fetch('/api/analysis/' + docId, {
+                    method: 'POST',
+                    headers: {
+                        'Authorization': 'Bearer ' + token,
+                        'Content-Type': 'application/json'
+                    }
+                });
+                const analysisData = await analysisRes.json();
+
+                if (!analysisRes.ok || !analysisData.success) {
+                    throw new Error(analysisData.message || 'Legal analysis pipeline failed.');
+                }
+
+                progressBar.style.width = '100%';
+                progressPercent.textContent = '100%';
+                progressStatus.textContent = 'Review complete!';
+
+                setTimeout(() => {
+                    renderAnalysisResults(file.name, analysisData.data);
+                }, 400);
+
+            } catch (err) {
+                progressContainer.style.display = 'none';
+                errorAlert.textContent = 'Error: ' + err.message;
+                errorAlert.style.display = 'block';
+            }
+        }
+
+        function renderAnalysisResults(fileName, report) {
+            document.getElementById('upload-panel').style.display = 'none';
+            document.getElementById('results-panel').style.display = 'block';
+
+            // Document info & Verdict
+            document.getElementById('result-doc-title').textContent = 
+                `Document: ${fileName} • Type: ${report.docType || 'Legal Contract'} • Clauses Detected: ${report.totalClausesDetected || 0}`;
+
+            const verdict = report.actionVerdict || (report.compositeRiskScore >= 50 ? 'DO NOT SIGN YET — RENEGOTIATE FLAGGED CLAUSES' : 'SAFE TO SIGN');
+            const score = report.compositeRiskScore || 0;
+
+            const verdictEl = document.getElementById('result-verdict-title');
+            verdictEl.textContent = verdict;
+            if (verdict.includes('DO NOT SIGN')) {
+                verdictEl.style.color = 'var(--color-risk-critical-text)';
+            } else if (verdict.includes('CAUTION')) {
+                verdictEl.style.color = 'var(--color-risk-high-text)';
+            } else {
+                verdictEl.style.color = 'var(--color-risk-low-text)';
+            }
+
+            document.getElementById('result-score-val').textContent = `${Math.round(score)} / 100`;
+
+            // Detailed English Summary (Convert markdown headings to HTML)
+            const engText = report.englishExplanation || 'Detailed analysis completed.';
+            document.getElementById('english-explanation-text').innerHTML = formatMarkdownText(engText);
+
+            // Detailed Hindi Summary
+            const hinText = report.hindiExplanation || 'विस्तृत कानूनी सारांश तैयार किया गया है।';
+            document.getElementById('hindi-explanation-text').innerHTML = formatMarkdownText(hinText);
+
+            // Actionable Next Steps
+            const stepsList = document.getElementById('next-steps-list');
+            stepsList.innerHTML = '';
+            const steps = report.nextSteps && report.nextSteps.length > 0 ? report.nextSteps : [
+                "Request written modification of flagged clauses before signing.",
+                "Verify liability limits and dispute resolution forum.",
+                "Retain an executed original copy for personal legal records."
+            ];
+
+            steps.forEach((step, idx) => {
+                const li = document.createElement('li');
+                li.innerHTML = `<span class="next-step-badge">${idx + 1}</span> <span>${escapeHtml(step)}</span>`;
+                stepsList.appendChild(li);
+            });
+
+            // Clauses Table
+            const tbody = document.getElementById('clauses-table-body');
+            tbody.innerHTML = '';
+            const clauses = report.clauses || [];
+
+            if (clauses.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="4" style="padding: 20px; text-align: center; color: var(--color-text-muted);">No distinct clauses required flagging. All provisions within standard limits.</td></tr>`;
+            } else {
+                clauses.forEach(c => {
+                    const tr = document.createElement('tr');
+                    tr.style.borderBottom = '1px solid var(--color-border)';
+
+                    const hasRisk = c.hasRisk;
+                    const risks = c.risks || [];
+                    const topSeverity = risks.length > 0 ? risks[0].severity : 'LOW';
+
+                    let badgeColor = '#059669';
+                    let badgeBg = '#ECFDF5';
+                    if (topSeverity === 'CRITICAL') { badgeColor = '#DC2626'; badgeBg = '#FEF2F2'; }
+                    else if (topSeverity === 'HIGH') { badgeColor = '#EA580C'; badgeBg = '#FFF7ED'; }
+                    else if (topSeverity === 'MEDIUM') { badgeColor = '#D97706'; badgeBg = '#FFFBEB'; }
+
+                    const explanation = risks.length > 0 
+                        ? `<strong>${escapeHtml(risks[0].riskTitle)}:</strong> ${escapeHtml(risks[0].explanation)}<br><span style="color: #4B5565; font-size: 13px;">💡 Suggestion: ${escapeHtml(risks[0].suggestion)}</span>`
+                        : `<span style="color: #6B7280;">Standard terms; no high-severity risk triggers found.</span>`;
+
+                    tr.innerHTML = `
+                        <td style="padding: 14px 16px; font-weight: 600;">Clause ${c.clauseIndex || '-'}</td>
+                        <td style="padding: 14px 16px; font-weight: 500;">${escapeHtml(c.clauseType || 'GENERAL')}</td>
+                        <td style="padding: 14px 16px;">
+                            <span style="display: inline-block; padding: 4px 10px; border-radius: 4px; font-size: 12px; font-weight: 700; color: ${badgeColor}; background: ${badgeBg};">
+                                ${topSeverity}
+                            </span>
+                        </td>
+                        <td style="padding: 14px 16px; line-height: 1.6;">${explanation}</td>
+                    `;
+                    tbody.appendChild(tr);
+                });
+            }
+
+            // Scroll to top of results
+            document.getElementById('results-panel').scrollIntoView({ behavior: 'smooth' });
+        }
+
+        function formatMarkdownText(text) {
+            if (!text) return '';
+            // Basic markdown parser for headings, bold, bullet points
+            let html = escapeHtml(text);
+            html = html.replace(/### (.*?)\n/g, '<h3>$1</h3>');
+            html = html.replace(/## (.*?)\n/g, '<h3>$1</h3>');
+            html = html.replace(/\*\*(.*?)\*\*/g, '<strong>$1</strong>');
+            html = html.replace(/- (.*?)\n/g, '<li>$1</li>');
+            html = html.replace(/\n\n/g, '<br><br>');
+            return html;
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str
+                .replace(/&/g, "&amp;")
+                .replace(/</g, "&lt;")
+                .replace(/>/g, "&gt;")
+                .replace(/"/g, "&quot;")
+                .replace(/'/g, "&#039;");
+        }
+
+        function switchAdvisoryTab(lang) {
+            const tabEng = document.getElementById('tab-btn-eng');
+            const tabHin = document.getElementById('tab-btn-hin');
+            const paneEng = document.getElementById('pane-english');
+            const paneHin = document.getElementById('pane-hindi');
+
+            if (lang === 'eng') {
+                tabEng.classList.add('active');
+                tabHin.classList.remove('active');
+                paneEng.style.display = 'block';
+                paneHin.style.display = 'none';
+            } else {
+                tabHin.classList.add('active');
+                tabEng.classList.remove('active');
+                paneHin.style.display = 'block';
+                paneEng.style.display = 'none';
+            }
+        }
+
+        function downloadPdfReport() {
+            if (!currentDocumentId) return;
+            window.open('/api/reports/' + currentDocumentId + '/pdf', '_blank');
+        }
+
+        function resetWorkspaceForNewUpload() {
+            currentDocumentId = null;
+            document.getElementById('file-input').value = '';
+            document.getElementById('upload-progress-container').style.display = 'none';
+            document.getElementById('upload-panel').style.display = 'block';
+            document.getElementById('results-panel').style.display = 'none';
+            window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
+
+        function logoutWorkspace() {
+            localStorage.removeItem('auth_jwt_token');
+            localStorage.removeItem('auth_user_name');
+            localStorage.removeItem('auth_user_email');
+            window.location.href = '/auth.html';
+        }
+    </script>
+</body>
+</html>

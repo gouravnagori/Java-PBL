@@ -94,7 +94,7 @@ public class SecurityConfig {
                 .requestMatchers("/api/reports/**").permitAll()
                 .requestMatchers("/api/**").permitAll()
                 // Static assets & frontend views
-                .requestMatchers("/", "/index.html", "/auth.html", "/cases.html", "/css/**", "/js/**", "/style.css", "/script.js", "/favicon.ico", "/*.css", "/*.js").permitAll()
+                .requestMatchers("/", "/index.html", "/auth.html", "/cases.html", "/workspace.html", "/admin.html", "/css/**", "/js/**", "/style.css", "/script.js", "/favicon.ico", "/*.css", "/*.js").permitAll()
                 .anyRequest().permitAll()
             );
 
