@@ -6,6 +6,52 @@
     <title>Admin Control Center | All Legal Audit Reports | LexAdvisor</title>
     <link rel="stylesheet" href="style.css">
     <style>
+        /* Admin Password Security Gate Overlay */
+        .admin-lock-gate {
+            position: fixed;
+            inset: 0;
+            background: rgba(16, 17, 20, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .admin-gate-card {
+            width: 100%;
+            max-width: 440px;
+            background: #FFFFFF;
+            border: 1px solid #7E858F;
+            border-radius: 8px;
+            box-shadow: 0 30px 70px rgba(16, 17, 20, 0.35), 8px 8px 0 #737B86;
+            overflow: hidden;
+            animation: gatePop 0.35s var(--ease-out);
+        }
+        @keyframes gatePop {
+            from { opacity: 0; transform: translateY(18px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .admin-gate-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 13px 20px;
+            background: linear-gradient(110deg, #292B30, #111214);
+            color: #F5F6F8;
+            font: 700 10px var(--mono);
+            text-transform: uppercase;
+            border-bottom: 1px solid #6F7782;
+        }
+        .admin-gate-topbar strong {
+            color: var(--red);
+        }
+        .admin-gate-body {
+            padding: 34px 30px;
+        }
+
+        /* Detail Modal */
         .modal-overlay {
             position: fixed;
             inset: 0;
@@ -78,14 +124,57 @@
                 </span>
             </a>
             <div class="user-nav-slot">
+                <button onclick="lockAdminConsole()" class="btn-header-outline" id="lock-console-btn" title="Lock admin console">🔒 Lock Console</button>
                 <a href="/workspace.html" class="btn-header-outline">Workspace</a>
                 <a href="/" class="btn-header-outline">Public Home</a>
-                <button onclick="logoutAdmin()" class="btn-header-outline" style="background:var(--metal-light);">Logout</button>
             </div>
         </div>
     </header>
 
-    <div class="admin-page-container">
+    <!-- ADMIN PASS SECURITY GATE OVERLAY -->
+    <div id="admin-security-gate" class="admin-lock-gate">
+        <div class="admin-gate-card">
+            <div class="admin-gate-topbar">
+                <span>LexAdvisor / Access Control</span>
+                <strong>RESTRICTED AREA</strong>
+            </div>
+            <div class="admin-gate-body">
+                <div class="eyebrow" style="margin-bottom: 8px;">Authentication / Key Clearance</div>
+                <h2 style="font: 800 28px/1 var(--display); text-transform: uppercase; color: var(--ink); margin-bottom: 8px;">
+                    Enter Admin Passcode
+                </h2>
+                <p style="font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 22px;">
+                    Access to system audit logs, classified contracts, and security KPIs requires administrator credentials.
+                </p>
+
+                <div id="gate-error-alert" class="auth-alert-box error" style="display: none; margin-bottom: 16px;"></div>
+
+                <form id="admin-gate-form" onsubmit="handleAdminPassSubmit(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="admin-gate-pass">Admin Password / Secret Key</label>
+                        <div style="position: relative;">
+                            <input type="password" id="admin-gate-pass" class="form-input" placeholder="••••••••" required autocomplete="current-password" autofocus style="padding-right: 44px;">
+                            <button type="button" onclick="togglePassVisibility()" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); font-size: 15px;" title="Toggle visibility">👁</button>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; font: 600 11px var(--mono); color: var(--muted);">
+                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                            <input type="checkbox" id="remember-admin-session" checked> Remember session
+                        </label>
+                        <span>Key: <code>ADMIN_PASSWORD</code></span>
+                    </div>
+                    <button type="submit" id="btn-unlock-gate" class="btn btn-primary btn-full">
+                        Unlock Admin Console <span class="arrow">↗</span>
+                    </button>
+                </form>
+
+                <a href="/" class="auth-back-link" style="margin-top: 20px;">← Return to Public Home</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN ADMIN CONTENT (Hidden until password verified) -->
+    <div class="admin-page-container" id="admin-main-content" style="opacity: 0.1; pointer-events: none; transition: opacity 0.3s ease;">
 
         <!-- Top Header Banner -->
         <div class="admin-header-box">
@@ -199,7 +288,7 @@
     <!-- Footer -->
     <footer class="footer">
         <div class="footer-disclaimer">
-            <strong>Security Notice:</strong> The Admin Audit Console provides centralized compliance tracking for university project evaluation and testing. Data is protected with role-based access.
+            <strong>Security Notice:</strong> The Admin Audit Console is protected with administrator access control. Data is protected with role-based clearance.
         </div>
         <div class="footer-bottom">
             <span>© 2026 LexAdvisor. 5th Sem Java PBL.</span>
@@ -210,13 +299,120 @@
     <script>
         let allReports = [];
 
+        function getStoredAdminPass() {
+            return sessionStorage.getItem('admin_pass') || localStorage.getItem('admin_pass');
+        }
+
+        function togglePassVisibility() {
+            const input = document.getElementById('admin-gate-pass');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        async function handleAdminPassSubmit(e) {
+            e.preventDefault();
+            const pass = document.getElementById('admin-gate-pass').value.trim();
+            const errorBox = document.getElementById('gate-error-alert');
+            const submitBtn = document.getElementById('btn-unlock-gate');
+            const remember = document.getElementById('remember-admin-session').checked;
+
+            if (!pass) return;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Verifying Passcode...';
+            errorBox.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/reports/admin/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ passcode: pass })
+                });
+                const body = await res.json();
+
+                if (res.ok && body.success) {
+                    sessionStorage.setItem('admin_pass', pass);
+                    if (remember) {
+                        localStorage.setItem('admin_pass', pass);
+                    }
+                    unlockAdminConsole();
+                    fetchPlatformReports();
+                } else {
+                    errorBox.textContent = body.message || 'Incorrect admin passcode. Access denied.';
+                    errorBox.style.display = 'block';
+                    document.getElementById('admin-gate-pass').select();
+                }
+            } catch (err) {
+                errorBox.textContent = 'Network error verifying passcode: ' + err.message;
+                errorBox.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Unlock Admin Console <span class="arrow">↗</span>';
+            }
+        }
+
+        function unlockAdminConsole() {
+            const gate = document.getElementById('admin-security-gate');
+            const content = document.getElementById('admin-main-content');
+            gate.style.display = 'none';
+            content.style.opacity = '1';
+            content.style.pointerEvents = 'auto';
+        }
+
+        function lockAdminConsole() {
+            sessionStorage.removeItem('admin_pass');
+            localStorage.removeItem('admin_pass');
+            const gate = document.getElementById('admin-security-gate');
+            const content = document.getElementById('admin-main-content');
+            gate.style.display = 'flex';
+            content.style.opacity = '0.1';
+            content.style.pointerEvents = 'none';
+            document.getElementById('admin-gate-pass').value = '';
+            document.getElementById('gate-error-alert').style.display = 'none';
+            document.getElementById('admin-gate-pass').focus();
+        }
+
+        async function initAdminAuth() {
+            const stored = getStoredAdminPass();
+            if (stored) {
+                try {
+                    const res = await fetch('/api/reports/admin/verify', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ passcode: stored })
+                    });
+                    const body = await res.json();
+                    if (res.ok && body.success) {
+                        unlockAdminConsole();
+                        fetchPlatformReports();
+                        return;
+                    }
+                } catch (ignored) {}
+            }
+            // If no valid stored pass, display security gate
+            lockAdminConsole();
+        }
+
         async function fetchPlatformReports() {
             const tbody = document.getElementById('reports-table-body');
+            const adminPass = getStoredAdminPass();
+
             tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--muted);">Loading audit reports...</td></tr>`;
 
             try {
-                const res = await fetch('/api/reports/all');
+                const res = await fetch('/api/reports/all', {
+                    headers: {
+                        'X-Admin-Pass': adminPass || ''
+                    }
+                });
                 const data = await res.json();
+
+                if (res.status === 401) {
+                    lockAdminConsole();
+                    const errorBox = document.getElementById('gate-error-alert');
+                    errorBox.textContent = 'Session invalid or expired. Enter admin passcode.';
+                    errorBox.style.display = 'block';
+                    return;
+                }
 
                 if (res.ok && data.success) {
                     allReports = data.data || [];
@@ -287,6 +483,7 @@
                 }
 
                 const dateStr = r.generatedAt ? new Date(r.generatedAt).toLocaleDateString() : '-';
+                const adminPass = getStoredAdminPass();
 
                 tr.innerHTML = `
                     <td style="font-weight: 700; color: var(--ink);">${escapeHtml(r.fileName || 'Untitled Contract')}</td>
@@ -312,11 +509,14 @@
         async function inspectReport(documentId) {
             const modal = document.getElementById('report-modal');
             const body = document.getElementById('modal-body-container');
+            const adminPass = getStoredAdminPass();
             modal.style.display = 'flex';
             body.innerHTML = `<div style="text-align: center; padding: 40px; font: 600 12px var(--mono);">Fetching full audit report...</div>`;
 
             try {
-                const res = await fetch('/api/reports/' + documentId);
+                const res = await fetch('/api/reports/' + documentId, {
+                    headers: { 'X-Admin-Pass': adminPass || '' }
+                });
                 const data = await res.json();
 
                 if (res.ok && data.success) {
@@ -390,14 +590,7 @@
             return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
         }
 
-        function logoutAdmin() {
-            localStorage.removeItem('auth_jwt_token');
-            localStorage.removeItem('auth_user_name');
-            localStorage.removeItem('auth_user_email');
-            window.location.href = '/auth.html';
-        }
-
-        document.addEventListener('DOMContentLoaded', fetchPlatformReports);
+        document.addEventListener('DOMContentLoaded', initAdminAuth);
     </script>
 </body>
 </html>
