@@ -46,7 +46,7 @@ public class ReportController {
             return ResponseEntity.ok(ApiResponse.success("Administrator authorization verified", true));
         }
         return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                .body(ApiResponse.error(401, "Invalid administrator passcode"));
+                .body(ApiResponse.error("Invalid administrator passcode"));
     }
 
     @PostMapping("/{documentId}/generate")
@@ -80,7 +80,7 @@ public class ReportController {
         String provided = passHeader != null ? passHeader : passParam;
         if (!isValidAdminPass(provided)) {
             return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(ApiResponse.error(401, "Administrator passcode required to access all platform audit reports"));
+                    .body(ApiResponse.error("Administrator passcode required to access all platform audit reports"));
         }
         List<ReportSummaryResponse> summaries = reportService.getAllReportSummaries();
         return ResponseEntity.ok(ApiResponse.success("All platform audit reports retrieved successfully", summaries));
