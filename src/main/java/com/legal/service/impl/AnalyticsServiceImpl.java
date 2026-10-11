@@ -26,6 +26,9 @@ public class AnalyticsServiceImpl implements AnalyticsService {
     private final AnalysisRepository analysisRepository;
     private final ReportRepository reportRepository;
 
+    @Autowired(required = false)
+    private com.legal.repository.AnalysisResultRepository analysisResultRepository;
+
     @Autowired
     public AnalyticsServiceImpl(DocumentRepository documentRepository,
                                 AnalysisRepository analysisRepository,
@@ -110,6 +113,21 @@ public class AnalyticsServiceImpl implements AnalyticsService {
 
                 String category = categorizeScore(analysis.getOverallRiskScore());
                 riskDist.put(category, riskDist.getOrDefault(category, 0L) + 1);
+            }
+        }
+
+        // Fallback: If no AnalysisRecord was found but Analysis entities exist
+        if (analyses.isEmpty() && analysisResultRepository != null) {
+            List<com.legal.model.Analysis> results = analysisResultRepository.findAll();
+            for (com.legal.model.Analysis a : results) {
+                totalClauses += a.getTotalClausesDetected();
+                highRiskCount += a.getTotalRisksFound();
+                if (a.getCompositeRiskScore() > 0) {
+                    sumRiskScore += a.getCompositeRiskScore();
+                    scoreCount++;
+                    String category = categorizeScore(a.getCompositeRiskScore());
+                    riskDist.put(category, riskDist.getOrDefault(category, 0L) + 1);
+                }
             }
         }
 

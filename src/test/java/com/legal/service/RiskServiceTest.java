@@ -263,6 +263,41 @@ class RiskServiceTest {
         assertFalse(risk.getCitedText().isBlank(), "citedText must not be blank");
     }
 
+    @Test
+    @DisplayName("Should detect risk across line breaks in multiline clauses")
+    void shouldDetectRisksAcrossMultipleLines() {
+        // Multi-line clause simulating PDF text extraction
+        Clause clause = buildClause("The service provider shall have unlimited\n"
+            + "and total legal liability for any damages arising\n"
+            + "under this agreement without limitation.");
+
+        List<Risk> risks = riskService.evaluateClause(clause, "analysis-ml", "user-ml");
+
+        assertFalse(risks.isEmpty(), "Should detect risk across multiline text");
+        assertTrue(risks.stream().anyMatch(r -> "UNLIMITED_LIABILITY".equals(r.getRuleCode())),
+            "Expected UNLIMITED_LIABILITY across line breaks");
+    }
+
+    @Test
+    @DisplayName("Contract with clauses should have realistic baseline risk score instead of 0")
+    void shouldCalculateRealisticBaselineRiskForAnalyzedContract() {
+        // Contract with 6 standard clauses but no critical/high flags
+        double baselineScore = riskService.computeCompositeRiskScore(List.of(), 6);
+
+        assertTrue(baselineScore >= 15.0 && baselineScore <= 22.0,
+            "Analyzed binding contract should have realistic baseline between 15 and 22, got: " + baselineScore);
+        assertNotEquals(0.0, baselineScore, "Binding contract score must not be 0.0");
+    }
+
+    @Test
+    @DisplayName("Critical risks should escalate score into danger zone (>= 72)")
+    void shouldEscalateScoreForCriticalRisksInContract() {
+        List<Risk> risks = List.of(buildRisk(Severity.CRITICAL));
+        double score = riskService.computeCompositeRiskScore(risks, 5);
+
+        assertTrue(score >= 72.0, "Critical risk in contract must escalate score >= 72.0, got: " + score);
+    }
+
     // =========================================================================
     // Helpers
     // =========================================================================

@@ -29,6 +29,12 @@ public class ReportServiceImpl implements ReportService {
     private final AnalysisRepository analysisRepository;
     private final PdfReportExporter pdfReportExporter;
 
+    @Autowired(required = false)
+    private com.legal.repository.AnalysisResultRepository analysisResultRepository;
+
+    @Autowired(required = false)
+    private com.legal.repository.RiskRepository riskRepository;
+
     @Autowired
     public ReportServiceImpl(ReportRepository reportRepository,
                              DocumentRepository documentRepository,
@@ -71,6 +77,33 @@ public class ReportServiceImpl implements ReportService {
                     String sev = flag.getSeverity() != null ? flag.getSeverity().toUpperCase() : "MEDIUM";
                     severityBreakdown.put(sev, severityBreakdown.getOrDefault(sev, 0) + 1);
                     findings.add("[" + sev + "] " + flag.getClauseType() + ": " + flag.getDescription());
+                }
+            }
+        }
+
+        // Fallback: Check AnalysisResultRepository if AnalysisRecord was not found or has 0 score
+        if ((riskScore == 0.0 || analysisOpt.isEmpty()) && analysisResultRepository != null) {
+            String effectiveUser = userId != null ? userId : doc.getUserId();
+            Optional<com.legal.model.Analysis> resultOpt = analysisResultRepository.findByDocumentIdAndUserId(documentId, effectiveUser);
+            if (resultOpt.isEmpty()) {
+                resultOpt = analysisResultRepository.findAll().stream()
+                        .filter(a -> documentId.equals(a.getDocumentId()))
+                        .findFirst();
+            }
+            if (resultOpt.isPresent()) {
+                com.legal.model.Analysis a = resultOpt.get();
+                riskScore = a.getCompositeRiskScore();
+                riskCategory = categorizeScore(riskScore);
+                if (a.getRiskSummary() != null && !a.getRiskSummary().isBlank()) {
+                    execSummary = a.getRiskSummary();
+                }
+                if (riskRepository != null && findings.isEmpty()) {
+                    List<com.legal.model.Risk> risks = riskRepository.findByAnalysisIdOrderBySeverityDesc(a.getId());
+                    for (com.legal.model.Risk r : risks) {
+                        String sev = r.getSeverity() != null ? r.getSeverity().name() : "MEDIUM";
+                        severityBreakdown.put(sev, severityBreakdown.getOrDefault(sev, 0) + 1);
+                        findings.add("[" + sev + "] " + r.getRuleCode() + ": " + r.getRiskTitle());
+                    }
                 }
             }
         }

@@ -44,6 +44,7 @@ class AnalysisServiceTest {
     @Mock private ClassificationService classificationService;
     @Mock private RiskService riskService;
     @Mock private LegalAdvisoryService legalAdvisoryService;
+    @Mock private com.legal.repository.AnalysisRepository analysisRecordRepo;
 
     @InjectMocks
     private AnalysisService analysisService;
@@ -88,7 +89,8 @@ class AnalysisServiceTest {
         when(riskService.evaluateClause(any(Clause.class), eq(ANALYSIS_ID), eq(USER_ID)))
             .thenReturn(List.of(mockRisk));
         when(riskRepo.saveAll(anyList())).thenReturn(List.of(mockRisk));
-        when(riskService.computeCompositeRiskScore(anyList())).thenReturn(75.0);
+        when(riskService.computeCompositeRiskScore(anyList(), anyInt())).thenReturn(75.0);
+        lenient().when(riskService.computeCompositeRiskScore(anyList())).thenReturn(75.0);
         when(riskService.generateRiskSummary(anyDouble(), anyList())).thenReturn("High risk document.");
 
         // ---- Act ----

@@ -2,6 +2,7 @@ package com.legal.service;
 
 import com.legal.dto.*;
 import com.legal.model.Analysis;
+import com.legal.model.AnalysisRecord;
 import com.legal.model.Clause;
 import com.legal.model.Risk;
 import com.legal.model.enums.AnalysisStatus;
@@ -54,7 +55,7 @@ public class AnalysisService {
     /**
      * Primary segmentation: splits on two or more newlines (blank-line separated paragraphs).
      */
-    private static final Pattern PARA_SPLIT = Pattern.compile("\\n{2,}");
+    private static final Pattern PARA_SPLIT = Pattern.compile("(?:\\r?\\n){2,}");
 
     /**
      * Secondary segmentation: splits numbered / lettered clause headings.
@@ -81,6 +82,9 @@ public class AnalysisService {
     private final RiskService riskService;
     private final LegalAdvisoryService legalAdvisoryService;
 
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private com.legal.repository.AnalysisRepository analysisRecordRepo;
+
     public AnalysisService(AnalysisResultRepository analysisRepo,
                            ClauseRepository clauseRepo,
                            RiskRepository riskRepo,
@@ -93,6 +97,10 @@ public class AnalysisService {
         this.classificationService = classificationService;
         this.riskService           = riskService;
         this.legalAdvisoryService  = legalAdvisoryService;
+    }
+
+    public void setAnalysisRecordRepository(com.legal.repository.AnalysisRepository analysisRecordRepo) {
+        this.analysisRecordRepo = analysisRecordRepo;
     }
 
     // =========================================================================
@@ -110,6 +118,7 @@ public class AnalysisService {
      * 5. Persist all Clause and Risk entities.
      * 6. Compute composite risk score and summary.
      * 7. Update Analysis record to COMPLETED.
+     * 8. Synchronize AnalysisRecord for Reports & Analytics modules.
      *
      * @param documentId    the ID of the LegalDocument (from Gourav's module).
      * @param extractedText the raw text extracted from the document.
@@ -160,7 +169,7 @@ public class AnalysisService {
             }
 
             // ---- 6. Compute composite score and summary ----
-            double compositeScore = riskService.computeCompositeRiskScore(allRisks);
+            double compositeScore = riskService.computeCompositeRiskScore(allRisks, savedClauses.size());
             String riskSummary    = riskService.generateRiskSummary(compositeScore, allRisks);
 
             // ---- 7. Persist final Analysis state ----
@@ -171,6 +180,9 @@ public class AnalysisService {
             analysis.setTotalRisksFound(allRisks.size());
             analysis.setCompletedAt(LocalDateTime.now());
             analysisRepo.save(analysis);
+
+            // ---- 8. Synchronize AnalysisRecord for Reports & Analytics modules ----
+            syncAnalysisRecord(analysis, savedClauses, allRisks);
 
             log.info("Analysis COMPLETED for documentId={}: score={}, risks={}, clauses={}",
                 documentId, compositeScore, allRisks.size(), savedClauses.size());
@@ -246,6 +258,13 @@ public class AnalysisService {
             riskRepo.deleteByAnalysisId(analysis.getId());
             clauseRepo.deleteByAnalysisId(analysis.getId());
             analysisRepo.delete(analysis);
+            if (analysisRecordRepo != null) {
+                try {
+                    analysisRecordRepo.findByDocumentId(documentId).ifPresent(analysisRecordRepo::delete);
+                } catch (Exception ex) {
+                    log.debug("Non-fatal: could not delete AnalysisRecord: {}", ex.getMessage());
+                }
+            }
             log.info("Deleted analysis and all associated data for documentId={}", documentId);
         });
     }
@@ -253,6 +272,52 @@ public class AnalysisService {
     // =========================================================================
     // Internal helpers
     // =========================================================================
+
+    /**
+     * Synchronizes the generated Analysis with the AnalysisRecord collection
+     * queried by the Reports, PDF Exporter, and Analytics modules.
+     */
+    private void syncAnalysisRecord(Analysis analysis, List<Clause> clauses, List<Risk> risks) {
+        if (analysisRecordRepo == null) {
+            return;
+        }
+        try {
+            AnalysisRecord record = analysisRecordRepo.findByDocumentId(analysis.getDocumentId())
+                .orElse(new AnalysisRecord());
+
+            record.setDocumentId(analysis.getDocumentId());
+            record.setUserId(analysis.getUserId());
+            record.setAnalyzedAt(analysis.getCompletedAt() != null ? analysis.getCompletedAt() : LocalDateTime.now());
+            record.setOverallRiskScore(analysis.getCompositeRiskScore());
+            record.setDocumentType(analysis.getDocType() != null ? analysis.getDocType().name() : "LEGAL_CONTRACT");
+            record.setExecutiveSummary(analysis.getRiskSummary());
+            record.setSummary(analysis.getRiskSummary());
+
+            // Synchronize clauses
+            List<String> clauseTexts = clauses.stream()
+                .map(Clause::getRawText)
+                .filter(Objects::nonNull)
+                .collect(Collectors.toList());
+            record.setClauses(clauseTexts);
+
+            // Synchronize risk flags
+            List<AnalysisRecord.RiskFlag> riskFlags = risks.stream()
+                .map(r -> new AnalysisRecord.RiskFlag(
+                    r.getRuleCode(),
+                    r.getRiskTitle() + ": " + r.getExplanation(),
+                    r.getSeverity() != null ? r.getSeverity().name() : "MEDIUM"
+                ))
+                .collect(Collectors.toList());
+            record.setRiskFlags(riskFlags);
+
+            analysisRecordRepo.save(record);
+            log.info("Synchronized AnalysisRecord for documentId={}, overallRiskScore={}",
+                analysis.getDocumentId(), analysis.getCompositeRiskScore());
+        } catch (Exception ex) {
+            log.warn("Non-fatal: failed to synchronize AnalysisRecord for documentId={}: {}",
+                analysis.getDocumentId(), ex.getMessage());
+        }
+    }
 
     /**
      * Creates and persists a new Analysis record in PENDING state.
@@ -282,8 +347,10 @@ public class AnalysisService {
             return List.of();
         }
 
+        String normalized = text.strip();
+
         // Step 1: split on blank lines
-        String[] paragraphs = PARA_SPLIT.split(text.strip());
+        String[] paragraphs = PARA_SPLIT.split(normalized);
 
         List<String> segments = new ArrayList<>();
         for (String para : paragraphs) {
@@ -299,6 +366,30 @@ public class AnalysisService {
                     .forEach(segments::add);
             } else {
                 segments.add(cleaned);
+            }
+        }
+
+        // Fallback: If only 0 or 1 segment was found but the text is sufficiently long,
+        // it may be single-spaced text from OCR or raw text dumps.
+        if (segments.size() <= 1 && normalized.length() >= MIN_CLAUSE_LENGTH * 2) {
+            String[] lines = normalized.split("\\R+");
+            List<String> lineSegments = new ArrayList<>();
+            StringBuilder buffer = new StringBuilder();
+            for (String line : lines) {
+                String trimmedLine = line.strip();
+                if (trimmedLine.isEmpty()) continue;
+                if (CLAUSE_HEADING.matcher(trimmedLine).find() && buffer.length() >= MIN_CLAUSE_LENGTH) {
+                    lineSegments.add(buffer.toString().strip());
+                    buffer.setLength(0);
+                }
+                if (buffer.length() > 0) buffer.append(" ");
+                buffer.append(trimmedLine);
+            }
+            if (buffer.length() >= MIN_CLAUSE_LENGTH) {
+                lineSegments.add(buffer.toString().strip());
+            }
+            if (lineSegments.size() > segments.size()) {
+                return lineSegments;
             }
         }
 

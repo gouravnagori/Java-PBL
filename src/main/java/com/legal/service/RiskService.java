@@ -58,6 +58,7 @@ public class RiskService {
 
     private static List<RiskRule> buildRules() {
         List<RiskRule> rules = new ArrayList<>();
+        final int flags = Pattern.CASE_INSENSITIVE | Pattern.DOTALL;
 
         // -----------------------------------------------------------------------
         // CRITICAL Rules
@@ -66,7 +67,9 @@ public class RiskService {
             "UNLIMITED_LIABILITY",
             "Unlimited Liability Clause",
             Pattern.compile("(?:unlimited liability|no cap on liability|liable for all damages|"
-                + "liable without limit|total liability.*unlimited)", Pattern.CASE_INSENSITIVE),
+                + "liable without limit|total liability.*unlimited|liable.*without (?:any )?(?:limitation|limit|cap)|"
+                + "liability.*shall not be limited|no limitation of liability|unlimited.*indemnif|"
+                + "not be subject to any (?:cap|limitation))", flags),
             Severity.CRITICAL,
             "This clause exposes you to potentially infinite financial liability with no upper limit. "
                 + "In a worst-case scenario, you could be held responsible for damages far exceeding "
@@ -78,9 +81,11 @@ public class RiskService {
         rules.add(new RiskRule(
             "UNILATERAL_TERMINATION",
             "Unilateral Termination Without Cause",
-            Pattern.compile("(?:terminate.*without cause|terminate.*at will|terminate.*sole discretion"
-                + "|immediate termination without|cancel at any time without notice)",
-                Pattern.CASE_INSENSITIVE),
+            Pattern.compile("(?:terminate.*without cause|terminate.*at will|terminate.*sole discretion|"
+                + "immediate termination without|cancel at any time without notice|"
+                + "terminate.*at (?:any time|its (?:sole )?(?:option|convenience))|"
+                + "right to terminate.*unilaterally|terminate.*without (?:prior )?notice|"
+                + "without assignment of (?:any )?reason)", flags),
             Severity.CRITICAL,
             "The other party can terminate this agreement at any time for any reason without providing "
                 + "advance notice. This gives you no protection against sudden contract cancellation.",
@@ -91,8 +96,9 @@ public class RiskService {
         rules.add(new RiskRule(
             "WAIVER_OF_RIGHTS",
             "Blanket Waiver of Legal Rights",
-            Pattern.compile("(?:waive.*all rights|waive.*any claim|irrevocably waive|"
-                + "waiver of jury trial|waive right to sue)", Pattern.CASE_INSENSITIVE),
+            Pattern.compile("(?:waiv.*all rights|waiv.*any claim|irrevocably waive|"
+                + "waiver of jury trial|waive right to sue|waiver of.*(?:rights?|claims?|remed(?:y|ies))|"
+                + "waive.*(?:any and all|legal action|class action)|forfeit.*(?:all )?rights?)", flags),
             Severity.CRITICAL,
             "You are being asked to permanently give up legal rights, potentially including your right "
                 + "to sue or seek legal remedy in court.",
@@ -107,8 +113,9 @@ public class RiskService {
             "ONE_SIDED_INDEMNIFICATION",
             "One-Sided Indemnification",
             Pattern.compile("(?:indemnify.*from any.*claim|indemnify.*all.*losses|"
-                + "indemnify.*hold harmless.*unlimited|indemnify and defend.*all claims)",
-                Pattern.CASE_INSENSITIVE),
+                + "indemnify.*hold harmless.*unlimited|indemnify and defend.*all claims|"
+                + "indemnif.*(?:and )?hold harmless|indemnif.*against all (?:claims|losses|damages|liabilities)|"
+                + "defend, indemnify and hold harmless|solely responsible for.*indemnif)", flags),
             Severity.HIGH,
             "You are required to indemnify (financially protect) the other party against all claims and "
                 + "losses, potentially including those caused by their own negligence. This is a heavily "
@@ -120,9 +127,9 @@ public class RiskService {
         rules.add(new RiskRule(
             "BROAD_NON_COMPETE",
             "Overly Broad Non-Compete Clause",
-            Pattern.compile("(?:non.?compete|not.*compete.*worldwide|not.*work.*industry"
-                + "|non.?solicitation|not.*engage.*similar business)",
-                Pattern.CASE_INSENSITIVE),
+            Pattern.compile("(?:non.?compete|not.*compete.*worldwide|not.*work.*industry|"
+                + "non.?solicitation|not.*engage.*similar business|covenant not to compete|"
+                + "restraint of trade|non.?solicit|restrictive covenant|not.*directly or indirectly compete)", flags),
             Severity.HIGH,
             "A broad non-compete clause may prevent you from working in your field or industry for an "
                 + "extended period after this contract ends, significantly limiting your future employment "
@@ -134,9 +141,9 @@ public class RiskService {
         rules.add(new RiskRule(
             "PERPETUAL_LICENSE",
             "Perpetual and Irrevocable License Grant",
-            Pattern.compile("(?:perpetual.*irrevocable.*license|irrevocable.*perpetual.*right"
-                + "|permanent license to use|royalty.free.*irrevocable)",
-                Pattern.CASE_INSENSITIVE),
+            Pattern.compile("(?:perpetual.*irrevocable.*license|irrevocable.*perpetual.*right|"
+                + "permanent license to use|royalty.free.*irrevocable|perpetual.*irrevocable|"
+                + "irrevocable.*perpetual|in perpetuity|royalty.?free.*perpetual)", flags),
             Severity.HIGH,
             "You are granting the other party an irrevocable, permanent right to use your "
                 + "intellectual property or data, even if this contract is terminated.",
@@ -147,9 +154,9 @@ public class RiskService {
         rules.add(new RiskRule(
             "AUTO_RENEWAL",
             "Automatic Renewal Without Notice",
-            Pattern.compile("(?:automatically renew|auto.renew|shall renew unless.*notice"
-                + "|renewed for successive|unless terminated.*before.*renewal)",
-                Pattern.CASE_INSENSITIVE),
+            Pattern.compile("(?:automatically renew|auto.renew|shall renew unless.*notice|"
+                + "renewed for successive|unless terminated.*before.*renewal|automatic(?:ally)? renew|"
+                + "renew.*automatically|successive (?:terms?|periods?|years?|months?)|auto.?renewal)", flags),
             Severity.HIGH,
             "This contract automatically renews unless you actively cancel it before a specific "
                 + "deadline. Missing the cancellation window could lock you into another term.",
@@ -163,9 +170,9 @@ public class RiskService {
         rules.add(new RiskRule(
             "AMBIGUOUS_NOTICE_PERIOD",
             "Vague or Absent Notice Period",
-            Pattern.compile("(?:reasonable notice|as soon as practicable|notice.*may be given"
-                + "|sufficient notice|adequate notice)",
-                Pattern.CASE_INSENSITIVE),
+            Pattern.compile("(?:reasonable notice|as soon as practicable|notice.*may be given|"
+                + "sufficient notice|adequate notice|reasonable (?:advance )?notice|"
+                + "as soon as (?:practicable|possible)|promptly notify|undue delay)", flags),
             Severity.MEDIUM,
             "The notice period is described vaguely ('reasonable', 'sufficient') without a specific "
                 + "number of days. This creates ambiguity and potential disputes about whether proper "
@@ -176,9 +183,10 @@ public class RiskService {
         rules.add(new RiskRule(
             "DISPUTE_FOREIGN_JURISDICTION",
             "Governing Law in Unfavourable Jurisdiction",
-            Pattern.compile("(?:laws of.*delaware|laws of.*cayman|laws of.*singapore"
-                + "|exclusive jurisdiction.*foreign|courts of.*[a-z]+ shall have exclusive)",
-                Pattern.CASE_INSENSITIVE),
+            Pattern.compile("(?:laws of.*delaware|laws of.*cayman|laws of.*singapore|"
+                + "exclusive jurisdiction.*foreign|courts of.*[a-z]+ shall have exclusive|"
+                + "exclusive jurisdiction of (?:the )?courts at|"
+                + "governed by the laws of (?:the state of |the country of )?(?!india)[a-z]+)", flags),
             Severity.MEDIUM,
             "Disputes must be resolved under the laws of a foreign or remote jurisdiction, which may "
                 + "require you to engage local legal counsel there and travel for proceedings.",
@@ -189,9 +197,10 @@ public class RiskService {
         rules.add(new RiskRule(
             "UNILATERAL_AMENDMENT",
             "Unilateral Right to Amend Contract Terms",
-            Pattern.compile("(?:may modify.*terms|reserves.*right.*amend|may update.*agreement"
-                + "|change.*terms.*without notice|sole discretion.*modify)",
-                Pattern.CASE_INSENSITIVE),
+            Pattern.compile("(?:may modify.*terms|reserves.*right.*amend|may update.*agreement|"
+                + "change.*terms.*without notice|sole discretion.*modify|unilateral(?:ly)? amend|"
+                + "modify.*(?:terms|agreement).*without.*(?:prior )?consent|"
+                + "reserves the right to (?:change|modify|amend|alter))", flags),
             Severity.MEDIUM,
             "The other party retains the right to change the terms of this agreement unilaterally, "
                 + "potentially without notifying you or obtaining your consent.",
@@ -202,9 +211,9 @@ public class RiskService {
         rules.add(new RiskRule(
             "LATE_PAYMENT_PENALTY",
             "High Late Payment Penalty or Interest",
-            Pattern.compile("(?:interest.*per.*month|penalty.*late payment|overdue.*charge"
-                + "|late fee|interest.*\\d+\\s*%.*per)",
-                Pattern.CASE_INSENSITIVE),
+            Pattern.compile("(?:interest.*per.*month|penalty.*late payment|overdue.*charge|"
+                + "late fee|interest.*\\d+\\s*%.*per|late (?:payment )?(?:fee|penalty|charge)|"
+                + "penalty of \\d+|default interest)", flags),
             Severity.MEDIUM,
             "The contract imposes financial penalties or high interest rates for late payment. "
                 + "Depending on the rate, this could significantly increase your financial exposure.",
@@ -218,9 +227,8 @@ public class RiskService {
         rules.add(new RiskRule(
             "ENTIRE_AGREEMENT",
             "Entire Agreement / Integration Clause",
-            Pattern.compile("(?:entire agreement|supersedes all prior|constitutes the entire"
-                + "|all prior understandings.*merged)",
-                Pattern.CASE_INSENSITIVE),
+            Pattern.compile("(?:entire agreement|supersedes all prior|constitutes the entire|"
+                + "all prior understandings.*merged|entire understanding|sole and entire agreement)", flags),
             Severity.LOW,
             "This is a standard integration clause stating that this written contract is the complete "
                 + "and final agreement, overriding any prior verbal or written discussions.",
@@ -231,9 +239,8 @@ public class RiskService {
         rules.add(new RiskRule(
             "FORCE_MAJEURE",
             "Force Majeure Clause",
-            Pattern.compile("(?:force majeure|act of god|beyond.*reasonable control"
-                + "|natural disaster|pandemic.*excuse performance)",
-                Pattern.CASE_INSENSITIVE),
+            Pattern.compile("(?:force majeure|act of god|beyond.*reasonable control|"
+                + "natural disaster|pandemic.*excuse performance)", flags),
             Severity.LOW,
             "A standard force majeure clause suspends obligations if unforeseeable events (natural "
                 + "disasters, pandemics) prevent performance. This is generally protective for both "
@@ -246,9 +253,9 @@ public class RiskService {
         rules.add(new RiskRule(
             "CONFIDENTIALITY_STANDARD",
             "Standard Confidentiality Obligation",
-            Pattern.compile("(?:shall keep.*confidential|not.*disclose.*third party"
-                + "|confidentiality.*obligation|protect.*confidential information)",
-                Pattern.CASE_INSENSITIVE),
+            Pattern.compile("(?:shall keep.*confidential|not.*disclose.*third party|"
+                + "confidentiality.*obligation|protect.*confidential information|nondisclosure|"
+                + "non-disclosure|confidential information)", flags),
             Severity.LOW,
             "A standard mutual confidentiality obligation is present. This is typical in most "
                 + "commercial agreements and protects trade secrets and proprietary information.",
@@ -308,33 +315,79 @@ public class RiskService {
 
     /**
      * Computes the normalised composite risk score [0, 100] from a list of detected risks.
-     *
-     * Algorithm:
-     * <pre>
-     *   rawScore = sum of severity.weight for each risk
-     *   compositeScore = min(100, rawScore / normalisationFactor * 100)
-     * </pre>
-     *
-     * The normalisationFactor is calibrated so that a document with three CRITICAL risks
-     * reaches the maximum score of 100.
+     * Preserves legacy contract for isolated risk evaluation when clause context is unavailable.
      *
      * @param risks detected risk flags from an analysis run.
      * @return normalised score in [0.0, 100.0].
      */
     public double computeCompositeRiskScore(List<Risk> risks) {
-        if (risks == null || risks.isEmpty()) {
+        return computeCompositeRiskScore(risks, 0);
+    }
+
+    /**
+     * Computes the normalised composite risk score [0, 100] from a list of detected risks
+     * and the total number of clauses analyzed in the document.
+     *
+     * In legal contract theory, every binding legal agreement contains inherent contractual
+     * surface area and baseline legal obligations (performance, dispute, compliance).
+     * Therefore, an analyzed document with clauses should reflect an authentic baseline risk
+     * (15.0 - 22.0, representing "Safe to sign / Standard terms verified") rather than an
+     * illogical 0.0.
+     *
+     * When risk flags are detected, the score scales proportionally:
+     * - CRITICAL risks (unlimited liability, termination without cause) drive score to >= 70
+     * - HIGH risks (broad non-compete, one-sided indemnity) drive score to >= 45
+     * - MEDIUM risks (ambiguity, foreign venue, penalty) drive score to >= 30
+     * - LOW risks / Standard clauses remain in 15 - 25
+     *
+     * @param risks        detected risk flags from an analysis run.
+     * @param totalClauses total count of clauses detected in the document.
+     * @return normalised score in [0.0, 100.0].
+     */
+    public double computeCompositeRiskScore(List<Risk> risks, int totalClauses) {
+        if ((risks == null || risks.isEmpty()) && totalClauses <= 0) {
             return 0.0;
         }
 
-        int rawScore = risks.stream()
+        int rawScore = (risks != null) ? risks.stream()
+            .filter(r -> r.getSeverity() != null)
             .mapToInt(r -> r.getSeverity().getWeight())
-            .sum();
+            .sum() : 0;
 
-        // 3 CRITICAL risks (3 * 50 = 150) maps to 100
-        final double normalisationFactor = 150.0;
-        double compositeScore = (rawScore / normalisationFactor) * 100.0;
+        // Isolated risk list evaluation without document clause context
+        if (totalClauses <= 0) {
+            final double normalisationFactor = 150.0;
+            double compositeScore = (rawScore / normalisationFactor) * 100.0;
+            return Math.min(100.0, Math.round(compositeScore * 10.0) / 10.0);
+        }
 
-        return Math.min(100.0, Math.round(compositeScore * 10.0) / 10.0);
+        long criticalCount = (risks != null) ? risks.stream().filter(r -> r.getSeverity() == Severity.CRITICAL).count() : 0;
+        long highCount     = (risks != null) ? risks.stream().filter(r -> r.getSeverity() == Severity.HIGH).count() : 0;
+        long mediumCount   = (risks != null) ? risks.stream().filter(r -> r.getSeverity() == Severity.MEDIUM).count() : 0;
+        long lowCount      = (risks != null) ? risks.stream().filter(r -> r.getSeverity() == Severity.LOW).count() : 0;
+
+        // Inherent baseline contract risk for valid agreements (15.0 to 22.0)
+        double baselineRisk = 15.0 + Math.min(7.0, totalClauses * 0.4);
+
+        double score;
+        if (criticalCount > 0) {
+            // Critical severity tier: elevated directly into danger zone (72 - 100)
+            score = Math.max(72.0 + (criticalCount - 1) * 8.0 + (highCount * 4.0), baselineRisk + (rawScore / 150.0 * 100.0));
+        } else if (highCount > 0) {
+            // High severity tier: elevated directly into renegotiation zone (48 - 68)
+            score = Math.max(48.0 + (highCount - 1) * 6.0 + (mediumCount * 3.0), baselineRisk + (rawScore / 150.0 * 100.0));
+        } else if (mediumCount > 0) {
+            // Medium severity tier: caution zone (30 - 45)
+            score = Math.max(30.0 + (mediumCount - 1) * 4.0 + (lowCount * 2.0), baselineRisk + (rawScore / 150.0 * 100.0));
+        } else if (lowCount > 0) {
+            // Low risk informational notes: 20 - 28
+            score = baselineRisk + Math.min(10.0, lowCount * 3.0);
+        } else {
+            // Standard balanced contract verified: clean baseline
+            score = baselineRisk;
+        }
+
+        return Math.min(100.0, Math.round(score * 10.0) / 10.0);
     }
 
     /**
@@ -346,18 +399,19 @@ public class RiskService {
      * @return a concise English summary suitable for the risk summary field.
      */
     public String generateRiskSummary(double compositeScore, List<Risk> risks) {
-        long criticalCount = risks.stream().filter(r -> r.getSeverity() == Severity.CRITICAL).count();
-        long highCount     = risks.stream().filter(r -> r.getSeverity() == Severity.HIGH).count();
-        long mediumCount   = risks.stream().filter(r -> r.getSeverity() == Severity.MEDIUM).count();
-
-        if (risks.isEmpty()) {
-            return "No significant risk patterns were detected in this document. "
-                + "The contract appears to follow standard, balanced terms. "
-                + "A qualified legal professional should review the document before signing.";
-        }
+        long criticalCount = (risks != null) ? risks.stream().filter(r -> r.getSeverity() == Severity.CRITICAL).count() : 0;
+        long highCount     = (risks != null) ? risks.stream().filter(r -> r.getSeverity() == Severity.HIGH).count() : 0;
+        long mediumCount   = (risks != null) ? risks.stream().filter(r -> r.getSeverity() == Severity.MEDIUM).count() : 0;
 
         StringBuilder sb = new StringBuilder();
         sb.append(String.format("Overall Risk Score: %.1f / 100. ", compositeScore));
+
+        if (risks == null || risks.isEmpty()) {
+            sb.append("No significant risk patterns were detected in this document. ")
+              .append("The contract appears to follow standard, balanced terms. "
+              + "A qualified legal professional should review the document before signing.");
+            return sb.toString();
+        }
 
         if (criticalCount > 0) {
             sb.append(String.format(
