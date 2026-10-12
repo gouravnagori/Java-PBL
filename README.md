@@ -9,6 +9,12 @@
 [![Spring Security](https://img.shields.io/badge/Spring_Security-JWT-6DB33F?style=for-the-badge&logo=springsecurity&logoColor=white)](https://spring.io/projects/spring-security)
 [![Database](https://img.shields.io/badge/Database-MongoDB%20%7C%20H2%20JPA-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Build](https://img.shields.io/badge/Build-Passing-10B981?style=for-the-badge&logo=apache-maven&logoColor=white)](https://maven.apache.org/)
+[![Live Demo](https://img.shields.io/badge/Live_Demo-lexadvisor.onrender.com-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://lexadvisor.onrender.com)
+
+---
+
+> 🚀 **Live Production Deployment:** **[https://lexadvisor.onrender.com](https://lexadvisor.onrender.com)**  
+> *The system is live and globally accessible. Anyone can test contractual document upload, Vision OCR extraction, 13-rule legal risk scoring, and audit reports directly in the browser without local setup.*
 
 ---
 
@@ -21,6 +27,22 @@
 | **Dilip Kumawat** | **Legal Analysis & Risk Detection Engine** | 13-Rule Risk Detection Engine, Clause segmentation, Severity Matrix (LOW/MED/HIGH/CRITICAL), Risk score scoring |
 | **Harshvardhan Bhatt** | **Audit Reports & Analytics** | Audit Report Compiler, Real-time Dashboard KPI Aggregator, Apache PDFBox Legal Audit Report Exporter |
 | **Abhishi Samar** | **System Architecture & UML Modeling** | UML Class & Component Diagrams, State Transition models, SRS System flow verification |
+
+---
+
+## 🌐 Live Cloud Deployment
+
+The application is deployed on Render Cloud and is globally accessible:
+
+- **Official Live Website:** [https://lexadvisor.onrender.com](https://lexadvisor.onrender.com)
+
+### Live Portals & Features:
+| Portal | Live Link | Description |
+| :--- | :--- | :--- |
+| **🏠 Landing & Ingestion Portal** | [lexadvisor.onrender.com](https://lexadvisor.onrender.com) | Main landing desk, interactive contract demo, document upload & Vision OCR |
+| **🔐 Authentication Gateway** | [lexadvisor.onrender.com/auth.html](https://lexadvisor.onrender.com/auth.html) | Secure registration and user login with stateless JWT authentication |
+| **📁 Workspace & Case Review** | [lexadvisor.onrender.com/workspace.html](https://lexadvisor.onrender.com/workspace.html) | Multi-case management, clause inspector & interactive risk findings |
+| **📊 Executive Admin & Audit Desk** | [lexadvisor.onrender.com/admin.html](https://lexadvisor.onrender.com/admin.html) | Real-time KPI analytics, audit report compilation & downloadable PDFs |
 
 ---
 
@@ -46,6 +68,8 @@
 
 ## 🚀 Getting Started & Local Execution
 
+> **Note:** You can immediately experience the live cloud application at **[https://lexadvisor.onrender.com](https://lexadvisor.onrender.com)** without setting up a local environment.
+
 ### Prerequisites
 - **JDK 21** installed and configured
 - **Apache Maven 3.9+**
@@ -64,7 +88,7 @@ mvn clean install
 mvn spring-boot:run
 ```
 
-Once started, the application will be live at:
+Once started, the application will be live locally at:
 - **Web Application Portal:** [http://localhost:8080](http://localhost:8080)
 - **Authentication & Security Portal:** [http://localhost:8080/auth.html](http://localhost:8080/auth.html)
 - **Case Management Console:** [http://localhost:8080/cases.html](http://localhost:8080/cases.html)
