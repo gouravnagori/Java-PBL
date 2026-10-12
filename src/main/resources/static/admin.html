@@ -143,9 +143,14 @@
                 <h2 style="font: 800 28px/1 var(--display); text-transform: uppercase; color: var(--ink); margin-bottom: 8px;">
                     Enter Admin Passcode
                 </h2>
-                <p style="font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 22px;">
+                <p style="font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 14px;">
                     Access to system audit logs, classified contracts, and security KPIs requires administrator credentials.
                 </p>
+
+                <div style="background: #F8F9FA; border: 1px solid #D5D9DE; border-radius: 6px; padding: 10px 14px; margin-bottom: 18px; font-size: 12px; display: flex; justify-content: space-between; align-items: center;">
+                    <span>Default Passcode: <strong style="color: var(--ink);">admin123</strong></span>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="quickFillAdminPass('admin123')" style="font-size: 11px; padding: 4px 10px;">⚡ Quick Fill & Enter</button>
+                </div>
 
                 <div id="gate-error-alert" class="auth-alert-box error" style="display: none; margin-bottom: 16px;"></div>
 
@@ -301,6 +306,12 @@
 
         function getStoredAdminPass() {
             return sessionStorage.getItem('admin_pass') || localStorage.getItem('admin_pass');
+        }
+
+        function quickFillAdminPass(pass) {
+            const input = document.getElementById('admin-gate-pass');
+            input.value = pass;
+            handleAdminPassSubmit(new Event('submit'));
         }
 
         function togglePassVisibility() {

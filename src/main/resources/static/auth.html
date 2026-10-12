@@ -134,11 +134,22 @@
                     </button>
                 </form>
 
-                <!-- Quick Demo Login -->
-                <div class="demo-box">
-                    <p>Academic Evaluation / Instant Testing:</p>
-                    <button type="button" class="btn btn-outline btn-sm" onclick="quickDemoLogin()" style="width: 100%;">
-                        ⚡ 1-Click Evaluator Demo Login
+                <!-- Quick Demo & Verified Account Logins -->
+                <div class="demo-box" style="margin-top: 24px; padding: 18px; background: #F8F9FA; border: 1px solid #D5D9DE; border-radius: 6px;">
+                    <div style="font: 700 11px var(--mono); text-transform: uppercase; color: var(--muted); margin-bottom: 10px; display: flex; align-items: center; justify-content: space-between;">
+                        <span>Verified Pre-Seeded Accounts</span>
+                        <span style="color: var(--green);">Ready to Sign In</span>
+                    </div>
+                    <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 8px;">
+                        <button type="button" class="btn btn-outline btn-sm" onclick="quickFillAndLogin('user@lexadvisor.com', 'user123', 'Legal Reviewer')" title="Sign in as Regular User" style="font-size: 11px; padding: 7px 10px;">
+                            👤 User (user123)
+                        </button>
+                        <button type="button" class="btn btn-outline btn-sm" onclick="quickFillAndLogin('admin@lexadvisor.com', 'admin123', 'System Administrator')" title="Sign in as Administrator" style="font-size: 11px; padding: 7px 10px; border-color: var(--gold); color: #8A6400;">
+                            👑 Admin (admin123)
+                        </button>
+                    </div>
+                    <button type="button" class="btn btn-outline btn-sm" onclick="quickFillAndLogin('evaluator@legalpbl.edu', 'password123', 'Project Evaluator')" style="width: 100%; font-size: 11px;">
+                        ⚡ 1-Click Evaluator Demo (password123)
                     </button>
                 </div>
 
@@ -216,9 +227,9 @@
 
                 if (res.ok && body.success) {
                     const token = body.data.token || body.data.accessToken;
-                    localStorage.setItem('auth_jwt_token', token);
-                    localStorage.setItem('auth_user_name', body.data.name || email.split('@')[0]);
-                    localStorage.setItem('auth_user_email', body.data.email || email);
+                    const uName = body.data.name || email.split('@')[0];
+                    const uEmail = body.data.email || email;
+                    saveUnifiedSession(token, uName, uEmail);
                     showMessage('Login successful! Redirecting to workspace...', false);
                     setTimeout(() => {
                         window.location.href = '/workspace.html';
@@ -254,9 +265,7 @@
 
                 if (res.ok && body.success) {
                     const token = body.data.token || body.data.accessToken;
-                    localStorage.setItem('auth_jwt_token', token);
-                    localStorage.setItem('auth_user_name', body.data.name || name);
-                    localStorage.setItem('auth_user_email', body.data.email || email);
+                    saveUnifiedSession(token, name, email);
                     showMessage('Account registered successfully! Redirecting...', false);
                     setTimeout(() => {
                         window.location.href = '/workspace.html';
@@ -272,51 +281,67 @@
             }
         }
 
-        async function quickDemoLogin() {
-            const demoEmail = 'evaluator@legalpbl.edu';
-            const demoPassword = 'password123';
-            
+        function saveUnifiedSession(token, name, email) {
+            localStorage.setItem('auth_jwt_token', token);
+            localStorage.setItem('auth_user_name', name);
+            localStorage.setItem('auth_user_email', email);
+            localStorage.setItem('lex_token', token);
+            localStorage.setItem('lex_user_name', name);
+            localStorage.setItem('lex_user_email', email);
+        }
+
+        async function quickFillAndLogin(email, password, fallbackName) {
+            setAuthMode('login');
+            document.getElementById('login-email').value = email;
+            document.getElementById('login-password').value = password;
+            showMessage(`Authenticating as ${fallbackName} (${email})...`, false);
+
             try {
                 const res = await fetch('/api/auth/login', {
                     method: 'POST',
                     headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ email: demoEmail, password: demoPassword })
+                    body: JSON.stringify({ email, password })
                 });
                 const body = await res.json();
+
                 if (res.ok && body.success) {
                     const token = body.data.token || body.data.accessToken;
-                    localStorage.setItem('auth_jwt_token', token);
-                    localStorage.setItem('auth_user_name', 'Evaluator (Academic)');
-                    localStorage.setItem('auth_user_email', demoEmail);
+                    const uName = body.data.name || fallbackName;
+                    const uEmail = body.data.email || email;
+                    saveUnifiedSession(token, uName, uEmail);
+                    showMessage(`Welcome, ${uName}! Entering workspace...`, false);
+                    setTimeout(() => {
+                        window.location.href = '/workspace.html';
+                    }, 400);
+                    return;
+                }
+            } catch (ignored) {}
+
+            // Fallback: If not yet in DB, auto-register and sign in
+            try {
+                const regRes = await fetch('/api/auth/register', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ name: fallbackName, email, password })
+                });
+                const regBody = await regRes.json();
+                if (regRes.ok && regBody.success) {
+                    const token = regBody.data.token || regBody.data.accessToken;
+                    saveUnifiedSession(token, fallbackName, email);
                     window.location.href = '/workspace.html';
                     return;
                 }
             } catch (ignored) {}
 
-            try {
-                const regRes = await fetch('/api/auth/register', {
-                    method: 'POST',
-                    headers: { 'Content-Type': 'application/json' },
-                    body: JSON.stringify({ name: 'Project Evaluator', email: demoEmail, password: demoPassword })
-                });
-                const regBody = await regRes.json();
-                if (regRes.ok && regBody.success) {
-                    const token = regBody.data.token || regBody.data.accessToken;
-                    localStorage.setItem('auth_jwt_token', token);
-                    localStorage.setItem('auth_user_name', 'Project Evaluator');
-                    localStorage.setItem('auth_user_email', demoEmail);
-                    window.location.href = '/workspace.html';
-                } else {
-                    document.getElementById('login-email').value = demoEmail;
-                    document.getElementById('login-password').value = demoPassword;
-                    handleLoginSubmit(new Event('submit'));
-                }
-            } catch (e) {
-                showMessage('Demo login failed: ' + e.message, true);
-            }
+            // Trigger submit event
+            handleLoginSubmit(new Event('submit'));
         }
 
-        if (localStorage.getItem('auth_jwt_token')) {
+        async function quickDemoLogin() {
+            quickFillAndLogin('evaluator@legalpbl.edu', 'password123', 'Project Evaluator');
+        }
+
+        if (localStorage.getItem('auth_jwt_token') || localStorage.getItem('lex_token')) {
             window.location.href = '/workspace.html';
         }
     </script>

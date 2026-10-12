@@ -28,8 +28,8 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 # Copy the built jar from build stage
 COPY --from=build /app/target/legal-document-analyser-0.0.1-SNAPSHOT.jar app.jar
 
-# Create directory for runtime document uploads
-RUN mkdir -p uploads/documents && chmod -R 777 uploads
+# Create directory for runtime document uploads and persistent database
+RUN mkdir -p data uploads/documents && chmod -R 777 data uploads
 
 # Render provides the port dynamically via $PORT
 ENV PORT=8080

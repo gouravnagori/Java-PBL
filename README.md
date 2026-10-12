@@ -44,6 +44,14 @@ The application is deployed on Render Cloud and is globally accessible:
 | **📁 Workspace & Case Review** | [lexadvisor.onrender.com/workspace.html](https://lexadvisor.onrender.com/workspace.html) | Multi-case management, clause inspector & interactive risk findings |
 | **📊 Executive Admin & Audit Desk** | [lexadvisor.onrender.com/admin.html](https://lexadvisor.onrender.com/admin.html) | Real-time KPI analytics, audit report compilation & downloadable PDFs |
 
+### 🔑 Pre-Configured Access Credentials:
+| Account / Role | Portal | Email / Identifier | Password / Passcode | Access Level |
+| :--- | :--- | :--- | :--- | :--- |
+| **👑 Administrator** | [auth.html](https://lexadvisor.onrender.com/auth.html) | `admin@lexadvisor.com` | `admin123` | Full administrative review & case management |
+| **👤 Standard User** | [auth.html](https://lexadvisor.onrender.com/auth.html) | `user@lexadvisor.com` | `user123` | Contract upload, 13-rule risk audit & advisory |
+| **⚡ Academic Evaluator** | [auth.html](https://lexadvisor.onrender.com/auth.html) | `evaluator@legalpbl.edu` | `password123` | 1-Click fast testing demo session |
+| **🛡️ Central Audit Gate** | [admin.html](https://lexadvisor.onrender.com/admin.html) | *(Security Gate Key)* | `admin123` | Live platform KPIs & complete audit report registry |
+
 ---
 
 ## 🏛️ System Architecture & Workflow

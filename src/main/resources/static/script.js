@@ -10,9 +10,9 @@
 
 // Application State
 const state = {
-    token: localStorage.getItem('lex_token') || null,
-    userName: localStorage.getItem('lex_user_name') || null,
-    userEmail: localStorage.getItem('lex_user_email') || null,
+    token: localStorage.getItem('lex_token') || localStorage.getItem('auth_jwt_token') || null,
+    userName: localStorage.getItem('lex_user_name') || localStorage.getItem('auth_user_name') || null,
+    userEmail: localStorage.getItem('lex_user_email') || localStorage.getItem('auth_user_email') || null,
     selectedFile: null,
     currentReport: null
 };
@@ -188,6 +188,9 @@ function saveSession(token, name, email) {
     localStorage.setItem('lex_token', token);
     localStorage.setItem('lex_user_name', name);
     localStorage.setItem('lex_user_email', email);
+    localStorage.setItem('auth_jwt_token', token);
+    localStorage.setItem('auth_user_name', name);
+    localStorage.setItem('auth_user_email', email);
 }
 
 function handleLogout() {
@@ -197,6 +200,9 @@ function handleLogout() {
     localStorage.removeItem('lex_token');
     localStorage.removeItem('lex_user_name');
     localStorage.removeItem('lex_user_email');
+    localStorage.removeItem('auth_jwt_token');
+    localStorage.removeItem('auth_user_name');
+    localStorage.removeItem('auth_user_email');
     initAuthUI();
     showToast('You have been signed out.');
 }

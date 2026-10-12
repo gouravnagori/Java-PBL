@@ -42,6 +42,9 @@ public class AnalysisController {
     private final AnalysisService analysisService;
     private final DocumentService documentService;
 
+    @org.springframework.beans.factory.annotation.Autowired(required = false)
+    private com.legal.service.ReportService reportService;
+
     public AnalysisController(AnalysisService analysisService, DocumentService documentService) {
         this.analysisService = analysisService;
         this.documentService = documentService;
@@ -89,6 +92,16 @@ public class AnalysisController {
         }
 
         AnalysisReportResponse report = analysisService.runAnalysis(documentId, extractedText, userId);
+
+        // Auto-compile and persist LegalReport so admin control center is instantly synchronized
+        if (reportService != null) {
+            try {
+                reportService.generateReportForDocument(documentId, userId);
+                log.info("Synchronized LegalReport for documentId={} into audit repository", documentId);
+            } catch (Exception ex) {
+                log.warn("Non-fatal: automatic compilation of LegalReport for documentId={} had warning: {}", documentId, ex.getMessage());
+            }
+        }
 
         return ResponseEntity.status(HttpStatus.CREATED)
             .body(ApiResponse.success("Legal analysis completed successfully.", report));

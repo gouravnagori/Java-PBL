@@ -218,8 +218,8 @@
 
     <script>
         // Check Authentication Gate
-        const token = localStorage.getItem('auth_jwt_token');
-        const userName = localStorage.getItem('auth_user_name');
+        const token = localStorage.getItem('auth_jwt_token') || localStorage.getItem('lex_token');
+        const userName = localStorage.getItem('auth_user_name') || localStorage.getItem('lex_user_name');
         if (!token) {
             window.location.href = '/auth.html';
         } else {
@@ -472,6 +472,9 @@
             localStorage.removeItem('auth_jwt_token');
             localStorage.removeItem('auth_user_name');
             localStorage.removeItem('auth_user_email');
+            localStorage.removeItem('lex_token');
+            localStorage.removeItem('lex_user_name');
+            localStorage.removeItem('lex_user_email');
             window.location.href = '/auth.html';
         }
     </script>
