@@ -1,15 +1,18 @@
 package com.legal.dto;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import java.time.LocalDateTime;
 
 /**
- * Standardized API response wrapper for consistent REST contracts.
+ * Standardized API response wrapper for consistent REST contracts across all modules.
  */
 public class ApiResponse<T> {
 
     private boolean success;
     private String message;
     private T data;
+
+    @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "yyyy-MM-dd'T'HH:mm:ss")
     private LocalDateTime timestamp;
 
     public ApiResponse() {
@@ -27,11 +30,23 @@ public class ApiResponse<T> {
         return new ApiResponse<>(true, message, data);
     }
 
+    public static <T> ApiResponse<T> success(T data) {
+        return new ApiResponse<>(true, "Success", data);
+    }
+
+    public static <T> ApiResponse<T> ok(String message, T data) {
+        return new ApiResponse<>(true, message, data);
+    }
+
+    public static <T> ApiResponse<T> ok(T data) {
+        return new ApiResponse<>(true, "Success", data);
+    }
+
     public static <T> ApiResponse<T> error(String message) {
         return new ApiResponse<>(false, message, null);
     }
 
-    // Getters and Setters
+    // --- Getters & Setters ---
     public boolean isSuccess() { return success; }
     public void setSuccess(boolean success) { this.success = success; }
 

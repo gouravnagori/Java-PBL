@@ -158,6 +158,12 @@ public class DocumentServiceImpl implements DocumentService {
     }
 
     @Override
+    public LegalDocument getDocument(String id) {
+        return documentRepository.findById(id)
+                .orElseThrow(() -> new DocumentNotFoundException("Document not found with ID: " + id));
+    }
+
+    @Override
     public DocumentMetadataResponse getDocumentById(String id, String userId) {
         LegalDocument doc = findDocumentWithOwnership(id, userId);
         return mapToMetadataResponse(doc);

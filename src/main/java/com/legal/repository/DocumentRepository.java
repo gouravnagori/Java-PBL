@@ -16,6 +16,9 @@ import java.util.Optional;
 @Repository
 public interface DocumentRepository extends MongoRepository<LegalDocument, String> {
 
+    /** Find all documents belonging to a specific user */
+    List<LegalDocument> findByUserId(String userId);
+
     /** Find all documents belonging to a specific user ordered by upload date descending */
     List<LegalDocument> findByUserIdOrderByUploadedAtDesc(String userId);
 

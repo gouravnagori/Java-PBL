@@ -43,6 +43,7 @@ class AnalysisServiceTest {
     @Mock private RiskRepository riskRepo;
     @Mock private ClassificationService classificationService;
     @Mock private RiskService riskService;
+    @Mock private LegalAdvisoryService legalAdvisoryService;
 
     @InjectMocks
     private AnalysisService analysisService;

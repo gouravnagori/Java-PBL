@@ -1,0 +1,596 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Admin Control Center | All Legal Audit Reports | LexAdvisor</title>
+    <link rel="stylesheet" href="style.css">
+    <style>
+        /* Admin Password Security Gate Overlay */
+        .admin-lock-gate {
+            position: fixed;
+            inset: 0;
+            background: rgba(16, 17, 20, 0.88);
+            backdrop-filter: blur(8px);
+            -webkit-backdrop-filter: blur(8px);
+            z-index: 2000;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            padding: 24px;
+        }
+        .admin-gate-card {
+            width: 100%;
+            max-width: 440px;
+            background: #FFFFFF;
+            border: 1px solid #7E858F;
+            border-radius: 8px;
+            box-shadow: 0 30px 70px rgba(16, 17, 20, 0.35), 8px 8px 0 #737B86;
+            overflow: hidden;
+            animation: gatePop 0.35s var(--ease-out);
+        }
+        @keyframes gatePop {
+            from { opacity: 0; transform: translateY(18px) scale(0.97); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+        .admin-gate-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 13px 20px;
+            background: linear-gradient(110deg, #292B30, #111214);
+            color: #F5F6F8;
+            font: 700 10px var(--mono);
+            text-transform: uppercase;
+            border-bottom: 1px solid #6F7782;
+        }
+        .admin-gate-topbar strong {
+            color: var(--red);
+        }
+        .admin-gate-body {
+            padding: 34px 30px;
+        }
+
+        /* Detail Modal */
+        .modal-overlay {
+            position: fixed;
+            inset: 0;
+            background: rgba(16, 17, 20, 0.76);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            z-index: 1000;
+            padding: 24px;
+            display: none;
+        }
+        .modal-card {
+            background: #FFFFFF;
+            border: 1px solid #7E858F;
+            border-radius: 8px;
+            width: 100%;
+            max-width: 860px;
+            max-height: 88vh;
+            overflow-y: auto;
+            box-shadow: 0 28px 65px rgba(16, 17, 20, 0.2), 8px 8px 0 #737B86;
+            position: relative;
+        }
+        .modal-card-topbar {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 14px 22px;
+            background: linear-gradient(110deg, #292B30, #111214);
+            color: #F5F7FA;
+            font: 700 10px var(--mono);
+            text-transform: uppercase;
+            border-bottom: 1px solid #6F7782;
+            position: sticky;
+            top: 0;
+            z-index: 2;
+        }
+        .modal-card-body {
+            padding: 32px 30px;
+        }
+        .modal-close-btn {
+            background: transparent;
+            border: 1px solid #707782;
+            border-radius: 4px;
+            color: #F5F7FA;
+            font-size: 16px;
+            width: 28px;
+            height: 28px;
+            display: grid;
+            place-items: center;
+            cursor: pointer;
+            line-height: 1;
+        }
+        .modal-close-btn:hover {
+            background: var(--red);
+            border-color: var(--red);
+        }
+    </style>
+</head>
+<body>
+    <div class="top-rule"></div>
+
+    <!-- Header -->
+    <header class="site-header">
+        <div class="header-container">
+            <a href="/" class="brand-wrapper" aria-label="LexAdvisor home">
+                <span class="brand-mark">L/</span>
+                <span class="brand-info">
+                    <span class="brand-name">LexAdvisor</span>
+                    <span class="brand-tag">Plain-language legal assistant</span>
+                </span>
+            </a>
+            <div class="user-nav-slot">
+                <button onclick="lockAdminConsole()" class="btn-header-outline" id="lock-console-btn" title="Lock admin console">🔒 Lock Console</button>
+                <a href="/workspace.html" class="btn-header-outline">Workspace</a>
+                <a href="/" class="btn-header-outline">Public Home</a>
+            </div>
+        </div>
+    </header>
+
+    <!-- ADMIN PASS SECURITY GATE OVERLAY -->
+    <div id="admin-security-gate" class="admin-lock-gate">
+        <div class="admin-gate-card">
+            <div class="admin-gate-topbar">
+                <span>LexAdvisor / Access Control</span>
+                <strong>RESTRICTED AREA</strong>
+            </div>
+            <div class="admin-gate-body">
+                <div class="eyebrow" style="margin-bottom: 8px;">Authentication / Key Clearance</div>
+                <h2 style="font: 800 28px/1 var(--display); text-transform: uppercase; color: var(--ink); margin-bottom: 8px;">
+                    Enter Admin Passcode
+                </h2>
+                <p style="font-size: 13px; color: var(--muted); line-height: 1.6; margin-bottom: 22px;">
+                    Access to system audit logs, classified contracts, and security KPIs requires administrator credentials.
+                </p>
+
+                <div id="gate-error-alert" class="auth-alert-box error" style="display: none; margin-bottom: 16px;"></div>
+
+                <form id="admin-gate-form" onsubmit="handleAdminPassSubmit(event)">
+                    <div class="form-group">
+                        <label class="form-label" for="admin-gate-pass">Admin Password / Secret Key</label>
+                        <div style="position: relative;">
+                            <input type="password" id="admin-gate-pass" class="form-input" placeholder="••••••••" required autocomplete="current-password" autofocus style="padding-right: 44px;">
+                            <button type="button" onclick="togglePassVisibility()" style="position: absolute; right: 12px; top: 50%; transform: translateY(-50%); background: none; border: none; cursor: pointer; color: var(--muted); font-size: 15px;" title="Toggle visibility">👁</button>
+                        </div>
+                    </div>
+                    <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 18px; font: 600 11px var(--mono); color: var(--muted);">
+                        <label style="display: flex; align-items: center; gap: 6px; cursor: pointer;">
+                            <input type="checkbox" id="remember-admin-session" checked> Remember session
+                        </label>
+                        <span>Key: <code>ADMIN_PASSWORD</code></span>
+                    </div>
+                    <button type="submit" id="btn-unlock-gate" class="btn btn-primary btn-full">
+                        Unlock Admin Console <span class="arrow">↗</span>
+                    </button>
+                </form>
+
+                <a href="/" class="auth-back-link" style="margin-top: 20px;">← Return to Public Home</a>
+            </div>
+        </div>
+    </div>
+
+    <!-- MAIN ADMIN CONTENT (Hidden until password verified) -->
+    <div class="admin-page-container" id="admin-main-content" style="opacity: 0.1; pointer-events: none; transition: opacity 0.3s ease;">
+
+        <!-- Top Header Banner -->
+        <div class="admin-header-box">
+            <div class="admin-header-title">
+                <div class="eyebrow" style="color:var(--metal-light);margin-bottom:6px;">Auditing & Compliance / 01</div>
+                <h2>Central Legal Audit Control Center</h2>
+                <p>Real-time audit log of all contractual analyses, classified clauses, risk ratings, and next step advisories.</p>
+            </div>
+            <div style="display: flex; gap: 12px; flex-wrap: wrap;">
+                <button class="btn btn-outline btn-sm" onclick="fetchPlatformReports()">
+                    Refresh Data ⟳
+                </button>
+                <a href="/workspace.html" class="btn btn-primary btn-sm">
+                    + New Document Analysis <span class="arrow">↗</span>
+                </a>
+            </div>
+        </div>
+
+        <!-- KPI Scorecards -->
+        <div class="admin-kpi-grid">
+            <div class="kpi-card">
+                <div class="kpi-label">Total Documents Processed</div>
+                <div class="kpi-value" id="kpi-total-reports">0</div>
+                <div class="kpi-sub">Across all registered user accounts</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">High & Critical Traps</div>
+                <div class="kpi-value" id="kpi-high-risk" style="color: var(--red);">0</div>
+                <div class="kpi-sub">Flagged for active renegotiation</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">Average Risk Score</div>
+                <div class="kpi-value" id="kpi-avg-score">0</div>
+                <div class="kpi-sub">Platform-wide average (0–100 scale)</div>
+            </div>
+            <div class="kpi-card">
+                <div class="kpi-label">System Health & AI Engine</div>
+                <div class="kpi-value" style="color: var(--green); font-size: 28px;">OPERATIONAL</div>
+                <div class="kpi-sub">13 Indian law compliance rules active</div>
+            </div>
+        </div>
+
+        <!-- Filters & Search Toolbar -->
+        <div class="admin-filters-card">
+            <div class="filter-group">
+                <input type="text" id="admin-search-input" class="search-input" placeholder="🔍 Search by Document Name or User ID..." oninput="applyFilters()" style="min-width: 280px;">
+                <select id="filter-risk" class="filter-select" onchange="applyFilters()">
+                    <option value="ALL">All Risk Levels</option>
+                    <option value="CRITICAL">Critical (≥80)</option>
+                    <option value="HIGH">High (50–79)</option>
+                    <option value="MEDIUM">Medium (25–49)</option>
+                    <option value="LOW">Low (<25)</option>
+                </select>
+                <select id="filter-type" class="filter-select" onchange="applyFilters()">
+                    <option value="ALL">All Document Types</option>
+                    <option value="RENTAL">Rental / Lease</option>
+                    <option value="EMPLOYMENT">Employment</option>
+                    <option value="NDA">NDA</option>
+                    <option value="SERVICE_AGREEMENT">Service Agreement</option>
+                    <option value="LOAN">Loan Agreement</option>
+                    <option value="GENERAL">General</option>
+                </select>
+            </div>
+            <div style="font: 600 11px var(--mono); text-transform: uppercase; color: var(--muted);">
+                Showing <strong id="filter-count-display" style="color: var(--ink);">0</strong> reports
+            </div>
+        </div>
+
+        <!-- Table of All Reports -->
+        <div class="card" style="padding: 0; overflow: hidden; margin-bottom: 40px;">
+            <div style="overflow-x: auto;">
+                <table>
+                    <thead>
+                        <tr>
+                            <th>Document Title</th>
+                            <th>Account / User</th>
+                            <th>Document Type</th>
+                            <th>Risk Score</th>
+                            <th>Risk Category</th>
+                            <th>Flagged Risks</th>
+                            <th>Date</th>
+                            <th style="text-align: right;">Actions</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reports-table-body">
+                        <tr>
+                            <td colspan="8" style="text-align: center; padding: 40px; color: var(--muted);">
+                                Loading platform audit reports...
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+    </div>
+
+    <!-- Detailed Inspection Modal -->
+    <div id="report-modal" class="modal-overlay" onclick="closeModalOnOutsideClick(event)">
+        <div class="modal-card" id="modal-card-content">
+            <div class="modal-card-topbar">
+                <span>LexAdvisor / Audit Report Inspection</span>
+                <button class="modal-close-btn" onclick="closeReportModal()">✕</button>
+            </div>
+            <div class="modal-card-body" id="modal-body-container">
+                <!-- Dynamically populated -->
+            </div>
+        </div>
+    </div>
+
+    <!-- Footer -->
+    <footer class="footer">
+        <div class="footer-disclaimer">
+            <strong>Security Notice:</strong> The Admin Audit Console is protected with administrator access control. Data is protected with role-based clearance.
+        </div>
+        <div class="footer-bottom">
+            <span>© 2026 LexAdvisor. 5th Sem Java PBL.</span>
+            <span><a href="/">Public Landing</a><a href="/workspace.html">Workspace</a></span>
+        </div>
+    </footer>
+
+    <script>
+        let allReports = [];
+
+        function getStoredAdminPass() {
+            return sessionStorage.getItem('admin_pass') || localStorage.getItem('admin_pass');
+        }
+
+        function togglePassVisibility() {
+            const input = document.getElementById('admin-gate-pass');
+            input.type = input.type === 'password' ? 'text' : 'password';
+        }
+
+        async function handleAdminPassSubmit(e) {
+            e.preventDefault();
+            const pass = document.getElementById('admin-gate-pass').value.trim();
+            const errorBox = document.getElementById('gate-error-alert');
+            const submitBtn = document.getElementById('btn-unlock-gate');
+            const remember = document.getElementById('remember-admin-session').checked;
+
+            if (!pass) return;
+
+            submitBtn.disabled = true;
+            submitBtn.innerHTML = 'Verifying Passcode...';
+            errorBox.style.display = 'none';
+
+            try {
+                const res = await fetch('/api/reports/admin/verify', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/json' },
+                    body: JSON.stringify({ passcode: pass })
+                });
+                const body = await res.json();
+
+                if (res.ok && body.success) {
+                    sessionStorage.setItem('admin_pass', pass);
+                    if (remember) {
+                        localStorage.setItem('admin_pass', pass);
+                    }
+                    unlockAdminConsole();
+                    fetchPlatformReports();
+                } else {
+                    errorBox.textContent = body.message || 'Incorrect admin passcode. Access denied.';
+                    errorBox.style.display = 'block';
+                    document.getElementById('admin-gate-pass').select();
+                }
+            } catch (err) {
+                errorBox.textContent = 'Network error verifying passcode: ' + err.message;
+                errorBox.style.display = 'block';
+            } finally {
+                submitBtn.disabled = false;
+                submitBtn.innerHTML = 'Unlock Admin Console <span class="arrow">↗</span>';
+            }
+        }
+
+        function unlockAdminConsole() {
+            const gate = document.getElementById('admin-security-gate');
+            const content = document.getElementById('admin-main-content');
+            gate.style.display = 'none';
+            content.style.opacity = '1';
+            content.style.pointerEvents = 'auto';
+        }
+
+        function lockAdminConsole() {
+            sessionStorage.removeItem('admin_pass');
+            localStorage.removeItem('admin_pass');
+            const gate = document.getElementById('admin-security-gate');
+            const content = document.getElementById('admin-main-content');
+            gate.style.display = 'flex';
+            content.style.opacity = '0.1';
+            content.style.pointerEvents = 'none';
+            document.getElementById('admin-gate-pass').value = '';
+            document.getElementById('gate-error-alert').style.display = 'none';
+            document.getElementById('admin-gate-pass').focus();
+        }
+
+        async function initAdminAuth() {
+            const stored = getStoredAdminPass();
+            if (stored) {
+                try {
+                    const res = await fetch('/api/reports/admin/verify', {
+                        method: 'POST',
+                        headers: { 'Content-Type': 'application/json' },
+                        body: JSON.stringify({ passcode: stored })
+                    });
+                    const body = await res.json();
+                    if (res.ok && body.success) {
+                        unlockAdminConsole();
+                        fetchPlatformReports();
+                        return;
+                    }
+                } catch (ignored) {}
+            }
+            // If no valid stored pass, display security gate
+            lockAdminConsole();
+        }
+
+        async function fetchPlatformReports() {
+            const tbody = document.getElementById('reports-table-body');
+            const adminPass = getStoredAdminPass();
+
+            tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--muted);">Loading audit reports...</td></tr>`;
+
+            try {
+                const res = await fetch('/api/reports/all', {
+                    headers: {
+                        'X-Admin-Pass': adminPass || ''
+                    }
+                });
+                const data = await res.json();
+
+                if (res.status === 401) {
+                    lockAdminConsole();
+                    const errorBox = document.getElementById('gate-error-alert');
+                    errorBox.textContent = 'Session invalid or expired. Enter admin passcode.';
+                    errorBox.style.display = 'block';
+                    return;
+                }
+
+                if (res.ok && data.success) {
+                    allReports = data.data || [];
+                    updateKpis(allReports);
+                    applyFilters();
+                } else {
+                    tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--red);">Failed to load reports: ${data.message || 'Server error'}</td></tr>`;
+                }
+            } catch (err) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--red);">Network error connecting to /api/reports/all: ${err.message}</td></tr>`;
+            }
+        }
+
+        function updateKpis(reports) {
+            document.getElementById('kpi-total-reports').textContent = reports.length;
+
+            const highRiskCount = reports.filter(r => r.riskLevel === 'CRITICAL' || r.riskLevel === 'HIGH').length;
+            document.getElementById('kpi-high-risk').textContent = highRiskCount;
+
+            if (reports.length > 0) {
+                const totalScore = reports.reduce((acc, r) => acc + (r.riskScore || 0), 0);
+                const avg = Math.round(totalScore / reports.length);
+                document.getElementById('kpi-avg-score').textContent = `${avg} / 100`;
+            } else {
+                document.getElementById('kpi-avg-score').textContent = '0 / 100';
+            }
+        }
+
+        function applyFilters() {
+            const searchTerm = document.getElementById('admin-search-input').value.toLowerCase().trim();
+            const riskFilter = document.getElementById('filter-risk').value;
+            const typeFilter = document.getElementById('filter-type').value;
+
+            const filtered = allReports.filter(r => {
+                const matchesSearch = !searchTerm || 
+                    (r.fileName && r.fileName.toLowerCase().includes(searchTerm)) || 
+                    (r.documentId && r.documentId.toLowerCase().includes(searchTerm)) ||
+                    (r.userId && r.userId.toLowerCase().includes(searchTerm));
+
+                const matchesRisk = riskFilter === 'ALL' || (r.riskLevel && r.riskLevel.toUpperCase() === riskFilter);
+                const matchesType = typeFilter === 'ALL' || (r.documentType && r.documentType.toUpperCase() === typeFilter);
+
+                return matchesSearch && matchesRisk && matchesType;
+            });
+
+            document.getElementById('filter-count-display').textContent = filtered.length;
+            renderReportsTable(filtered);
+        }
+
+        function renderReportsTable(reports) {
+            const tbody = document.getElementById('reports-table-body');
+            tbody.innerHTML = '';
+
+            if (reports.length === 0) {
+                tbody.innerHTML = `<tr><td colspan="8" style="text-align: center; padding: 40px; color: var(--muted);">No reports match your selected criteria.</td></tr>`;
+                return;
+            }
+
+            reports.forEach(r => {
+                const tr = document.createElement('tr');
+
+                const riskLevel = r.riskLevel || 'LOW';
+                let severityClass = 'low';
+                if (riskLevel === 'CRITICAL' || riskLevel === 'HIGH') {
+                    severityClass = 'critical';
+                } else if (riskLevel === 'MEDIUM') {
+                    severityClass = 'medium';
+                }
+
+                const dateStr = r.generatedAt ? new Date(r.generatedAt).toLocaleDateString() : '-';
+                const adminPass = getStoredAdminPass();
+
+                tr.innerHTML = `
+                    <td style="font-weight: 700; color: var(--ink);">${escapeHtml(r.fileName || 'Untitled Contract')}</td>
+                    <td style="font: 600 11px var(--mono); color: var(--muted);">${escapeHtml(r.userId || 'Guest / Default')}</td>
+                    <td style="font: 600 11px var(--mono); text-transform: uppercase;">${escapeHtml(r.documentType || 'LEGAL_DOC')}</td>
+                    <td style="font: 800 16px var(--display); color: var(--ink);">${Math.round(r.riskScore || 0)} / 100</td>
+                    <td><span class="risk-pill ${severityClass}">${riskLevel}</span></td>
+                    <td style="font: 700 11px var(--mono);">${r.flaggedRisksCount || 0}</td>
+                    <td style="font: 11px var(--mono); color: var(--muted);">${dateStr}</td>
+                    <td style="text-align: right; white-space: nowrap;">
+                        <button class="btn btn-outline btn-sm" onclick="inspectReport('${r.documentId}')" style="margin-right: 6px;">
+                            Inspect ↗
+                        </button>
+                        <a href="/api/reports/${r.documentId}/pdf" target="_blank" class="btn btn-primary btn-sm" style="text-decoration: none;">
+                            PDF ↓
+                        </a>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        async function inspectReport(documentId) {
+            const modal = document.getElementById('report-modal');
+            const body = document.getElementById('modal-body-container');
+            const adminPass = getStoredAdminPass();
+            modal.style.display = 'flex';
+            body.innerHTML = `<div style="text-align: center; padding: 40px; font: 600 12px var(--mono);">Fetching full audit report...</div>`;
+
+            try {
+                const res = await fetch('/api/reports/' + documentId, {
+                    headers: { 'X-Admin-Pass': adminPass || '' }
+                });
+                const data = await res.json();
+
+                if (res.ok && data.success) {
+                    const r = data.data;
+                    body.innerHTML = `
+                        <div style="border-bottom: 1px solid var(--line); padding-bottom: 18px; margin-bottom: 22px;">
+                            <span class="risk-pill ${r.riskCategory === 'CRITICAL' || r.riskCategory === 'HIGH' ? 'critical' : 'low'}">
+                                ${r.riskCategory || 'AUDIT REPORT'}
+                            </span>
+                            <h2 style="font: 800 28px var(--display); text-transform: uppercase; color: var(--ink); margin: 12px 0 6px;">
+                                ${escapeHtml(r.documentTitle || 'Legal Contract')}
+                            </h2>
+                            <p style="font: 600 11px var(--mono); color: var(--muted); text-transform: uppercase; margin: 0;">
+                                Document ID: ${escapeHtml(r.documentId)} • Overall Risk Score: ${Math.round(r.overallRiskScore || 0)} / 100
+                            </p>
+                        </div>
+
+                        <div style="margin-bottom: 24px;">
+                            <div class="eyebrow" style="margin-bottom: 6px;">Audit Summary</div>
+                            <h3 style="font: 700 16px var(--display); text-transform: uppercase; margin-bottom: 8px;">Executive Breakdown</h3>
+                            <div style="background: var(--metal-light); border: 1px solid var(--line); padding: 18px; border-radius: 4px; font-size: 13px; line-height: 1.7;">
+                                ${escapeHtml(r.executiveSummary || 'No summary compiled.')}
+                            </div>
+                        </div>
+
+                        <div style="margin-bottom: 24px;">
+                            <div class="eyebrow" style="color:var(--red);margin-bottom:6px;">Flagged Liabilities</div>
+                            <h3 style="font: 700 16px var(--display); text-transform: uppercase; margin-bottom: 8px;">Key Risk Findings</h3>
+                            <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.8;">
+                                ${(r.keyRiskFindings || []).map(f => `<li>${escapeHtml(f)}</li>`).join('') || '<li>Zero critical risks flagged.</li>'}
+                            </ul>
+                        </div>
+
+                        <div style="margin-bottom: 24px;">
+                            <div class="eyebrow" style="color:var(--green);margin-bottom:6px;">Next Move Checklist</div>
+                            <h3 style="font: 700 16px var(--display); text-transform: uppercase; color: var(--green); margin-bottom: 8px;">Recommended Steps</h3>
+                            <ul style="margin: 0; padding-left: 20px; font-size: 13px; line-height: 1.8; color: #173823;">
+                                ${(r.recommendedNextSteps || []).map(s => `<li>${escapeHtml(s)}</li>`).join('') || '<li>Standard signing procedure applies.</li>'}
+                            </ul>
+                        </div>
+
+                        <div style="display: flex; justify-content: flex-end; gap: 12px; margin-top: 24px; border-top: 1px solid var(--line); padding-top: 18px;">
+                            <a href="/api/reports/${r.documentId}/pdf" target="_blank" class="btn btn-primary btn-sm">
+                                Download Official PDF <span class="arrow">↓</span>
+                            </a>
+                            <button class="btn btn-outline btn-sm" onclick="closeReportModal()">
+                                Close
+                            </button>
+                        </div>
+                    `;
+                } else {
+                    body.innerHTML = `<div style="color: var(--red); padding: 20px;">Could not load report details: ${data.message || 'Error'}</div>`;
+                }
+            } catch (err) {
+                body.innerHTML = `<div style="color: var(--red); padding: 20px;">Network error: ${err.message}</div>`;
+            }
+        }
+
+        function closeReportModal() {
+            document.getElementById('report-modal').style.display = 'none';
+        }
+
+        function closeModalOnOutsideClick(e) {
+            if (e.target.id === 'report-modal') {
+                closeReportModal();
+            }
+        }
+
+        function escapeHtml(str) {
+            if (!str) return '';
+            return str.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;").replace(/"/g, "&quot;");
+        }
+
+        document.addEventListener('DOMContentLoaded', initAdminAuth);
+    </script>
+</body>
+</html>

@@ -9,6 +9,7 @@ import java.util.Optional;
 
 @Repository
 public interface AnalysisRepository extends MongoRepository<AnalysisRecord, String> {
+    Optional<AnalysisRecord> findByDocumentId(String documentId);
     List<AnalysisRecord> findAllByOrderByAnalyzedAtDesc();
     List<AnalysisRecord> findByUserIdOrderByAnalyzedAtDesc(String userId);
     Optional<AnalysisRecord> findByIdAndUserId(String id, String userId);

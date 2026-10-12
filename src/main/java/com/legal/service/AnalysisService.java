@@ -18,6 +18,7 @@ import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 import java.util.regex.Pattern;
 import java.util.stream.Collectors;
 
@@ -78,17 +79,20 @@ public class AnalysisService {
     private final RiskRepository riskRepo;
     private final ClassificationService classificationService;
     private final RiskService riskService;
+    private final LegalAdvisoryService legalAdvisoryService;
 
     public AnalysisService(AnalysisResultRepository analysisRepo,
                            ClauseRepository clauseRepo,
                            RiskRepository riskRepo,
                            ClassificationService classificationService,
-                           RiskService riskService) {
-        this.analysisRepo         = analysisRepo;
-        this.clauseRepo           = clauseRepo;
-        this.riskRepo             = riskRepo;
+                           RiskService riskService,
+                           LegalAdvisoryService legalAdvisoryService) {
+        this.analysisRepo          = analysisRepo;
+        this.clauseRepo            = clauseRepo;
+        this.riskRepo              = riskRepo;
         this.classificationService = classificationService;
         this.riskService           = riskService;
+        this.legalAdvisoryService  = legalAdvisoryService;
     }
 
     // =========================================================================
@@ -400,6 +404,22 @@ public class AnalysisService {
         report.setStartedAt(analysis.getStartedAt());
         report.setCompletedAt(analysis.getCompletedAt());
 
+        // Synthesize plain-language bilingual advisory & actionable next steps
+        if (legalAdvisoryService != null) {
+            String textSample = clauses.stream()
+                    .map(Clause::getRawText)
+                    .filter(Objects::nonNull)
+                    .collect(Collectors.joining("\n\n"));
+            LegalAdvisoryService.AdvisoryBundle advisory = legalAdvisoryService.generateAdvisory(
+                    analysis.getDocType(), textSample, analysis.getCompositeRiskScore(), allRisks);
+
+            if (advisory != null) {
+                report.setEnglishExplanation(advisory.getEnglishExplanation());
+                report.setHindiExplanation(advisory.getHindiExplanation());
+                report.setNextSteps(advisory.getNextSteps());
+                report.setActionVerdict(advisory.getActionVerdict());
+            }
+        }
         return report;
     }
 

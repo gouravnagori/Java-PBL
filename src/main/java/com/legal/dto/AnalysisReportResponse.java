@@ -103,4 +103,27 @@ public class AnalysisReportResponse {
 
     public LocalDateTime getCompletedAt() { return completedAt; }
     public void setCompletedAt(LocalDateTime completedAt) { this.completedAt = completedAt; }
+    /** Plain-language explanation in simple English */
+    private String englishExplanation;
+
+    /** Plain-language explanation in simple Hindi (सरल हिंदी) */
+    private String hindiExplanation;
+
+    /** Actionable next steps checklist according to the document */
+    private List<String> nextSteps;
+
+    /** Overall action recommendation verdict */
+    private String actionVerdict;
+
+    public String getEnglishExplanation() { return englishExplanation; }
+    public void setEnglishExplanation(String englishExplanation) { this.englishExplanation = englishExplanation; }
+
+    public String getHindiExplanation() { return hindiExplanation; }
+    public void setHindiExplanation(String hindiExplanation) { this.hindiExplanation = hindiExplanation; }
+
+    public List<String> getNextSteps() { return nextSteps; }
+    public void setNextSteps(List<String> nextSteps) { this.nextSteps = nextSteps; }
+
+    public String getActionVerdict() { return actionVerdict; }
+    public void setActionVerdict(String actionVerdict) { this.actionVerdict = actionVerdict; }
 }
