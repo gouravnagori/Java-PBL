@@ -10,6 +10,21 @@
 [![Database](https://img.shields.io/badge/Database-MongoDB%20%7C%20H2%20JPA-47A248?style=for-the-badge&logo=mongodb&logoColor=white)](https://www.mongodb.com/)
 [![Build](https://img.shields.io/badge/Build-Passing-10B981?style=for-the-badge&logo=apache-maven&logoColor=white)](https://maven.apache.org/)
 [![Live Demo](https://img.shields.io/badge/Live_Demo-lexadvisor.onrender.com-46E3B7?style=for-the-badge&logo=render&logoColor=white)](https://lexadvisor.onrender.com)
+[![Google Drive](https://img.shields.io/badge/Google_Drive-Project_Docs_%26_Reports-4285F4?style=for-the-badge&logo=googledrive&logoColor=white)](https://drive.google.com/drive/folders/1km01tHR9SJw4qXtE625iC_X_o4L3dAlD?usp=sharing)
+
+---
+
+> [!IMPORTANT]
+> ### 📁 🌟 ALL PROJECT DELIVERABLES & IMPORTANT DOCS (GOOGLE DRIVE)
+> **🔗 Direct Link:** **[https://drive.google.com/drive/folders/1km01tHR9SJw4qXtE625iC_X_o4L3dAlD?usp=sharing](https://drive.google.com/drive/folders/1km01tHR9SJw4qXtE625iC_X_o4L3dAlD?usp=sharing)**
+>
+> **Access all essential academic and evaluation deliverables in one click:**
+> - 📊 **Presentation (PPT):** Full project defense presentation slide deck
+> - 📄 **Research Paper:** Legal AI analysis, Vision OCR methodology & benchmarking
+> - 📘 **Main Project Report:** Complete 5th-Semester PBL final project report
+> - 👤 **Personal Reports:** Individual student module contribution reports
+> - 🔑 **Demo Credentials:** System test accounts and evaluator credentials
+> - 📑 **All Important Docs:** SRS, UML diagrams, test data, and technical specifications
 
 ---
 
@@ -66,11 +81,22 @@ The application is deployed on Render Cloud and is globally accessible:
          └──► /api/reports/**   ──► [ReportService & PDF Exporter]     ──► [MongoDB Report & Analytics Repositories]
 ```
 
-### Key System Specifications
+### Key System Specifications & Evaluation Deliverables
+- **📁 Google Drive Project Repository:** **[Google Drive Deliverables & Reports Folder](https://drive.google.com/drive/folders/1km01tHR9SJw4qXtE625iC_X_o4L3dAlD?usp=sharing)**
 - **UML Diagram:** [`Legal Document Analysis System UML Diagram.png`](./Legal%20Document%20Analysis%20System%20UML%20Diagram.png)
 - **Software Requirements Specification:** [`docs/Software_Requirements_Specification.md`](./docs/Software_Requirements_Specification.md)
 - **Ayush Module Documentation:** [`docs/AYUSH_MODULE_SPECIFICATION.md`](./docs/AYUSH_MODULE_SPECIFICATION.md)
 - **Reports & Analytics Specification:** [`docs/REPORTS_AND_ANALYTICS_MODULE.md`](./docs/REPORTS_AND_ANALYTICS_MODULE.md)
+
+### 📦 Google Drive Deliverables Breakdown
+| Deliverable | Description | Link |
+| :--- | :--- | :--- |
+| **📊 Project Presentation (PPT)** | Comprehensive slide deck detailing architecture, module distribution, live demo walkthrough, and evaluation metrics | [Open in Drive](https://drive.google.com/drive/folders/1km01tHR9SJw4qXtE625iC_X_o4L3dAlD?usp=sharing) |
+| **📄 Research Paper** | Research manuscript detailing the multimodal Vision OCR pipeline, 13-rule risk engine, and comparative legal analysis | [Open in Drive](https://drive.google.com/drive/folders/1km01tHR9SJw4qXtE625iC_X_o4L3dAlD?usp=sharing) |
+| **📘 Main Project Report** | Complete 5th-Semester PBL technical engineering report covering SDLC, SRS, design, testing, and deployment | [Open in Drive](https://drive.google.com/drive/folders/1km01tHR9SJw4qXtE625iC_X_o4L3dAlD?usp=sharing) |
+| **👤 Personal Module Reports** | Individual student submission reports covering respective module implementation, code snippets, and outcomes | [Open in Drive](https://drive.google.com/drive/folders/1km01tHR9SJw4qXtE625iC_X_o4L3dAlD?usp=sharing) |
+| **🔑 Demo Credentials & Test Guide** | Pre-configured evaluation accounts, sample legal contracts (PDF/DOCX/Scanned images), and testing cheat sheet | [Open in Drive](https://drive.google.com/drive/folders/1km01tHR9SJw4qXtE625iC_X_o4L3dAlD?usp=sharing) |
+| **📑 All Important Docs** | SRS specifications, high-resolution UML diagrams, schema definitions, and academic rubrics | [Open in Drive](https://drive.google.com/drive/folders/1km01tHR9SJw4qXtE625iC_X_o4L3dAlD?usp=sharing) |
 
 ---
 
